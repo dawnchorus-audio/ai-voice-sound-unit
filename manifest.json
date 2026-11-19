@@ -1,0 +1,31 @@
+{
+    "package_name": "ElevenLabs in LUNA",
+    "manufacturer": "Universal Audio",
+    "description": "Text to Speech, Sound Effects, Music, Voice Changer and Instant Voice Clone from ElevenLabs, placed straight onto the LUNA timeline.",
+    "network": [
+        "api.elevenlabs.io",
+        "storage.googleapis.com"
+    ],
+    "add_ons": [
+        {
+            "id": "com.vbilous.elevenlabs",
+            "title": "ElevenLabs in LUNA",
+            "version": "0.1.0",
+            "sdk_version": "3.1.2",
+            "min_luna_version": "3.1.1",
+            "engines": [
+                "luna"
+            ],
+            "html": "index.html",
+            "target": "window",
+            "targets": [
+                "window",
+                "browser"
+            ],
+            "floating": true,
+            "show_with_session": false,
+            "width": 560,
+            "height": 720
+        }
+    ]
+}
