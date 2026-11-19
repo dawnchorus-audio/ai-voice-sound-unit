@@ -100,8 +100,23 @@ const AddOnLogic = {
   /** Put generated WAV bytes into the session as a source (no clip yet). Resolves its uid. */
   async uploadAudio(session, { wav, name, onProgress }) {
     if (!session) throw new Error('Open a session in LUNA first');
-    const source = await session.uploadFile({ bytes: wav, name: `${name}.wav`, onProgress });
+    const source = await session.uploadFile({ bytes: wav, name: `${AddOnLogic.safeFileName(name)}.wav`, onProgress });
     return source.id;
+  },
+
+  /**
+   * A file name made from a prompt or a voice name (voice names in ElevenLabs' shared library
+   * are chosen by strangers): no folders, control characters or leading dots, 100 characters
+   * at most.
+   */
+  safeFileName(name) {
+    const s = String(name ?? '')
+      .replace(/[\u0000-\u001f\u007f/\\:*?"<>|]+/g, ' ')
+      .replace(/^[\s.]+|[\s.]+$/g, '')
+      .replace(/\s+/g, ' ')
+      .slice(0, 100)
+      .trim();
+    return s || 'ElevenLabs';
   },
 
   /** The track a target names, if it still exists and is an audio track. */
@@ -471,9 +486,17 @@ const AddOnLogic = {
    * Where LUNA keeps a source on disk: `<session package>/audio/<uid>.wav`. Observed on
    * LUNA 3.1 for macOS; the SDK does not document it, so a read failure says so.
    */
+  /** A source uid as LUNA makes them: letters, digits, `-` and `_`, no path. */
+  isSourceUid(uid) {
+    return typeof uid === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(uid);
+  },
+
   sourcePath(session, sourceUid, ext = 'wav') {
     const pkg = session.sessionPackagePath.value;
     if (!pkg) throw new Error('LUNA did not say where this session is saved');
+    // The uid can come from History in session storage, which a shared session file brings
+    // along: never let it name a file outside the session's audio folder.
+    if (!AddOnLogic.isSourceUid(sourceUid)) throw new Error('This entry does not name an audio file of the session');
     return `${pkg.replace(/[\\/]+$/, '')}/audio/${sourceUid}.${ext}`;
   },
 

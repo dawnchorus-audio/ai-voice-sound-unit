@@ -236,6 +236,7 @@ const AddOnHelp = (() => {
   <li>Only what you generate from is sent to ElevenLabs: the text or prompt, and for Voice Changer, Voice Clone and Transcribe the selected audio. LUNA's lyrics are read in the Add On and only sent as the text you generate from. Nothing else from your session leaves your computer.</li>
   <li>Every request uses your ElevenLabs credits. Variations, script and lyric lines, multi-clip changes and transcriptions each count as separate requests, and in lyrics mode a line generated again at a fitting speed counts twice.</li>
   <li>Writing to your session happens only when you place audio or click <b>Add to LUNA lyrics</b>; both are undoable in LUNA.</li>
+  <li>A session someone sent you brings its History along. The Add On shows it as plain text, loads its settings only into the matching tab's fields, and plays only audio files inside that session. Nothing in it can run code or reach your API key.</li>
 </ul>`,
     },
   ];

@@ -692,3 +692,30 @@ Four hours of steady work faced us. A large size in stockings is hard to sell.}`
     expect(logic.rtfToText(rtf)).toBe('Café Česky\nTab\there {braces} and a space\nnext—end'); // the space after a control word is its delimiter
   });
 });
+
+describe('untrusted names and History data', () => {
+  const session = { sessionPackagePath: { value: '/Users/me/Song.luna/' } };
+
+  it('builds a source path only from a real source uid', () => {
+    expect(logic.sourcePath(session, '01611158500247d095aa69212b39a13d')).toBe('/Users/me/Song.luna/audio/01611158500247d095aa69212b39a13d.wav');
+    for (const bad of ['../../.ssh/id_rsa', 'a/b', 'a\\b', '..', '', null, 42, 'x'.repeat(129)]) {
+      expect(() => logic.sourcePath(session, bad)).toThrow(/does not name an audio file/);
+    }
+  });
+
+  it('makes safe file names from prompts and voice names', () => {
+    expect(logic.safeFileName('Rachel · Hello')).toBe('Rachel · Hello');
+    expect(logic.safeFileName('../../etc/passwd')).toBe('etc passwd');
+    expect(logic.safeFileName('a\u0000b\nc:d*e?')).toBe('a b c d e');
+    expect(logic.safeFileName('...')).toBe('ElevenLabs');
+    expect(logic.safeFileName(undefined)).toBe('ElevenLabs');
+    expect(logic.safeFileName('x'.repeat(300))).toHaveLength(100);
+  });
+
+  it('uploads generated audio under a safe file name', async () => {
+    let seen;
+    const fake = { uploadFile: async ({ name }) => { seen = name; return { id: 'abc' }; } };
+    await logic.uploadAudio(fake, { wav: new Uint8Array(4), name: '../evil' });
+    expect(seen).toBe('evil.wav');
+  });
+});

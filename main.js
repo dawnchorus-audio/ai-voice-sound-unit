@@ -564,9 +564,19 @@ function snapshot(tab) {
   for (const el of document.querySelectorAll(`#tab-${tab} [data-remember]`)) out[el.id] = fieldValue(el);
   return out;
 }
+/**
+ * Load saved settings into a tab. They come from History in session storage, which a shared
+ * session brings along, so only the tab's own remembered fields take them, as plain values.
+ */
 function applySnapshot(tab, settings) {
+  if (typeof tab !== 'string' || !/^[a-z-]+$/.test(tab) || !$(`tab-${tab}`)) return false;
   showTab(tab);
-  for (const [id, v] of Object.entries(settings ?? {})) { const el = $(id); if (el) setField(el, v); }
+  const allowed = new Set([...document.querySelectorAll(`#tab-${tab} [data-remember]`)].map((el) => el.id));
+  for (const [id, v] of Object.entries(settings ?? {})) {
+    if (!allowed.has(id) || (v !== null && typeof v === 'object')) continue;
+    setField($(id), v);
+  }
+  return true;
 }
 
 // ---------- features ----------

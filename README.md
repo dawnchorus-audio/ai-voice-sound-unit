@@ -27,6 +27,9 @@ Needs LUNA 3.1.1 or later; moving it between a window and the side panel needs L
 - Only clone voices you have the right to clone, with the speaker's consent.
 - Generated audio is saved into your LUNA session (its audio files), with a History of prompts
   and settings saved alongside. Clearing History does not delete the audio files.
+- A session file can come from someone else, so the History it carries is treated as
+  untrusted: it is shown as text only, its settings fill only the remembered fields of their
+  own tab, and an entry can only point at an audio file inside that session's audio folder.
 
 The user guide and the full shortcut list live in the Add On itself: **?** in its header,
 or ⌘/ (Ctrl+/), with a search box (⇧⌘F) that finds words or "phrases" across every section,
@@ -105,6 +108,13 @@ icon back.
 
 Every button has a `title` tooltip saying what it does (code-made buttons pass one to
 `btn(text, onclick, title)`), and `withShortcut()` in `main.js` adds the shortcut to it.
+
+Security rules the code keeps: text from ElevenLabs, History or files goes into the page with
+`textContent` or through `esc()`, never as HTML; voice ids are URL-encoded; file names made
+from prompts or voice names go through `AddOnLogic.safeFileName`; a source uid must pass
+`AddOnLogic.isSourceUid` before it becomes a path; `applySnapshot` takes only the tab's
+`data-remember` fields. The API key lives only in `luna.secrets` and is sent only in the
+`xi-api-key` header to `api.elevenlabs.io`.
 
 Every change ships with its documentation: update the Help sections and `SHORTCUTS` in
 `help.js` (add a shortcut for each new user action and wire it in `main.js` `ACTIONS`), and this
