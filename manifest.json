@@ -1,6 +1,6 @@
 {
-    "package_name": "ElevenLabs in LUNA",
-    "manufacturer": "Universal Audio",
+    "package_name": "Voice & Sound Unit",
+    "manufacturer": "dawnchorus",
     "description": "Text to Speech, Sound Effects, Music, Voice Changer and Instant Voice Clone from ElevenLabs, placed straight onto the LUNA timeline.",
     "network": [
         "api.elevenlabs.io",
@@ -9,7 +9,7 @@
     "add_ons": [
         {
             "id": "com.vbilous.elevenlabs",
-            "title": "ElevenLabs in LUNA",
+            "title": "Voice & Sound Unit",
             "version": "0.1.0",
             "sdk_version": "3.1.2",
             "min_luna_version": "3.1.1",
@@ -17,6 +17,7 @@
                 "luna"
             ],
             "html": "index.html",
+            "icon": "icon.png",
             "target": "window",
             "floating": true,
             "show_with_session": false,

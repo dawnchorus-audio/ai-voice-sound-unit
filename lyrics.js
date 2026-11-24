@@ -1,4 +1,4 @@
-// ElevenLabs in LUNA: lyrics and LRC. No DOM, so tests can drive it against Luna.MockEngine.
+// Voice & Sound Unit: lyrics and LRC. No DOM, so tests can drive it against Luna.MockEngine.
 //
 // LUNA keeps lyrics (Extract Lyrics) under `<session>/lyrics/<rowid>`, one node per line:
 // `text`, `location` and `length` in nanoseconds into the audio source named by `source_uid`,
@@ -235,7 +235,7 @@ const AddOnLyrics = {
     const out = [];
     if (title) out.push(`[ti:${title.replace(/[\[\]\n]/g, ' ')}]`);
     if (artist) out.push(`[ar:${artist.replace(/[\[\]\n]/g, ' ')}]`);
-    out.push('[re:ElevenLabs in LUNA]');
+    out.push('[re:Voice & Sound Unit]');
     for (const l of [...lines].sort((a, b) => a.start - b.start)) {
       const text = String(l.text).replace(/\s*\n\s*/g, ' ').trim();
       if (words && l.words?.length) {

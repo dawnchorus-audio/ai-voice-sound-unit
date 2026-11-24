@@ -1,4 +1,4 @@
-// ElevenLabs in LUNA: DOM wiring. Connects to LUNA, keeps the API key in luna.secrets, runs
+// Voice & Sound Unit: DOM wiring. Connects to LUNA, keeps the API key in luna.secrets, runs
 // ElevenLabs requests as background jobs, keeps results and the session's history, and hands
 // WAV bytes to AddOnLogic to place on the timeline. No engine logic lives here.
 

@@ -4,7 +4,7 @@
   "license": "MIT",
   "version": "0.1.0",
   "type": "module",
-  "description": "ElevenLabs in LUNA, a LUNA Add On built with @uaudio/luna-builder-sdk",
+  "description": "Voice & Sound Unit, a LUNA Add On built with @uaudio/luna-builder-sdk",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",

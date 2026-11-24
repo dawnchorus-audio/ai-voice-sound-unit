@@ -1,4 +1,4 @@
-// ElevenLabs in LUNA: engine logic with no DOM, so tests can exercise it against
+// Voice & Sound Unit: engine logic with no DOM, so tests can exercise it against
 // Luna.MockEngine. main.js decodes audio and renders; this file encodes WAV and places
 // generated audio on the LUNA timeline.
 
