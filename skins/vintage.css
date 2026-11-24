@@ -1,0 +1,243 @@
+/* Vintage skin: the hardware faceplate look (design E). Studio (studio.css) is the base for both
+   skins; every rule here is scoped to :root[data-skin=vintage] and only changes how things look.
+   Element ids, wiring, remembered settings and shortcuts are the same in both skins, so a control
+   with no rule here still works and keeps its Studio look (in Vintage colours).
+
+   How it is built:
+   - The faceplate (body, header, tabs, cards, buttons) uses the --v-* finish tokens; Cream is the
+     default, :root[data-finish=black] is the Black finish.
+   - "Screens" (the text fields, popovers, the feed, the status line) are amber LCDs. They re-set
+     Studio's colour variables (--text, --dim, --line…) for everything inside them, so Studio's own
+     rules draw them in LCD colours without a rule per element.
+   - Sizes stay Studio's: every padding, margin, height, border width and font size is Studio's, so
+     switching the look moves nothing. Only colour, fonts, shadows and radii change here. Labels in
+     the condensed face can be a few px wider or narrower, and a slide switch is 9px wider than
+     Studio's checkbox. The mono face is kept to places where it does not change a size (text fields,
+     status line, feed labels); the destination, the menus and the empty-feed note keep Studio's font.
+   - Fonts are system fonts: LUNA lets the page reach only the manifest's servers, so web fonts
+     would have to ship inside the Add On. Barlow Condensed / IBM Plex Mono are used when installed. */
+
+:root[data-skin=vintage] {
+  /* finish: Cream */
+  --v-face: #E6E0D2; --v-edge: #F4EFE4; --v-shadow: #CFC7B5; --v-ink: #2A2722; --v-muted: #5C574D;
+  --v-btn: #DDD6C6; --v-btn-on: #F4EFE4; --v-line: #A9A190; --v-screw: #9A9384; --v-ring: #7E7869;
+  --v-led-off: #8F887A; --v-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%232A2722' stroke-width='3'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  /* fixed parts: the LCD, the LEDs and the red Generate key look the same on both finishes */
+  --v-lcd: #161C14; --v-lcd-2: #1F2619; --v-lcd-line: #3A3A26; --v-amber: #F2B544; --v-amber-hi: #FFD27A;
+  --v-amber-dim: #B08A3C; --v-led: #F2A33A; --v-red: #C8452D; --v-red-hi: #E0533A; --v-red-lo: #8E3524;
+  --v-green: #8FD39F;
+  --v-label: "Barlow Condensed", "Avenir Next Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Arial Narrow", sans-serif;
+  --v-mono: "IBM Plex Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Studio's variables, for the faceplate */
+  color-scheme: light;
+  --bg: var(--v-face); --card: var(--v-shadow); --feed: var(--v-shadow); --chip: var(--v-btn); --well: var(--v-btn);
+  --pop: var(--v-lcd); --line: var(--v-line); --line2: var(--v-line); --pop-line: #000;
+  --text: var(--v-ink); --dim: var(--v-muted); --mute: var(--v-muted);
+  --accent: var(--v-red); --accent-ink: var(--v-edge); --accent-soft: rgba(200, 69, 45, .14);
+  --ok: #2F7A45; --err: #B0341E; --mono: var(--v-mono);
+}
+:root[data-skin=vintage][data-finish=black] {
+  --v-face: #2A2A2C; --v-edge: #3A3A3D; --v-shadow: #1F1F21; --v-ink: #ECE6D8; --v-muted: #B5AE9F;
+  --v-btn: #38383B; --v-btn-on: #4C4C50; --v-line: #5A5A5F; --v-screw: #5A5A5F; --v-ring: #77777C;
+  --v-led-off: #5E5A52; --v-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23ECE6D8' stroke-width='3'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  color-scheme: dark; --ok: #8FD39F; --err: #F07A7A; --accent-soft: rgba(224, 83, 58, .2);
+}
+
+/* ---------- LCD screens: Studio's variables re-set for everything inside ---------- */
+:root[data-skin=vintage] :is(textarea.big, #lrc-text, input.key, #quota, .dest-btn, footer, .pop, .job, .group, .hist, .empty, .help-hit, .opts) {
+  --text: var(--v-amber); --dim: var(--v-amber-dim); --mute: var(--v-amber-dim); --line: var(--v-lcd-line); --line2: #4A4A30;
+  --chip: var(--v-lcd-2); --well: #10140E; --bg: #0E120C; --card: var(--v-lcd-2); --feed: var(--v-lcd);
+  --accent: var(--v-amber); --accent-ink: var(--v-lcd); --accent-soft: #2C2A18; --ok: var(--v-green); --err: #FF8A6E;
+  color-scheme: dark; color: var(--text);
+}
+
+/* ---------- the faceplate ---------- */
+:root[data-skin=vintage] body {
+  font-size: 13px;
+  background:
+    radial-gradient(circle at 9px 9px, var(--v-screw) 0 3px, var(--v-ring) 3.5px 4.5px, transparent 5px),
+    radial-gradient(circle at calc(100% - 9px) 9px, var(--v-screw) 0 3px, var(--v-ring) 3.5px 4.5px, transparent 5px),
+    radial-gradient(circle at 9px calc(100% - 9px), var(--v-screw) 0 3px, var(--v-ring) 3.5px 4.5px, transparent 5px),
+    radial-gradient(circle at calc(100% - 9px) calc(100% - 9px), var(--v-screw) 0 3px, var(--v-ring) 3.5px 4.5px, transparent 5px),
+    linear-gradient(180deg, var(--v-edge), var(--v-face) 70px, var(--v-face) calc(100% - 40px), var(--v-shadow));
+  box-shadow: inset 0 0 0 1px var(--v-line);
+}
+:root[data-skin=vintage] :is(button, input, select, textarea):focus-visible { outline-color: var(--v-red); }
+
+/* labels in the condensed hardware face */
+/* :where() keeps this list light, so the rules below can set a part's spacing */
+:root[data-skin=vintage] :where(header h1, nav button, .chip, button.primary, button.ghost, .eyebrow, .pop .ph, .overlay .bar-top h2, .seg button, .tag) {
+  font-family: var(--v-label); text-transform: uppercase; letter-spacing: .04em;
+}
+
+/* header: the unit's name strip */
+:root[data-skin=vintage] header h1 { letter-spacing: .1em; }
+:root[data-skin=vintage] #quota { background: var(--v-lcd); color: var(--v-amber); border: 0; border-radius: 3px; font-family: var(--v-mono); box-shadow: inset 0 1px 4px #000; }
+:root[data-skin=vintage] #session { color: var(--v-muted); font-family: var(--v-label); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+:root[data-skin=vintage] #session-text b { color: var(--v-ink); }
+:root[data-skin=vintage] #session .dot { background: var(--v-led-off); box-shadow: inset 0 1px 1px rgba(0, 0, 0, .4); }
+:root[data-skin=vintage] #session[data-state=connected] .dot { background: #5BD47A; box-shadow: 0 0 6px #5BD47A; }
+:root[data-skin=vintage] #session[data-state=waiting] .dot { background: var(--v-led); box-shadow: 0 0 6px var(--v-led); }
+:root[data-skin=vintage] #session[data-state=error] .dot { background: var(--v-red-hi); box-shadow: 0 0 6px var(--v-red-hi); }
+
+/* hardware keys: header icons, chips, small buttons, the play keys */
+/* (.seg button sets this list's weight; a heavier selector here would beat the popover and feed rules) */
+:root[data-skin=vintage] :is(.icon, .chip, button.ghost, .play, .seg button) {
+  background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn));
+  border: 1px solid var(--v-line); border-radius: 4px; color: var(--v-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18);
+}
+:root[data-skin=vintage] :is(.icon, .chip, button.ghost, .play, .seg button):active { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .25); }
+:root[data-skin=vintage] :is(.icon, .chip, button.ghost, .play):hover:not(:disabled) { border-color: var(--v-muted); color: var(--v-ink); }
+/* a key that is on: pressed in, amber legend, like the takes and place keys of design E */
+:root[data-skin=vintage] :is(.icon.on, .chip.on, .seg button.on, .play.on) {
+  background: var(--v-ink); color: var(--v-amber); border-color: var(--v-ink); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .5);
+}
+:root[data-skin=vintage][data-finish=black] :is(.icon.on, .chip.on, .seg button.on, .play.on) { background: #111112; border-color: #000; }
+:root[data-skin=vintage] .chip { font-weight: 600; letter-spacing: 0; }
+:root[data-skin=vintage] .chip .unit { color: inherit; opacity: .7; }
+:root[data-skin=vintage] .chip input[type=number] { font-family: var(--v-mono); text-transform: none; }
+:root[data-skin=vintage] .chip button { color: inherit; border-left-color: var(--v-line); font-family: inherit; letter-spacing: inherit; }
+:root[data-skin=vintage] select.chip { background-image: var(--v-arrow), linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); background-repeat: no-repeat, no-repeat; background-position: right 9px center, 0 0; }
+:root[data-skin=vintage] .avatar { border-radius: 3px; background: var(--v-lcd); color: var(--v-amber); font-family: var(--v-mono); box-shadow: inset 0 1px 3px #000; }
+:root[data-skin=vintage] button.ghost { font-weight: 600; letter-spacing: 0; }
+:root[data-skin=vintage] button.ghost.danger { color: var(--err); }
+:root[data-skin=vintage] .play { border-radius: 4px; }
+:root[data-skin=vintage] .seg { background: transparent; }
+:root[data-skin=vintage] button.link { color: var(--v-red); font-weight: 600; }
+
+/* the big red key: Generate, Compose, Create voice, Paste key… */
+:root[data-skin=vintage] button.primary:not(.alt) {
+  border-radius: 4px; font-weight: 700; letter-spacing: .02em;
+  background: linear-gradient(180deg, var(--v-red-hi), var(--v-red) 55%, var(--v-red-lo)); color: #FBEFE6;
+  border: 1px solid #5E2715; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 2px 0 #7E2A18, 0 4px 6px rgba(0, 0, 0, .3);
+}
+:root[data-skin=vintage] button.primary:not(.alt):active { transform: translateY(2px); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .35); }
+:root[data-skin=vintage] button.primary.alt {
+  border-radius: 4px; font-weight: 700; color: var(--v-ink);
+  background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); border: 1px solid var(--v-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18);
+}
+:root[data-skin=vintage] button.primary kbd { font-family: var(--v-mono); letter-spacing: 0; }
+
+/* tabs: the mode keys, each with its LED */
+:root[data-skin=vintage] nav { border-bottom: 1px solid var(--v-line); box-shadow: 0 1px 0 var(--v-edge); }
+/* the key stays in Studio's box: Studio's 8px 9px padding + 2px underline = 1px border + 8px 3px
+   padding, with the 6px LED and its 4px gap taking the rest of the width */
+:root[data-skin=vintage] nav button { flex-shrink: 0; padding: 8px 3px;
+  color: var(--v-ink); font-weight: 700; border: 1px solid var(--v-line); border-radius: 4px;
+  background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18);
+}
+:root[data-skin=vintage] nav button::before { content: ''; flex: 0 0 auto; width: 6px; height: 6px; border-radius: 50%; background: var(--v-led-off); box-shadow: inset 0 1px 1px rgba(0, 0, 0, .4); }
+:root[data-skin=vintage] nav button.active { font-weight: 700; color: var(--v-ink); border-color: var(--v-muted); border-bottom-color: var(--v-muted); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .25); }
+:root[data-skin=vintage] nav button.active::before { background: var(--v-led); box-shadow: 0 0 6px var(--v-led), 0 0 2px var(--v-amber-hi); }
+:root[data-skin=vintage] nav button:hover { color: var(--v-ink); border-color: var(--v-muted); }
+:root[data-skin=vintage] #tabs button.has-new::after { display: none; }
+:root[data-skin=vintage] #tabs button.has-new:not(.active)::before { background: var(--v-green); box-shadow: 0 0 5px var(--v-green); }
+
+/* the work area */
+:root[data-skin=vintage] .card { background: var(--v-shadow); border: 1px solid var(--v-line); border-radius: 6px; box-shadow: inset 0 1px 0 var(--v-edge), inset 0 -1px 0 rgba(0, 0, 0, .06); }
+:root[data-skin=vintage] .card:focus-within { border-color: var(--v-muted); }
+:root[data-skin=vintage] .eyebrow { color: var(--v-muted); font-weight: 700; }
+:root[data-skin=vintage] .hint { color: var(--mute); }
+:root[data-skin=vintage] .card-meta { font-family: var(--v-mono); color: var(--v-muted); }
+
+/* the LCD text fields */
+:root[data-skin=vintage] :is(textarea.big, #lrc-text) {
+  border-radius: 5px 5px 0 0; background: var(--v-lcd); color: var(--v-amber);
+  font-family: var(--v-mono); box-shadow: inset 0 2px 8px #000; caret-color: var(--v-amber-hi);
+}
+:root[data-skin=vintage] :is(textarea.big, #lrc-text)::placeholder { color: var(--v-amber-dim); opacity: .8; }
+:root[data-skin=vintage] textarea.drop-over { background: #2C2A18; }
+:root[data-skin=vintage] input.key { background: var(--v-lcd); color: var(--v-amber); border: 0; border-radius: 5px; box-shadow: inset 0 2px 6px #000; }
+:root[data-skin=vintage] .field-line input { color: var(--v-ink); border-bottom-color: var(--v-line); }
+:root[data-skin=vintage] .field-line input:focus { border-bottom-color: var(--v-red); }
+:root[data-skin=vintage] .field-line input.title { font-family: var(--v-label); letter-spacing: .04em; }
+:root[data-skin=vintage] .drop { border: 1px dashed var(--v-muted); border-radius: 5px; color: var(--v-muted); background: rgba(0, 0, 0, .03); }
+:root[data-skin=vintage] .drop .file { color: var(--v-ink); font-family: var(--v-mono); }
+:root[data-skin=vintage] .drop.over { border-color: var(--v-red); background: var(--accent-soft); color: var(--v-ink); }
+:root[data-skin=vintage] .steps { color: var(--v-ink); }
+:root[data-skin=vintage] .consent, :root[data-skin=vintage] #lrc-words-label, :root[data-skin=vintage] .lrc-opts { color: var(--v-muted); }
+:root[data-skin=vintage] :is(.lrc-opts select, .group-actions select, .opts select, .opts input[type=number]) { border-radius: 3px; }
+
+/* the destination: a small LCD readout */
+:root[data-skin=vintage] .dest-btn { background: var(--v-lcd); border-color: transparent; border-radius: 4px; box-shadow: inset 0 1px 4px #000; color: var(--v-amber); }
+:root[data-skin=vintage] .dest-btn svg { color: var(--v-amber-dim); }
+
+/* popovers: LCD modules */
+:root[data-skin=vintage] .pop { border-radius: 6px; border-color: #000; box-shadow: inset 0 0 0 1px var(--v-lcd-line), 0 12px 30px rgba(0, 0, 0, .5); }
+:root[data-skin=vintage] .pop .ph { font-weight: 700; letter-spacing: .14em; }
+:root[data-skin=vintage] .pop label.check:hover { background: #2C2A18; }
+:root[data-skin=vintage] .pop input[type=radio] { accent-color: var(--v-amber); }
+:root[data-skin=vintage] .pop select.list option:checked { background: var(--v-amber) linear-gradient(var(--v-amber), var(--v-amber)); color: var(--v-lcd); }
+:root[data-skin=vintage] .pop .chip, :root[data-skin=vintage] .pop button.ghost, :root[data-skin=vintage] .pop .play { background: transparent; border-color: #5B4A22; color: var(--v-amber); box-shadow: none; }
+
+/* sliders: faders with a cap */
+:root[data-skin=vintage] input[type=range] { -webkit-appearance: none; appearance: none; height: 16px; background: transparent; }
+:root[data-skin=vintage] input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: #050605; box-shadow: inset 0 1px 2px #000, 0 1px 0 rgba(255, 255, 255, .08); }
+:root[data-skin=vintage] input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 10px; height: 16px; margin-top: -6px; border-radius: 2px; border: 1px solid #000;
+  background: linear-gradient(90deg, transparent 4px, #2A2722 4px 6px, transparent 6px), linear-gradient(180deg, #F4EFE4, #BDB5A3);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, .5);
+}
+:root[data-skin=vintage] .pop .ctl b { font-family: var(--v-mono); color: var(--v-amber-hi); }
+
+/* script options under the card */
+:root[data-skin=vintage] .opts { border-color: transparent; border-radius: 6px; box-shadow: inset 0 2px 6px #000; color: var(--v-amber-dim); }
+
+/* the feed: running jobs and results as tape strips */
+:root[data-skin=vintage] :is(.job, .group, .hist, .help-hit) { border-color: transparent; border-radius: 5px; box-shadow: inset 0 2px 6px #000; }
+:root[data-skin=vintage] :is(.job .label, .group .title b, .hist .top b) { font-family: var(--v-mono); font-weight: 500; }
+:root[data-skin=vintage] .item { border-radius: 4px; }
+:root[data-skin=vintage] .item .name { font-family: var(--v-mono); }
+:root[data-skin=vintage] .item .wave { color: #6F5A2A; }
+:root[data-skin=vintage] .title + .item .wave { color: #D9B26A; }
+:root[data-skin=vintage] .placed { font-family: var(--v-mono); }
+:root[data-skin=vintage] .empty { border-color: transparent; background: var(--v-lcd); box-shadow: inset 0 2px 6px #000; color: var(--v-amber-dim); }
+:root[data-skin=vintage] .job.queued .spin { border-color: #5B4A22; border-right-color: transparent; }
+:root[data-skin=vintage] .hist .prompt, :root[data-skin=vintage] .help-hit span { color: #C9A35A; }
+:root[data-skin=vintage] .feed-head .hint { font-family: var(--v-mono); }
+:root[data-skin=vintage] :is(.job, .group, .hist) :is(button.ghost, .play, .chip) { background: #26241F; border-color: #5A554B; color: var(--v-amber); box-shadow: none; }
+:root[data-skin=vintage] :is(.job, .group, .hist) .play.on { background: var(--v-amber); color: var(--v-lcd); }
+
+/* the status line: one LCD row along the bottom */
+:root[data-skin=vintage] footer { border-top-color: #000; background: var(--v-lcd); box-shadow: inset 0 2px 6px #000; }
+:root[data-skin=vintage] #status { font-family: var(--v-mono); }
+
+/* History and Help over the faceplate */
+:root[data-skin=vintage] .overlay { background: var(--v-face); }
+:root[data-skin=vintage] .overlay .bar-top { border-bottom-color: var(--v-line); }
+:root[data-skin=vintage] .overlay .bar-top h2 { font-weight: 700; letter-spacing: .1em; }
+:root[data-skin=vintage] #help-nav { border-right-color: var(--v-line); }
+:root[data-skin=vintage] #help-nav button.active { background: var(--v-shadow); color: var(--v-ink); box-shadow: inset 3px 0 0 var(--v-led); }
+:root[data-skin=vintage] #help-content dd { color: var(--v-muted); }
+:root[data-skin=vintage] #help-content h3 { color: var(--v-muted); font-family: var(--v-label); letter-spacing: .1em; }
+:root[data-skin=vintage] #help-content mark { background: rgba(242, 163, 58, .45); }
+:root[data-skin=vintage] #help-search { background: var(--v-lcd); color: var(--v-amber); border-color: transparent; border-radius: 4px; box-shadow: inset 0 1px 4px #000; font-family: var(--v-mono); }
+:root[data-skin=vintage] kbd:not(button kbd) { background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); border-color: var(--v-line); color: var(--v-ink); border-radius: 3px; }
+:root[data-skin=vintage] .tag.sfx { color: #2F8F7E; } :root[data-skin=vintage] .tag.music { color: #8A4FB0; } :root[data-skin=vintage] .tag.vc { color: #3A66C4; } :root[data-skin=vintage] .tag.script { color: #B8541F; }
+:root[data-skin=vintage] .hist .tag { filter: brightness(1.6); }
+
+/* two-position options (every checkbox): a flat slide switch, left = off, right = on. A dark slot
+   with a flat thumb carrying two grip lines; drawn with background layers only (no ::before on
+   inputs), so it renders the same in WebKit and WebView2. */
+:root[data-skin=vintage] input[type=checkbox] {
+  -webkit-appearance: none; appearance: none; flex: 0 0 auto; margin: 0; cursor: pointer;
+  width: 22px; height: 13px; border: 0; border-radius: 3px; background-color: #2A2722;
+  background-image:
+    linear-gradient(90deg, transparent 2px, #2A2722 2px 3px, transparent 3px 6px, #2A2722 6px 7px, transparent 7px),
+    linear-gradient(#E6E0D2, #E6E0D2);
+  background-size: 9px 9px, 9px 9px;
+  background-position: 2px 2px, 2px 2px;
+  background-repeat: no-repeat;
+  transition: background-position .1s;
+}
+:root[data-skin=vintage] input[type=checkbox]:checked { background-position: calc(100% - 2px) 2px, calc(100% - 2px) 2px; }
+:root[data-skin=vintage] input[type=checkbox]:disabled { opacity: .45; cursor: default; }
+:root[data-skin=vintage] input[type=checkbox]:focus-visible { outline: 2px solid var(--v-red); outline-offset: 2px; }
+/* a chip with a toggle keeps the key face and Studio's size; the switch's thumb shows the state,
+   and an on switch gets a red slot */
+:root[data-skin=vintage] .chip:has(input[type=checkbox]:checked) { border-color: var(--v-line); background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); }
+:root[data-skin=vintage] input[type=checkbox]:checked { background-color: var(--v-red); }

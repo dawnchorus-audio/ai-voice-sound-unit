@@ -46,6 +46,7 @@ const AddOnHelp = (() => {
 
     { group: 'Window', action: 'voice-search', mod: true, key: 'f', field: true, label: 'Open the voice list and search voices (Text to Speech, Voice Changer)' },
     { group: 'Window', action: 'paste-key', mod: true, shift: true, key: 'v', field: true, label: 'Paste the API key from the clipboard' },
+    { group: 'Window', action: 'look', mod: true, shift: true, key: 'e', field: true, label: 'Next look: Studio, Vintage Cream, Vintage Black' },
     { group: 'Window', action: 'help', mod: true, key: '/', field: true, label: 'Open or close Help' },
     { group: 'Window', action: 'search-help', mod: true, shift: true, key: 'f', field: true, label: 'Search Help' },
     { group: 'Window', action: 'help', key: '?', label: 'Open Help' },
@@ -101,6 +102,7 @@ const AddOnHelp = (() => {
       id: 'start', title: 'Getting started', html: `
 <p><b>ElevenLabs in LUNA</b> brings ElevenLabs into LUNA: Text to Speech, Sound Effects, Music, Voice Changer and Voice Clone, plus re-voicing LUNA's extracted lyrics at their original timing and LRC files. What it makes goes straight onto your timeline.</p>
 <p><b>Opening it</b>: it opens as a window of its own that you can move anywhere, from LUNA's <b>Add Ons</b> menu or the Add Ons browser.</p>
+<p><b>Look</b>: the half-filled circle in the header (<kbd>${isMac ? '⇧⌘E' : 'Ctrl+Shift+E'}</kbd> steps through them) chooses how the Add On looks: <b>Studio</b>, clean and dark, or <b>Vintage</b>, a hardware faceplate in a <b>Cream</b> or <b>Black</b> finish, with mode keys and LEDs, amber screens, faders, and a slide switch for every on/off option (left is off, right is on; the key says ON or OFF). It starts in Vintage Cream. Only the look changes: every button, setting, shortcut and History entry is the same in both, and the Add On remembers your choice.</p>
 <ol>
   <li><b>Add your API key</b> on the <b>API Key</b> tab (the key icon at the right end of the tabs). Follow the steps there, then click <b>Paste key</b>. The key is kept in your system keychain, never in the Add On's files or the session.</li>
   <li><b>Choose where audio goes</b> with the dashed <b>destination chip</b> (⤓) under the tab: it says in words where the next result will land. Click it to choose the <b>Selected track</b> (the audio track you last clicked in LUNA) or a <b>New track</b>, and <b>Place automatically</b>.</li>

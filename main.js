@@ -79,7 +79,7 @@ let activeTab = 'tts';
 function showTab(name) {
   if (typeof closePop === 'function') closePop();
   activeTab = name;
-  document.body.dataset.tab = name; // Clone, Lyrics and API Key show no destination or results (index.html)
+  document.body.dataset.tab = name; // Clone, Lyrics and API Key show no destination or results (skins/studio.css)
   for (const b of document.querySelectorAll('#tabs button')) {
     b.classList.toggle('active', b.dataset.tab === name);
     if (b.dataset.tab === name) b.classList.remove('has-new'); // seen
@@ -95,6 +95,20 @@ for (const b of document.querySelectorAll('#tabs button')) b.onclick = () => sho
 const PREFS_KEY = `${STORE_ID}.prefs`;
 function readPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY) || '{}'); } catch { return {}; } }
 let prefs = readPrefs();
+
+// ---------- skins: Vintage (default, Cream finish) and Studio; same page and ids, another stylesheet ----------
+
+const SKINS = ['studio', 'vintage'];
+const FINISHES = ['cream', 'black'];
+/** Show a skin and Vintage's finish; unknown or unset values fall back to Vintage / Cream. */
+function applySkin(skin, finish) {
+  const s = SKINS.includes(skin) ? skin : 'vintage';
+  const f = FINISHES.includes(finish) ? finish : 'cream';
+  document.documentElement.dataset.skin = s;
+  document.documentElement.dataset.finish = f;
+  return { skin: s, finish: f };
+}
+applySkin(prefs.skin, prefs.finish);
 function fieldValue(el) { return el.type === 'checkbox' ? el.checked : el.value; }
 function setField(el, v) {
   if (v === undefined || v === null) return;
@@ -1730,6 +1744,31 @@ function toggleHelp(section) {
   o.classList.add('open');
 }
 $('help-open').onclick = () => toggleHelp();
+
+// ---------- Look: Studio or Vintage, and Vintage's finish ----------
+
+const LOOKS = [['studio', 'cream'], ['vintage', 'cream'], ['vintage', 'black']];
+function lookName({ skin, finish }) { return skin === 'vintage' ? `Vintage, ${finish === 'black' ? 'Black' : 'Cream'}` : 'Studio'; }
+function renderLook() {
+  const { skin, finish } = applySkin(prefs.skin, prefs.finish);
+  for (const r of document.querySelectorAll('#pop-look input[name=skin]')) r.checked = r.value === skin;
+  for (const r of document.querySelectorAll('#pop-look input[name=finish]')) { r.checked = r.value === finish; r.disabled = skin !== 'vintage'; }
+}
+function setLook(skin, finish) {
+  prefs = { ...prefs, skin, finish };
+  remember();
+  renderLook();
+  say(`Look: ${lookName(applySkin(skin, finish))}`);
+}
+for (const r of document.querySelectorAll('#pop-look input[name=skin]')) r.onchange = () => setLook(r.value, prefs.finish);
+for (const r of document.querySelectorAll('#pop-look input[name=finish]')) r.onchange = () => setLook('vintage', r.value);
+function nextLook() {
+  const cur = applySkin(prefs.skin, prefs.finish);
+  const i = LOOKS.findIndex(([s, f]) => s === cur.skin && (s === 'studio' || f === cur.finish));
+  const [skin, finish] = LOOKS[(i + 1) % LOOKS.length];
+  setLook(skin, skin === 'studio' ? cur.finish : finish);
+}
+renderLook();
 $('help-close').onclick = () => $('help').classList.remove('open');
 /** Add a button's shortcut to its tooltip, so hovering also teaches the key. */
 function withShortcut(el, action) {
@@ -1741,7 +1780,7 @@ for (const [id, action] of Object.entries({
   'tts-go': 'generate', 'sfx-go': 'generate', 'music-go': 'generate', 'vc-go': 'generate', 'ivc-go': 'generate',
   'vc-every': 'every-clip', 'vc-clip': 'use-clip', 'ivc-clip': 'use-clip', 'tts-import-lyrics': 'import-lyrics',
   'tts-import-text': 'import-text', 'ly-find': 'find-lyrics', 'lrc-copy': 'copy-lyrics', 'key-paste': 'paste-key',
-  'results-clear': 'clear', 'history-open': 'history', 'help-open': 'help', 'history-close': 'cancel', 'help-close': 'cancel',
+  'results-clear': 'clear', 'history-open': 'history', 'help-open': 'help', 'look-open': 'look', 'history-close': 'cancel', 'help-close': 'cancel',
   'sfx-sel-len': 'selection-length', 'music-sel-len': 'selection-length',
 })) withShortcut($(id), action);
 
@@ -1838,6 +1877,7 @@ const ACTIONS = {
   },
   'paste-key': pasteKey,
   help: () => toggleHelp(),
+  look: nextLook,
   'search-help': () => {
     if (!$('help').classList.contains('open')) toggleHelp();
     $('help-search').focus();

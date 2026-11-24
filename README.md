@@ -65,6 +65,27 @@ All element ids stayed the same through the redesign, so `main.js` wiring, remem
 (`data-remember`) and shortcuts did not change; selects that are chips keep their values
 (`×2` shows, `2` is the value).
 
+### Skins
+
+The look comes in skins: **Vintage** (the hardware
+faceplate of design E, in a Cream or Black finish; Vintage Cream is the default) and **Studio**
+(the layout above). One page, one `main.js`, the same element ids:
+`applySkin()` in `main.js` sets `data-skin` on `<html>` from the remembered `prefs.skin`, and
+`skins/vintage.css` restyles the Studio page under `:root[data-skin=vintage]`
+(`[data-finish=black]` for Black). Vintage draws the tabs as mode keys with LEDs, chips and
+buttons as hardware keys, every two-position option (checkbox) as a flat slide switch (left off,
+right on, with ON/OFF printed on its chip), the main button as the red key, sliders as faders, and the text fields,
+popovers, destination, feed and status line as amber LCDs. The LCDs re-set Studio's colour
+variables for everything inside them, so Studio's own rules draw them. A control with no Vintage
+rule still works, in Vintage colours; check every new control in both skins. Vintage uses system fonts (condensed labels, mono
+LCD; Barlow Condensed and IBM Plex Mono when installed): LUNA lets the page reach only the
+manifest's servers, so web fonts would have to ship inside the Add On.
+
+The **Look** button in the header (`#look-open`, popover `#pop-look`) picks the skin and Vintage's
+finish (the finish radios are disabled, not hidden, in Studio); ⇧⌘E (`look` in `SHORTCUTS`) steps
+Studio → Vintage Cream → Vintage Black. `setLook()` keeps the choice in `prefs.skin` /
+`prefs.finish`; `renderLook()` applies it at start.
+
 ## Files
 
 It opens as a floating window only (*Add Ons > Windows > ElevenLabs in LUNA*), one page and one
@@ -74,7 +95,9 @@ now: it is too narrow for the Add On until LUNA allows a wider panel.
 | File | Purpose |
 |---|---|
 | `manifest.json` | What LUNA reads: id, name, window size, entry page. `id` is `com.vbilous.elevenlabs` for good: it scopes the keychain secret and the session storage, so never change it. |
-| `index.html` | The page and its styles. Loads the SDK bundle, then the scripts below in this order. |
+| `index.html` | The page. Loads the two skin stylesheets, the SDK bundle, then the scripts below in this order. |
+| `skins/studio.css` | Studio, the clean dark look (direction A, Compose). It is also the base for every skin. |
+| `skins/vintage.css` | Vintage, the hardware faceplate look (design E), as rules scoped to `:root[data-skin=vintage]` over Studio; Cream finish, Black with `data-finish=black`. |
 | `elevenlabs-api.js` | ElevenLabs REST client (`fetch`, no DOM): TTS (with timestamps), SFX, Music, Voice Changer, Voice Clone, Speech to Text, voices, models, quota; retries on concurrency limits; classified errors. |
 | `logic.js` | Engine logic with no DOM: WAV encode/parse, targets and placement (single, variations, scripts), clip audio ranges, history store, credits, music context, text files (decode, .md and .rtf to plain text, .srt/.vtt/.lrc cues). |
 | `lyrics.js` | LUNA lyrics: read, map file time → timeline through the clip, place re-voiced lines (A/B/C), LRC format, transcription line grouping, `set_lyric`. |
@@ -117,7 +140,7 @@ README.
 
 At start, a saved key that fails with a network error (`ApiError.kind === 'network'`) is kept:
 `tryStoredKey` retries every 5 s (5 times) and offers **Try again**; only a rejected key opens the
-API Key tab. Clone, Lyrics and API Key show no destination chip or results list (`body[data-tab=…]` in `index.html`): they make nothing to place. Running jobs (a clone, a transcription) still show there.
+API Key tab. Clone, Lyrics and API Key show no destination chip or results list (`body[data-tab=…]` in `skins/studio.css`): they make nothing to place. Running jobs (a clone, a transcription) still show there.
 
 ElevenLabs outages: on 2026-11-18 `/v2/voices` returned 502 with no CORS headers (a page sees
 "Load failed") while the rest of the API worked. `Client.voices()` falls back to `/v1/voices` on a
