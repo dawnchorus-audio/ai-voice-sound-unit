@@ -2,14 +2,8 @@
 // ElevenLabs requests as background jobs, keeps results and the session's history, and hands
 // WAV bytes to AddOnLogic to place on the timeline. No engine logic lives here.
 
-// manifest.json has one entry with `targets: ["window", "browser"]`: LUNA's host switch (and the
-// Add Ons browser's window / side-panel buttons) moves the same page between a floating window
-// and the secondary browser panel. LUNA reopens the page in the new host and passes it as the
-// page URL's `target`.
-const IS_PANEL = new URLSearchParams(location.search).get('target') === 'browser';
 const STORE_ID = 'com.vbilous.elevenlabs';
 const ADD_ON_ID = STORE_ID; // LUNA serves media files and keeps secrets per Add On id
-document.documentElement.classList.toggle('panel', IS_PANEL);
 const $ = (id) => document.getElementById(id);
 const L = AddOnLogic;
 

@@ -18,10 +18,6 @@
             ],
             "html": "index.html",
             "target": "window",
-            "targets": [
-                "window",
-                "browser"
-            ],
             "floating": true,
             "show_with_session": false,
             "width": 560,

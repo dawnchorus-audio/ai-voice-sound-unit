@@ -16,7 +16,7 @@ ElevenLabs is a trademark of its owner.
 3. Paste your own ElevenLabs API key on the key tab (create one in your ElevenLabs account under
    Developers → API Keys).
 
-Needs LUNA 3.1.1 or later; moving it between a window and the side panel needs LUNA 3.1.2.
+Needs LUNA 3.1.1 or later.
 
 ## Your account and your data
 
@@ -67,14 +67,9 @@ All element ids stayed the same through the redesign, so `main.js` wiring, remem
 
 ## Files
 
-It opens two ways, from one page and one Add On (id `com.vbilous.elevenlabs`): a floating window
-(*Add Ons > Windows > ElevenLabs in LUNA*) or a panel in LUNA's secondary browser, beside Media,
-Markers and Lyrics. `manifest.json` has one entry with `"targets": ["window", "browser"]`
-(LUNA 3.1.2+): the window / side-panel buttons in the Add On's header (LUNA's host switch) move it
-between the two (the Add Ons browser row shows only the default host), and LUNA remembers the choice. LUNA reopens the
-page in the new host with `target=window|browser` in its URL; `main.js` sets `IS_PANEL` from it.
-Window and panel are the same Add On, so they share the API key, History and settings. An older
-LUNA ignores `targets` and opens it as a window only.
+It opens as a floating window only (*Add Ons > Windows > ElevenLabs in LUNA*), one page and one
+Add On (id `com.vbilous.elevenlabs`). The side panel in LUNA's secondary browser is left out for
+now: it is too narrow for the Add On until LUNA allows a wider panel.
 
 | File | Purpose |
 |---|---|
