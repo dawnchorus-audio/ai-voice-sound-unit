@@ -1745,13 +1745,14 @@ function toggleHelp(section) {
 }
 $('help-open').onclick = () => toggleHelp();
 
-// ---------- Support: an optional tip on Buy Me a Coffee ----------
+// ---------- Support: an optional tip on the maker's monobank Base page ----------
 
-// The Buy Me a Coffee page, e.g. 'https://buymeacoffee.com/<name>'. Empty until the account exists.
-const SUPPORT_URL = '';
+// The maker's monobank Base page (base.monobank.ua; international cards accepted). If it is ever
+// emptied, the button says the page is coming soon instead of opening anything.
+const SUPPORT_URL = 'https://base.monobank.ua/CxcJKeRQip99nf';
 function openSupport() {
-  if (!SUPPORT_URL) { say('Support page coming soon: the Buy Me a Coffee page is not set up yet. Thanks for the thought!'); return; }
-  say('Opening Buy Me a Coffee in your web browser. Thank you!', 'ok');
+  if (!SUPPORT_URL) { say('Support page coming soon: it is not set up yet. Thanks for the thought!'); return; }
+  say('Opening the support page in your web browser. Thank you!', 'ok');
   openUrl(SUPPORT_URL);
 }
 $('support-open').onclick = openSupport;

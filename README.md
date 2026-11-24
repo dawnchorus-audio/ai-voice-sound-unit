@@ -32,10 +32,11 @@ Needs LUNA 3.1.1 or later.
 - A session file can come from someone else, so the History it carries is treated as
   untrusted: it is shown as text only, its settings fill only the remembered fields of their
   own tab, and an entry can only point at an audio file inside that session's audio folder.
-- The Add On is free. The **cup** button in the header opens an optional Buy Me a Coffee page
-  in your web browser for a tip; it sends nothing and changes nothing in the Add On.
-  `SUPPORT_URL` in `main.js` holds the page address; while it is empty the button says the
-  page is coming soon.
+- The Add On is free. The **cup** button in the header opens the maker's optional support page
+  (monobank Base, base.monobank.ua; it takes international cards) in your web browser for a tip;
+  it sends nothing and changes nothing in the Add On. `SUPPORT_URL` in `main.js` holds the page
+  address (https://base.monobank.ua/CxcJKeRQip99nf); if it is empty the button says the page is
+  coming soon.
 
 The user guide and the full shortcut list live in the Add On itself: **?** in its header,
 or ⌘/ (Ctrl+/), with a search box (⇧⌘F) that finds words or "phrases" across every section,

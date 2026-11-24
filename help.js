@@ -242,8 +242,8 @@ const AddOnHelp = (() => {
     },
     {
       id: 'support', title: 'Support the Add On', html: `
-<p>The Add On is free. If it saves you time and you'd like to say thanks, the <b>cup</b> button in the header opens its Buy Me a Coffee page in your web browser, where you can leave a tip. It's entirely optional: nothing in the Add On changes either way.</p>
-<p>The tip goes through Buy Me a Coffee, not ElevenLabs, and has nothing to do with your ElevenLabs credits or plan. The Add On sends nothing about you or your session; it only opens the page.</p>`,
+<p>The Add On is free. If it saves you time and you'd like to say thanks, the <b>cup</b> button in the header opens the maker's support page (monobank Base) in your web browser, where you can leave a tip by card, from any country. It's entirely optional: nothing in the Add On changes either way.</p>
+<p>The tip goes to the maker (dawnchorus) through monobank, not ElevenLabs, and has nothing to do with your ElevenLabs credits or plan. The Add On sends nothing about you or your session; it only opens the page.</p>`,
     },
   ];
 
