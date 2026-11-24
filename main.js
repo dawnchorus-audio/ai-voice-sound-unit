@@ -1745,6 +1745,17 @@ function toggleHelp(section) {
 }
 $('help-open').onclick = () => toggleHelp();
 
+// ---------- Support: an optional tip on Buy Me a Coffee ----------
+
+// The Buy Me a Coffee page, e.g. 'https://buymeacoffee.com/<name>'. Empty until the account exists.
+const SUPPORT_URL = '';
+function openSupport() {
+  if (!SUPPORT_URL) { say('Support page coming soon: the Buy Me a Coffee page is not set up yet. Thanks for the thought!'); return; }
+  say('Opening Buy Me a Coffee in your web browser. Thank you!', 'ok');
+  openUrl(SUPPORT_URL);
+}
+$('support-open').onclick = openSupport;
+
 // ---------- Look: Studio or Vintage, and Vintage's finish ----------
 
 const LOOKS = [['studio', 'cream'], ['vintage', 'cream'], ['vintage', 'black']];
