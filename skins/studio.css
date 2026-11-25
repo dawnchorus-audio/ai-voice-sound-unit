@@ -248,3 +248,6 @@ button.busy { opacity: .7; cursor: progress; }
 .need { outline: 2px solid var(--err); outline-offset: 2px; animation: need-shake .35s ease-in-out; }
 @keyframes need-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 @media (prefers-reduced-motion: reduce) { .job .spin, .icon.busy svg, button.pressed, button.flash-ok, button.flash-error, .need { animation: none; } }
+
+/* a button showing feedback keeps its width; a longer message is cut with an ellipsis */
+button.held { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

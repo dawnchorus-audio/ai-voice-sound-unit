@@ -269,10 +269,17 @@
 
   unit.innerHTML = `
     <div class="u-face">
-      <div class="u-top"><span class="u-screw"></span><span class="u-name">Voice &amp; Sound Unit</span><span class="u-maker">dawnchorus</span><span class="u-grow"></span>
-        <button type="button" class="u-finish" title="Look: Studio or Vintage, and Vintage's finish (⇧⌘E steps through them)"></button>
-        <button type="button" class="u-online"><i></i><svg class="u-key" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3"/><path d="m16 7 3 3"/></svg><span></span></button>
-        <button type="button" class="u-credits" title="Credits left on your ElevenLabs plan: click for the plan, Help and support"></button><span class="u-screw"></span></div>
+      <div class="u-top"><span class="u-screw"></span>
+        <span class="u-title"><span class="u-name">Voice &amp; Sound Unit</span><span class="u-maker">dawnchorus</span></span>
+        <span class="u-grow"></span>
+        <div class="u-right-top">
+          <div class="u-status-row">
+            <button type="button" class="u-online"><i></i><svg class="u-key" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3"/><path d="m16 7 3 3"/></svg><span></span></button>
+            <button type="button" class="u-credits" title="Credits left on your ElevenLabs plan: click for the plan, Help and support"></button>
+          </div>
+          <div class="u-tools"><button type="button" class="u-finish" title="Look: Studio or Vintage, and Vintage's finish (⇧⌘E steps through them)"></button></div>
+        </div>
+        <span class="u-screw"></span></div>
       <div class="u-modes" role="tablist"></div>
       <div class="u-bezel">
         <div class="u-lcd">
@@ -307,6 +314,20 @@
       const fit = Math.max(1, Math.floor((q('.u-softkeys').clientWidth + SOFT_GAP) / (SOFT_W + SOFT_GAP)));
       if (fit !== lastFit) { lastFit = fit; layoutSoft(); }
     }).observe(q('.u-bezel'));
+  }
+
+  // header tools: Studio's header buttons, as small keys (each presses the Studio button, so its
+  // shortcut, tooltip and action stay the same)
+  for (const id of ['load-from-clip', 'history-open', 'support-open', 'help-open']) {
+    const src = $(id);
+    if (!src) continue;
+    const b = h('button', 'u-tool');
+    b.type = 'button';
+    b.innerHTML = src.innerHTML;
+    b.title = src.title;
+    b.setAttribute('aria-label', src.getAttribute('aria-label') ?? src.title);
+    b.onclick = () => src.click();
+    q('.u-tools').append(b);
   }
 
   // header
@@ -373,6 +394,7 @@
     const box = q('.u-softkeys');
     const fit = Math.max(1, Math.floor((box.clientWidth + SOFT_GAP) / (SOFT_W + SOFT_GAP)));
     const row = [];
+    box.style.setProperty('--soft-cols', fit);
     if (softKeys.length <= fit) row.push(...softKeys);
     else {
       row.push(...softKeys.slice(0, fit - 1));
@@ -509,7 +531,10 @@
     const go = $(m.go);
     const rest = { tts: 'Generate', sfx: 'Generate', music: 'Compose', vc: 'Change voice', ivc: 'Create voice', lyrics: 'Re-voice in Text to Speech' }[tab];
     const now = go?.textContent.replace(/⌘↩|Ctrl\+↩/g, '').trim();
-    q('.u-go').textContent = now && rest && !now.startsWith(rest) ? now : m.goLabel;
+    const goKey = q('.u-go');
+    const feedback = now && rest && !now.startsWith(rest);
+    if (!feedback) { goKey.style.width = ''; goKey.textContent = m.goLabel; goKey.dataset.rest = goKey.offsetWidth; }
+    else { if (goKey.dataset.rest > 0) goKey.style.width = `${goKey.dataset.rest}px`; goKey.textContent = now; }
     q('.u-go').disabled = !!go?.disabled;
     q('.u-go').title = go?.title ?? m.goLabel;
     q('.u-tape-title').textContent = `Tape · ${m.label}`;

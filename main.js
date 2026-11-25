@@ -1523,6 +1523,15 @@ $('ly-transcribe').onclick = async () => {
  * Show on the button itself that it worked (or not): "✓ Copied" in green for a moment,
  * then its own label again. The status line still says the details.
  */
+/** While a button shows feedback ("Reading…", "✓ Set", "Failed") it keeps the width it had. */
+function holdWidth(b) {
+  if (b._held || !b.offsetWidth) return;
+  b._held = true;
+  b.style.width = `${b.offsetWidth}px`;
+  b.classList.add('held');
+}
+function releaseWidth(b) { if (!b._held) return; b._held = false; b.style.width = ''; b.classList.remove('held'); }
+
 function flashButton(b, text, kind = 'ok', ms = 1600) {
   clearTimeout(b._flash);
   // A 30px icon button has no room for words: it keeps its icon's place and shows ✓ or ! instead.
@@ -1532,6 +1541,7 @@ function flashButton(b, text, kind = 'ok', ms = 1600) {
     b.textContent = kind === 'ok' ? '✓' : '!';
   } else {
     if (!b.dataset.label) b.dataset.label = b.textContent;
+    holdWidth(b);
     b.textContent = text;
   }
   b.classList.remove('flash-ok', 'flash-error');
@@ -1542,6 +1552,7 @@ function flashButton(b, text, kind = 'ok', ms = 1600) {
     if (icon) { b.innerHTML = b._html; delete b._html; return; }
     b.textContent = b.dataset.label;
     delete b.dataset.label;
+    releaseWidth(b);
   }, ms);
 }
 
@@ -2035,7 +2046,7 @@ function withFeedback(b, { busy, ok = '✓ Done' } = {}) {
       if (b._html !== undefined) { b.innerHTML = b._html; delete b._html; }
       b.classList.remove('flash-ok', 'flash-error');
       b.classList.add('busy');
-    } else if (busy) { clearTimeout(b._flash); if (!b.dataset.label) b.dataset.label = label; b.textContent = busy; b.classList.add('busy'); }
+    } else if (busy) { clearTimeout(b._flash); if (!b.dataset.label) b.dataset.label = label; holdWidth(b); b.textContent = busy; b.classList.add('busy'); }
     let result;
     let threw = false;
     try { result = await run.call(b, e); } catch (err) { threw = true; sayError(err); }
