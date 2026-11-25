@@ -14,7 +14,7 @@ ElevenLabs or Universal Audio. ElevenLabs is a trademark of its owner.
 ## Install
 
 1. Install **AI Voice & Sound Unit** from Discover on UA Universe or in LUNA. Or download
-   `AI Voice & Sound Unit.lunaaddon` from this repository's [latest release](../../releases/latest)
+   `AI-Voice-and-Sound-Unit.lunaaddon` from this repository's [latest release](../../releases/latest)
    and double-click it.
 2. Restart LUNA, open a session, then open **Add Ons > Windows > AI Voice & Sound Unit**.
 3. When LUNA asks whether the Add On may reach `api.elevenlabs.io` and `storage.googleapis.com`
