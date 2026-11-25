@@ -486,7 +486,7 @@
     const state = $('session')?.dataset.state;
     const ok = !!client && state === 'connected';
     q('.u-online').className = `u-online ${!client ? 'nokey' : state === 'connected' ? 'on' : 'off'}`;
-    q('.u-online span').textContent = !client ? 'No key' : state === 'connected' ? 'Online' : state === 'error' ? 'No LUNA' : 'Waiting';
+    q('.u-online span').textContent = !client ? 'No key' : { connected: 'Online', none: 'No session', error: 'No LUNA' }[state] ?? 'Waiting';
     q('.u-online').title = `${$('session-text')?.textContent ?? ''}. ${client ? 'Click for the API key.' : 'Click to add your ElevenLabs API key.'}`;
     let credits = '— CR';
     if (subscription && typeof subscription.character_limit === 'number') credits = `${Math.max(0, subscription.character_limit - (subscription.character_count ?? 0))} CR`;
