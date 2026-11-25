@@ -243,7 +243,7 @@
 
   // header
   q('.u-finish').onclick = (e) => (openPopId === 'pop-look' ? closePop() : openPop('pop-look', e.currentTarget));
-  q('.u-online').onclick = () => show(screen === 'key' ? 'main' : 'key');
+  q('.u-online').onclick = () => (screenNow() === 'key' ? leaveKey() : show('key'));
   q('.u-credits').onclick = () => show(screen === 'plan' ? 'main' : 'plan');
 
   // mode keys
@@ -294,6 +294,9 @@
   // ---------- screens: the text (main), the voice list, the API key, the plan ----------
 
   let screen = 'main';
+  /** The screen shown: an open voice list or plan wins; on the API Key tab the key screen is the main one. */
+  const screenNow = () => (screen !== 'main' ? screen : activeTab === 'key' ? 'key' : 'main');
+  const leaveKey = () => { screen = 'main'; if (activeTab === 'key') showTab(prefs.lastMode ?? 'tts'); else { built = null; render(); } };
   let built = null; // what is drawn now: `${tab}|${screen}`
   let softPage = 0;
   function show(s) { screen = s; if (s === 'key' && activeTab !== 'key') { /* keep the mode */ } built = null; softPage = 0; render(); }
@@ -316,7 +319,7 @@
   function build() {
     const tab = MODES[activeTab] ? activeTab : 'tts';
     const m = MODES[tab];
-    const scr = activeTab === 'key' ? 'key' : screen;
+    const scr = screenNow();
     built = `${activeTab}|${scr}`;
     undockAll();
     const body = q('.u-body');
@@ -347,7 +350,7 @@
     } else if (scr === 'key') {
       for (const el of [$('key-input'), $('key-note')]) dock(el, body);
       headPart('API key ▸ kept in your keychain', 'left');
-      headPart({ text: '◀ Back', run: () => { show('main'); if (activeTab === 'key') showTab(prefs.lastMode ?? 'tts'); } }, 'right');
+      headPart({ text: '◀ Back', run: leaveKey }, 'right');
       soft = [softKey('Paste key', 'key-paste'), softKey('Save', 'key-save'), softKey('Forget key', 'key-delete'), softKey('Get a key ↗', 'key-open')];
     } else if (scr === 'plan') {
       body.append(h('div', 'u-plan-text'));
@@ -406,7 +409,7 @@
     if (subscription && typeof subscription.character_limit === 'number') credits = `${Math.max(0, subscription.character_limit - (subscription.character_count ?? 0))} CR`;
     q('.u-credits').textContent = credits;
     if (screen === 'plan') { const t = unit.querySelector('.u-plan-text'); if (t) t.textContent = `${$('quota').textContent || 'Add your API key to see your credits.'}\nEvery Generate uses your own ElevenLabs credits.`; }
-    if (screen === 'main' && activeTab !== 'key') {
+    if (screenNow() === 'main') {
       const hd = m.head;
       const left = q('.u-left .u-link, .u-left .u-dim');
       if (left) left.textContent = hd.voice ? `${hd.prefix} ▸ ${label($(hd.voice))} ▾` : (typeof hd.text === 'function' ? hd.text() : hd.text);
@@ -437,12 +440,12 @@
     document.body.classList.toggle('unit-on', on);
     if (!on) { if (docked.size) undockAll(); built = null; return; }
     if (MODES[activeTab]) prefs.lastMode = activeTab;
-    if (built !== `${activeTab}|${activeTab === 'key' ? 'key' : screen}`) build();
+    if (built !== `${activeTab}|${screenNow()}`) build();
     paint();
   }
 
   // Keep the panel in step: tab and look changes call render() at once; the rest is light enough to poll.
-  window.unitRender = () => { if (activeTab !== 'key' && screen === 'key' && built?.startsWith('key')) screen = 'main'; render(); };
+  window.unitRender = () => render();
   document.addEventListener('input', () => { if (vintage()) queueMicrotask(paint); });
   document.addEventListener('change', () => { if (vintage()) queueMicrotask(paint); });
   setInterval(() => { if (vintage()) paint(); }, 500);

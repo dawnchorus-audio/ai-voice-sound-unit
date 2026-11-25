@@ -102,7 +102,7 @@ const AddOnHelp = (() => {
       id: 'start', title: 'Getting started', html: `
 <p><b>Voice &amp; Sound Unit</b> (by dawnchorus) brings ElevenLabs into LUNA: Text to Speech, Sound Effects, Music, Voice Changer and Voice Clone, plus re-voicing LUNA's extracted lyrics at their original timing and LRC files. What it makes goes straight onto your timeline.</p>
 <p><b>Opening it</b>: it opens as a window of its own that you can move anywhere, from LUNA's <b>Add Ons</b> menu or the Add Ons browser.</p>
-<p><b>Look</b>: the half-filled circle in the header (<kbd>${isMac ? '⇧⌘E' : 'Ctrl+Shift+E'}</kbd> steps through them) chooses how the Add On looks: <b>Studio</b>, clean and dark, or <b>Vintage</b>, a hardware faceplate in a <b>Cream</b> or <b>Black</b> finish, with mode keys and LEDs, amber screens, faders, and a slide switch for every on/off option (left is off, right is on; the key says ON or OFF). It starts in Vintage Cream. Only the look changes: every button, setting, shortcut and History entry is the same in both, and the Add On remembers your choice.</p>
+<p><b>Look</b>: the half-filled circle in the header (<kbd>${isMac ? '⇧⌘E' : 'Ctrl+Shift+E'}</kbd> steps through them) chooses how the Add On looks: <b>Studio</b>, clean and dark, or <b>Vintage</b>, a hardware faceplate in a <b>Cream</b> or <b>Black</b> finish, with mode keys and LEDs, amber screens, faders, and a slide switch for every on/off option (left is off, right is on; the key says ON or OFF). It starts in Vintage Cream. Only the look changes: every setting, shortcut and History entry is the same in both, and the Add On remembers your choice (see <b>The Vintage panel</b>).</p>
 <ol>
   <li><b>Add your API key</b> on the <b>API Key</b> tab (the key icon at the right end of the tabs). Follow the steps there, then click <b>Paste key</b>. The key is kept in your system keychain, never in the Add On's files or the session.</li>
   <li><b>Choose where audio goes</b> with the dashed <b>destination chip</b> (⤓) under the tab: it says in words where the next result will land. Click it to choose the <b>Selected track</b> (the audio track you last clicked in LUNA) or a <b>New track</b>, and <b>Place automatically</b>. Under <b>Position</b>, choose where a new result starts: the <b>Playhead</b>, the <b>Selection start</b> or the <b>Next marker</b> (at or after the playhead), as they are when you click Generate; with no selection or marker it goes at the playhead.</li>
@@ -115,13 +115,25 @@ const AddOnHelp = (() => {
 <p>Every button shows that it worked: it presses in when clicked, and buttons that do something tell you how it went on the button itself, for example <i>Refreshing…</i> then <b>✓ 23 voices</b>, or <b>✓ Started</b> for a generation. A red <b>Failed</b> means the status line at the bottom of the window says why.</p>`,
     },
     {
+      id: 'vintage', title: 'The Vintage panel', html: `
+<p>In the <b>Vintage</b> look the Add On is one hardware panel. It does everything the Studio tabs do, with the same settings, History and shortcuts; only the controls look different.</p>
+<ul>
+  <li><b>Top strip</b>: <b>◐ Cream / Black</b> opens Look (Studio, Vintage, finish); the lamp says <b>Online</b>, <b>Waiting</b>, <b>No LUNA</b> or <b>No key</b> (click it for the API key); <b>CR</b> shows the credits left (click it for your plan, Help and support).</li>
+  <li><b>Mode keys</b>: Speech, SFX, Music, Changer, Clone, Lyrics.</li>
+  <li><b>The screen</b>: on top the voice (click to search, preview and pick; <b>My voices</b> shows only yours) and the model (click for the next one, Shift-click for the previous one); then the text, recording or samples; then the status line, the count and <b>DEST ▸</b> (click it to choose the track, the position and Place automatically).</li>
+  <li><b>Soft keys</b> under the screen do what the Studio buttons do (Import text, Len = sel, Tempo &amp; key, Read sel, + Sample, Find, Transcribe…); <b>More ▸</b> shows the rest.</li>
+  <li><b>Knobs</b>: drag up or down (Shift for finer steps), scroll, or click one and use the arrow keys; a double-click puts the default back. Options with two positions are slide switches: left is off, right is on.</li>
+  <li><b>Takes</b> 1–4 (variations), <b>Takes as</b> Playlists or Tracks (how several takes are placed together), <b>Place at</b> Playhead, Selection (its start) or Markers (the next one), and the red key.</li>
+  <li><b>The tape</b> lists this mode's takes, lettered A, B, C…, with ▶ and Place; <b>History</b> opens every result.</li>
+</ul>`,
+    },
+    {
       id: 'tts', title: 'Text to Speech', html: `
 <p>Type text, pick a voice and a model, and click <b>Generate</b>.</p>
 <ul>
   <li><b>Voice</b>: the first chip shows the chosen voice. Click it to search by name, accent or gender and pick from the list (double-click or <kbd>↩</kbd> picks and closes); ▶ plays the voice's sample before you spend credits, and <b>↻ Refresh</b> reloads your voices from ElevenLabs. Your own cloned voices are listed first.</li>
   <li><b>Credits</b>: the small line under the text shows the estimated cost and what is left on your plan, and warns when the text is too long for the model.</li>
-  <li>In the <b>Vintage</b> look the voice and the model sit at the top of the text screen: click the voice to search, preview and pick one; click the model for the next one (Shift-click for the previous one). The status line and the destination (<b>DEST ▸</b>, click it to choose the track) sit at the bottom of the same screen on Speech, Sound Effects and Music. Under the screen, <b>soft keys</b> do what the buttons they replace do: <b>Import text</b> and <b>Import lyrics</b> on Speech, <b>Len = sel</b> (the length of the timeline selection) on Sound Effects and Music, and <b>Tempo &amp; key</b> on Music; their tooltips name the same shortcuts. Results below are drawn as a <b>tape</b>: each take gets a letter (A, B, C…) next to its ▶, with the same Place buttons.</li>
-  <li><b>⚙ Voice settings</b>: Stability (lower is more expressive), Similarity (closeness to the original voice), Style and Speed. In the <b>Vintage</b> look they are four knobs on the panel instead: drag up or down (Shift for finer steps), scroll, or click one and use the arrow keys; a double-click puts the default back.</li>
+  <li><b>⚙ Voice settings</b>: Stability (lower is more expressive), Similarity (closeness to the original voice), Style and Speed.</li>
   <li><b>Script mode</b> (the <b>Lines</b> chip, <i>one clip per line</i>): every line becomes its own clip. Its options appear under the card: <i>one after another</i> with a gap you choose, or <i>on markers</i> from the playhead on. Start a line with a voice's name and a colon, such as <code>Alice: Hello!</code>, to speak it in that voice; each speaker gets a track of their own.</li>
   <li><b>Import text…</b> (or drop a file from Finder anywhere on the tab): <b>.txt</b>, <b>.md</b> and <b>.rtf</b> (TextEdit's and Word's rich text) fill the text field as plain text: Markdown and RTF formatting is removed, paragraphs stay. Subtitles (<b>.srt</b>, <b>.vtt</b>) and <b>.lrc</b> become one line per cue and, with a session open, keep their timing, counted from the session start: they use <i>At the original lyric timing</i>, with the same timing choices as lyrics. A WebVTT voice (<code>&lt;v Alice&gt;</code>) becomes <i>Alice:</i> and speaks in that voice if you have one by that name.</li>
   <li><b>Import lyrics</b>: re-voice a recording that LUNA's <b>Extract Lyrics</b> has transcribed. See <i>Lyrics &amp; LRC</i>.</li>
@@ -164,7 +176,7 @@ const AddOnHelp = (() => {
 <ul>
   <li><b>Length</b> chip: 0.5 to 30 seconds, or empty to let the model decide. <b>Selection</b> in the chip takes the length of the timeline selection.</li>
   <li><b>Loop</b> makes a sound that loops seamlessly, without a click.</li>
-  <li><b>⚙</b>: Prompt influence (how literally the prompt is followed) and the model. In the <b>Vintage</b> look Prompt influence is the <b>Influence</b> knob on the panel, and the model is at the top of the screen (click it for the next one).</li>
+  <li><b>⚙</b>: Prompt influence (how literally the prompt is followed) and the model.</li>
 </ul>`,
     },
     {
@@ -174,7 +186,7 @@ const AddOnHelp = (() => {
   <li><b>+ Tempo &amp; key</b> adds the session's tempo and key at the playhead to the prompt, so the music fits your song.</li>
   <li><b>Length</b> chip: 3 seconds to 10 minutes. <b>Selection</b> in the chip takes the length of the timeline selection, for example exactly 8 bars.</li>
   <li><b>Instrumental</b> asks for no vocals.</li>
-  <li><b>⚙</b>: the music model. In the <b>Vintage</b> look it is at the top of the screen instead: click it for the next one.</li>
+  <li><b>⚙</b>: the music model.</li>
 </ul>`,
     },
     {
@@ -204,7 +216,6 @@ const AddOnHelp = (() => {
 <ul>
   <li><b>This tab</b>, under the destination chip, lists the jobs still running and what was generated on that tab (scripts and lyrics count as Text to Speech, multi-clip changes as Voice Changer). When something finishes on a tab you are not on, that tab gets a <b>●</b> until you open it. <b>History</b> has everything, from every tab. ▶ plays a result and the small waveform shows its shape; <b>Place at playhead</b> puts it at the playhead on the destination; <b>Place at …</b> puts it where you were when you clicked Generate.</li>
   <li><b>Variations</b> (1 to 4): makes several versions in one go (each costs credits). With <b>Place automatically</b> on, they all go onto the timeline where you clicked Generate, as <b>Playlists</b> (one track, one playlist per variation; variation 1 stays active) or as <b>Tracks</b> (one new track each), whichever you chose last in <b>Place all as</b> (Playlists at first). To audition them first, turn <b>Place automatically</b> off: they wait in the list, where you place the one you like or <b>Place all</b>.</li>
-  <li>In the <b>Vintage</b> look, the keys next to the red key do the same: <b>Takes</b> 1–4 set the variations (the ×1 chip is not shown there), and <b>Track</b> picks <b>Sel</b> (the selected audio track) or <b>New</b> (a new track), with <b>Auto</b> for <b>Place automatically</b>. They change the same settings as the destination chip.</li>
   <li><b>Re-voiced lyrics</b> arrive as one group; <b>Place on a new track</b> can place them again with another timing (start, fitted, word by word) without generating again.</li>
   <li><b>LRC</b> on a speech result or a lyrics/script group opens its timing on the <i>Lyrics &amp; LRC</i> tab, ready to save, copy, or add to LUNA's lyrics.</li>
   <li><b>Clear</b> empties the current tab's list to free space; other tabs keep theirs. Nothing is lost: <b>History</b> keeps every generation of this session, saved with the session, with its prompt and settings. From History you can play, place, reuse the settings, or remove an entry. <b>Remove</b> and <b>Clear history</b> delete only the History entries: the audio stays in the session's audio files even if it was never placed (an Add On cannot delete session audio yet), and audio on the timeline is untouched.</li>

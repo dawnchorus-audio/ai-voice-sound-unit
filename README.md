@@ -74,40 +74,28 @@ All element ids stayed the same through the redesign, so `main.js` wiring, remem
 
 ### Skins
 
-The look comes in skins: **Vintage** (the hardware
-faceplate of design E, in a Cream or Black finish; Vintage Cream is the default) and **Studio**
-(the layout above). One page, one `main.js`, the same element ids:
-`applySkin()` in `main.js` sets `data-skin` on `<html>` from the remembered `prefs.skin`, and
-`skins/vintage.css` restyles the Studio page under `:root[data-skin=vintage]`
-(`[data-finish=black]` for Black). Vintage draws the tabs as mode keys with LEDs, chips and
-buttons as hardware keys, every two-position option (checkbox) as a flat slide switch (left off,
-right on, with ON/OFF printed on its chip), the main button as the red key, sliders as faders, and the text fields,
-popovers, destination, feed and status line as amber LCDs. The LCDs re-set Studio's colour
-variables for everything inside them, so Studio's own rules draw them. A control with no Vintage
-rule still works, in Vintage colours; check every new control in both skins. Vintage uses system fonts (condensed labels, mono
-LCD; Barlow Condensed and IBM Plex Mono when installed): LUNA lets the page reach only the
-manifest's servers, so web fonts would have to ship inside the Add On.
+The look comes in skins: **Vintage** (design E, a hardware unit, in a Cream or Black finish;
+Vintage Cream is the default) and **Studio** (the layout above). `applySkin()` in `main.js` sets
+`data-skin` / `data-finish` on `<html>` from the remembered `prefs.skin` / `prefs.finish`.
 
-In Vintage the voice and sound sliders are also drawn as rotary **knobs** on the panel, as in
-design E (`.knobs` / `.knob[data-for]` in `index.html`, `makeKnob()` in `main.js`): each knob drives
-the range input named in `data-for`, so remembered settings, History and Reuse clip settings stay
-the input's own. Studio hides `.knobs`; Vintage hides the Speech ⚙ (it held only those sliders) and
-the Influence row of the SFX ⚙.
-Next to the red key, Vintage shows **TAKES** and **TRACK** keys (`.hwkeys`, built by `makeHwKeys()`):
-TAKES 1–4 set the tab's ×variations list (whose chip Vintage hides), TRACK Sel / New and Auto set
-the destination's `input[name=dest]` and `#auto-place`. The keys only read and set those controls,
-repainting after any `input` / `change`, so shortcuts, History and the destination chip stay in step.
-On Speech, SFX and Music the text field is one **screen** in Vintage: `.lcd-head` above it shows the
-voice (opens the voice list) and the model (click: next, Shift-click: previous), and `.lcd-foot` below
-it takes `#status` and `#dest-row`, which `placeScreenParts()` moves in for the active tab and back
-to the footer and `main` in Studio or on tabs with no screen. Vintage hides the chips these repeat
-(Speech voice and model, the SFX and Music ⚙, which held only the model by then).
-Under that screen, `.softkeys[data-keys="id:Label|…"]` are Vintage's soft keys: each presses the
-button it names (Import text / lyrics, Length from the selection, Tempo & key), copies its tooltip and
-disabled state, and shows its feedback ("Reading…", "✓ Set") while the button does. Vintage hides
-the buttons they repeat; switches (Lines, Loop, Instrumental) stay slide switches.
-The results list is drawn as design E's **tape** in Vintage, with CSS only (`#results .item` with a
-`take` counter): the same rows, buttons and order as Studio, each take lettered A, B, C… after ▶.
+**Vintage is its own panel**, built by `unit.js` (`#unit`), laid out as design E: a top strip (name,
+maker, finish → Look, the Online / No key lamp → API key screen, credits → plan screen), six
+one-word mode keys, a screen in a bezel (voice and model on top, the text or drop zone, the status
+line, a count and DEST) with four soft keys (More ▸ for the rest), knobs and slide switches, TAKES,
+TAKES AS (playlists or tracks), PLACE AT and the red key, and the tape of results with History.
+Studio's header, tabs and footer are hidden and `main` keeps only its popovers.
+
+Nothing is new underneath: every key, knob and switch drives a control of the Studio page (same ids,
+`setField()` / `.click()`), and the page's own parts (text fields, drop zones, voice lists, the key
+field, `#status`, `#dest-chip`, `#jobs`, `#results`) are moved into the panel (`dock()`) and back
+(`undockAll()`) when the mode, screen or look changes (`window.unitRender`, called from `showTab()`
+and `applySkin()`). So remembered settings, History, shortcuts, tooltips and button feedback stay one.
+The modes, their knobs, switches and soft keys are the `MODES` table in `unit.js`. User rules for
+Vintage: two-position options are flat left-right slide switches; a control does not change size when
+it switches state; keys have no press effect (colour and border only). Styles: `skins/vintage.css`
+(`#unit …`); the older rules there still draw the popovers, Help and History in Vintage. Vintage uses
+system fonts (Barlow Condensed and IBM Plex Mono when installed): LUNA lets the page reach only the
+manifest's servers, so web fonts would have to ship inside the Add On.
 
 The **Look** button in the header (`#look-open`, popover `#pop-look`) picks the skin and Vintage's
 finish (the finish radios are disabled, not hidden, in Studio); ⇧⌘E (`look` in `SHORTCUTS`) steps
@@ -119,7 +107,7 @@ Studio → Vintage Cream → Vintage Black. `setLook()` keeps the choice in `pre
 It opens as a floating window only (*Add Ons > Windows > Voice & Sound Unit*), one page and one
 Add On (id `com.vbilous.elevenlabs`). The side panel in LUNA's secondary browser is left out for
 now: it is too narrow for the Add On until LUNA allows a wider panel.
-The window opens at 600 × 720. LUNA has no minimum window width, so the page itself never lays out
+The window opens at 600 × 860. LUNA has no minimum window width, so the page itself never lays out
 narrower than 600 px (`min-width` on `body` in `skins/studio.css`; Vintage's mode keys need about
 590): a narrower window scrolls sideways instead of wrapping rows or cutting the tabs.
 
@@ -129,6 +117,7 @@ narrower than 600 px (`min-width` on `body` in `skins/studio.css`; Vintage's mod
 | `icon.png` | The Add On's icon (512 px): a voice wave printed on the Vintage Cream faceplate. `icon` in the manifest; LUNA does not draw it in its menus yet, UA Universe shows it on the Add On's card. Drafts and the source that draws it: `notes/icon-drafts` (outside this repo). |
 | `index.html` | The page. Loads the two skin stylesheets, the SDK bundle, then the scripts below in this order. |
 | `skins/studio.css` | Studio, the clean dark look (direction A, Compose). It is also the base for every skin. |
+| `unit.js` | The Vintage panel (design E): builds `#unit` and drives the page's controls; see Skins. |
 | `skins/vintage.css` | Vintage, the hardware faceplate look (design E), as rules scoped to `:root[data-skin=vintage]` over Studio; Cream finish, Black with `data-finish=black`. |
 | `elevenlabs-api.js` | ElevenLabs REST client (`fetch`, no DOM): TTS (with timestamps), SFX, Music, Voice Changer, Voice Clone, Speech to Text, voices, models, quota; retries on concurrency limits; classified errors. |
 | `logic.js` | Engine logic with no DOM: WAV encode/parse, targets and placement (single, variations, scripts), clip audio ranges, history store, credits, music context, text files (decode, .md and .rtf to plain text, .srt/.vtt/.lrc cues). |
