@@ -271,7 +271,7 @@
     <div class="u-face">
       <div class="u-top"><span class="u-screw"></span><span class="u-name">Voice &amp; Sound Unit</span><span class="u-maker">dawnchorus</span><span class="u-grow"></span>
         <button type="button" class="u-finish" title="Look: Studio or Vintage, and Vintage's finish (⇧⌘E steps through them)"></button>
-        <button type="button" class="u-online"><i></i><span></span></button>
+        <button type="button" class="u-online"><i></i><svg class="u-key" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3"/><path d="m16 7 3 3"/></svg><span></span></button>
         <button type="button" class="u-credits" title="Credits left on your ElevenLabs plan: click for the plan, Help and support"></button><span class="u-screw"></span></div>
       <div class="u-modes" role="tablist"></div>
       <div class="u-bezel">

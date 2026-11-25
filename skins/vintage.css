@@ -408,3 +408,8 @@
    them, and MORE ▸ opens the rest in a row below */
 #unit .u-softkeys { grid-template-columns: repeat(auto-fill, 128px); justify-content: start; }
 #unit .u-soft.more { color: var(--v-amber); }
+/* no API key: the lamp becomes a red key, so it reads as "add your key" at a glance */
+#unit .u-online .u-key { display: none; }
+#unit .u-online.nokey i { display: none; }
+#unit .u-online.nokey .u-key { display: block; color: #E0533A; filter: drop-shadow(0 0 3px rgba(224, 83, 58, .6)); }
+#unit .u-online.nokey span { color: #C8452D; }
