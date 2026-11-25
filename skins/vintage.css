@@ -434,3 +434,4 @@
 /* soft keys fill the row: as many columns as fit at 128 px each */
 #unit .u-softkeys { grid-template-columns: repeat(var(--soft-cols, 4), minmax(0, 1fr)); }
 #unit .u-go { overflow: hidden; text-overflow: ellipsis; }
+#unit .u-logo { flex: none; }

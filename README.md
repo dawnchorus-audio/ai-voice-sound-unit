@@ -1,4 +1,4 @@
-# Voice & Sound Unit
+# AI Voice & Sound Unit
 
 A LUNA Add On that brings ElevenLabs
 into LUNA and places what it makes on the timeline. Built with the
@@ -13,7 +13,7 @@ ElevenLabs is a trademark of its owner.
 
 1. Download the `.lunaaddon` file from the latest [release](../../releases/latest) and double-click
    it; LUNA installs it. Or add this repository's URL in LUNA's Add Ons browser.
-2. Restart LUNA once, open **Voice & Sound Unit** from the **Add Ons** menu, and choose **Allow**
+2. Restart LUNA once, open **AI Voice & Sound Unit** from the **Add Ons** menu, and choose **Allow**
    when LUNA asks whether it may reach `api.elevenlabs.io` and `storage.googleapis.com`.
 3. Paste your own ElevenLabs API key on the key tab (create one in your ElevenLabs account under
    Developers → API Keys).
@@ -104,7 +104,7 @@ Studio → Vintage Cream → Vintage Black. `setLook()` keeps the choice in `pre
 
 ## Files
 
-It opens as a floating window only (*Add Ons > Windows > Voice & Sound Unit*), one page and one
+It opens as a floating window only (*Add Ons > Windows > AI Voice & Sound Unit*), one page and one
 Add On (id `com.vbilous.elevenlabs`). The side panel in LUNA's secondary browser is left out for
 now: it is too narrow for the Add On until LUNA allows a wider panel.
 The window opens at 600 × 860. LUNA has no minimum window width, so the page itself never lays out
@@ -114,7 +114,7 @@ narrower than 600 px (`min-width` on `body` in `skins/studio.css`; Vintage's mod
 | File | Purpose |
 |---|---|
 | `manifest.json` | What LUNA reads: id, name, window size, entry page. `id` is `com.vbilous.elevenlabs` for good: it scopes the keychain secret and the session storage, so never change it. |
-| `icon.png` | The Add On's icon (512 px): a voice wave printed on the Vintage Cream faceplate. `icon` in the manifest; LUNA does not draw it in its menus yet, UA Universe shows it on the Add On's card. Drafts and the source that draws it: `notes/icon-drafts` (outside this repo). |
+| `icon.png` | The Add On's icon (512 px): a speech bubble with a voice wave on an amber screen, on the Vintage Cream faceplate (draft V2). `icon` in the manifest; LUNA does not draw it in its menus yet, UA Universe shows it on the Add On's card. The Vintage header shows the same bubble. Drafts and the source that draws it: `notes/icon-drafts` (outside this repo). |
 | `index.html` | The page. Loads the two skin stylesheets, the SDK bundle, then the scripts below in this order. |
 | `skins/studio.css` | Studio, the clean dark look (direction A, Compose). It is also the base for every skin. |
 | `index.html` `?v=` | Every script and stylesheet is loaded with `?v=<stamp>`; change the stamp with every change, so a web view that cached an older file never mixes it with new ones (seen while testing: an old `logic.js` with a new `main.js`). |

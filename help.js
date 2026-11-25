@@ -1,4 +1,4 @@
-// Voice & Sound Unit: keyboard shortcuts and the user guide shown by Help.
+// AI Voice & Sound Unit: keyboard shortcuts and the user guide shown by Help.
 // SHORTCUTS is the one list both the key handler (main.js) and the Help page read, so the
 // page can never describe a shortcut that does not exist.
 
@@ -100,7 +100,7 @@ const AddOnHelp = (() => {
   const SECTIONS = [
     {
       id: 'start', title: 'Getting started', html: `
-<p><b>Voice &amp; Sound Unit</b> (by dawnchorus) brings ElevenLabs into LUNA: Text to Speech, Sound Effects, Music, Voice Changer and Voice Clone, plus re-voicing LUNA's extracted lyrics at their original timing and LRC files. What it makes goes straight onto your timeline.</p>
+<p><b>AI Voice &amp; Sound Unit</b> (by dawnchorus) brings ElevenLabs into LUNA: Text to Speech, Sound Effects, Music, Voice Changer and Voice Clone, plus re-voicing LUNA's extracted lyrics at their original timing and LRC files. What it makes goes straight onto your timeline.</p>
 <p><b>Opening it</b>: it opens as a window of its own that you can move anywhere, from LUNA's <b>Add Ons</b> menu or the Add Ons browser.</p>
 <p><b>Look</b>: the half-filled circle in the header (<kbd>${isMac ? '⇧⌘E' : 'Ctrl+Shift+E'}</kbd> steps through them) chooses how the Add On looks: <b>Studio</b>, clean and dark, or <b>Vintage</b>, a hardware faceplate in a <b>Cream</b> or <b>Black</b> finish, with mode keys and LEDs, amber screens, faders, and a slide switch for every on/off option (left is off, right is on; the key says ON or OFF). It starts in Vintage Cream. Only the look changes: every setting, shortcut and History entry is the same in both, and the Add On remembers your choice (see <b>The Vintage panel</b>).</p>
 <ol>
@@ -236,7 +236,7 @@ const AddOnHelp = (() => {
     {
       id: 'trouble', title: 'Troubleshooting', html: `
 <dl>
-  <dt>"Could not reach ElevenLabs"</dt><dd>A network problem, not a bad key: the saved key is kept. In current LUNA versions an Add On reaches only the servers you allowed: when LUNA asks whether <i>Voice &amp; Sound Unit</i> may use api.elevenlabs.io and storage.googleapis.com (voice samples), choose <b>Allow</b>. If you chose Don't Allow, allow them in LUNA's <b>Settings → Add Ons → SERVERS</b> and reopen the window. When the Add On opens without a connection it tries again on its own every 5 seconds (5 times), and <b>Try again</b> in the status line retries at once. It can also be ElevenLabs itself: when one of its services is down, the rest keeps working (the voice list then comes from an older service). Check the internet connection. If it keeps happening with a working connection, ElevenLabs may be refusing requests from the Add On's page; please report it.</dd>
+  <dt>"Could not reach ElevenLabs"</dt><dd>A network problem, not a bad key: the saved key is kept. In current LUNA versions an Add On reaches only the servers you allowed: when LUNA asks whether <i>AI Voice &amp; Sound Unit</i> may use api.elevenlabs.io and storage.googleapis.com (voice samples), choose <b>Allow</b>. If you chose Don't Allow, allow them in LUNA's <b>Settings → Add Ons → SERVERS</b> and reopen the window. When the Add On opens without a connection it tries again on its own every 5 seconds (5 times), and <b>Try again</b> in the status line retries at once. It can also be ElevenLabs itself: when one of its services is down, the rest keeps working (the voice list then comes from an older service). Check the internet connection. If it keeps happening with a working connection, ElevenLabs may be refusing requests from the Add On's page; please report it.</dd>
   <dt>"The API key was rejected" / "missing permissions"</dt><dd>The key was deleted, expired, or is restricted. Create a new key, or allow the features you use and reading Models, Voices and User.</dd>
   <dt>"Quota exceeded" / out of credits</dt><dd>Your plan's credits are used up for this period. The header shows what is left.</dd>
   <dt>Paste key does nothing</dt><dd>LUNA may not let the page read the clipboard. Paste into the field with ${isMac ? '⌘V' : 'Ctrl+V'} and click <b>Save and check</b>.</dd>

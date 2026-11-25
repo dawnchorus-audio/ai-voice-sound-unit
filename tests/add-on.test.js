@@ -607,7 +607,7 @@ describe('lyrics: import, re-voice timing, LRC', () => {
       { start: 5, end: 7, text: 'Hello there world.', words: [{ text: 'Hello', start: 5 }, { text: 'there', start: 5.6 }, { text: 'world.', start: 6.5 }] },
       { start: 70.25, end: 71, text: 'Second line.' },
     ];
-    expect(Ly.formatLrc(lines, { title: 'Dialog' })).toBe('[ti:Dialog]\n[re:Voice & Sound Unit]\n[00:05.00]Hello there world.\n[00:07.00]\n[01:10.25]Second line.\n[01:11.00]\n');
+    expect(Ly.formatLrc(lines, { title: 'Dialog' })).toBe('[ti:Dialog]\n[re:AI Voice & Sound Unit]\n[00:05.00]Hello there world.\n[00:07.00]\n[01:10.25]Second line.\n[01:11.00]\n');
     expect(Ly.formatLrc(lines, { words: true }).split('\n')[1]).toBe('[00:05.00] <00:05.00>Hello <00:05.60>there <00:06.50>world.');
     const grouped = Ly.linesFromWords([
       { text: 'One', start: 0, end: 0.3 }, { text: 'two.', start: 0.4, end: 0.7 },
