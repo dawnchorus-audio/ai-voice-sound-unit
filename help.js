@@ -120,7 +120,7 @@ const AddOnHelp = (() => {
 <ul>
   <li><b>Voice</b>: the first chip shows the chosen voice. Click it to search by name, accent or gender and pick from the list (double-click or <kbd>↩</kbd> picks and closes); ▶ plays the voice's sample before you spend credits, and <b>↻ Refresh</b> reloads your voices from ElevenLabs. Your own cloned voices are listed first.</li>
   <li><b>Credits</b>: the small line under the text shows the estimated cost and what is left on your plan, and warns when the text is too long for the model.</li>
-  <li><b>⚙ Voice settings</b>: Stability (lower is more expressive), Similarity (closeness to the original voice), Style and Speed.</li>
+  <li><b>⚙ Voice settings</b>: Stability (lower is more expressive), Similarity (closeness to the original voice), Style and Speed. In the <b>Vintage</b> look they are four knobs on the panel instead: drag up or down (Shift for finer steps), scroll, or click one and use the arrow keys; a double-click puts the default back.</li>
   <li><b>Script mode</b> (the <b>Lines</b> chip, <i>one clip per line</i>): every line becomes its own clip. Its options appear under the card: <i>one after another</i> with a gap you choose, or <i>on markers</i> from the playhead on. Start a line with a voice's name and a colon, such as <code>Alice: Hello!</code>, to speak it in that voice; each speaker gets a track of their own.</li>
   <li><b>Import text…</b> (or drop a file from Finder anywhere on the tab): <b>.txt</b>, <b>.md</b> and <b>.rtf</b> (TextEdit's and Word's rich text) fill the text field as plain text: Markdown and RTF formatting is removed, paragraphs stay. Subtitles (<b>.srt</b>, <b>.vtt</b>) and <b>.lrc</b> become one line per cue and, with a session open, keep their timing, counted from the session start: they use <i>At the original lyric timing</i>, with the same timing choices as lyrics. A WebVTT voice (<code>&lt;v Alice&gt;</code>) becomes <i>Alice:</i> and speaks in that voice if you have one by that name.</li>
   <li><b>Import lyrics</b>: re-voice a recording that LUNA's <b>Extract Lyrics</b> has transcribed. See <i>Lyrics &amp; LRC</i>.</li>
@@ -163,7 +163,7 @@ const AddOnHelp = (() => {
 <ul>
   <li><b>Length</b> chip: 0.5 to 30 seconds, or empty to let the model decide. <b>Selection</b> in the chip takes the length of the timeline selection.</li>
   <li><b>Loop</b> makes a sound that loops seamlessly, without a click.</li>
-  <li><b>⚙</b>: Prompt influence (how literally the prompt is followed) and the model.</li>
+  <li><b>⚙</b>: Prompt influence (how literally the prompt is followed) and the model. In the <b>Vintage</b> look Prompt influence is the <b>Influence</b> knob on the panel, and ⚙ holds the model.</li>
 </ul>`,
     },
     {

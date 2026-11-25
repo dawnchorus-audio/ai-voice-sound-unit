@@ -88,6 +88,12 @@ rule still works, in Vintage colours; check every new control in both skins. Vin
 LCD; Barlow Condensed and IBM Plex Mono when installed): LUNA lets the page reach only the
 manifest's servers, so web fonts would have to ship inside the Add On.
 
+In Vintage the voice and sound sliders are also drawn as rotary **knobs** on the panel, as in
+design E (`.knobs` / `.knob[data-for]` in `index.html`, `makeKnob()` in `main.js`): each knob drives
+the range input named in `data-for`, so remembered settings, History and Reuse clip settings stay
+the input's own. Studio hides `.knobs`; Vintage hides the Speech ⚙ (it held only those sliders) and
+the Influence row of the SFX ⚙.
+
 The **Look** button in the header (`#look-open`, popover `#pop-look`) picks the skin and Vintage's
 finish (the finish radios are disabled, not hidden, in Studio); ⇧⌘E (`look` in `SHORTCUTS`) steps
 Studio → Vintage Cream → Vintage Black. `setLook()` keeps the choice in `prefs.skin` /

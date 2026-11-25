@@ -159,6 +159,62 @@ for (const id of ['tts-stability', 'tts-similarity', 'tts-style', 'tts-speed', '
   paint();
 }
 
+// ---------- knobs: the sliders above drawn as rotary knobs (shown by Vintage, hidden in Studio) ----------
+
+/** A knob drives the range input named in data-for, so remembered settings, History and
+ * "Reuse clip settings" stay the input's own. Drag up or down (Shift: finer), scroll, or use the
+ * arrow keys, Page Up/Down, Home and End; a double-click puts the default back. */
+function makeKnob(el) {
+  const input = $(el.dataset.for);
+  const min = Number(input.min), max = Number(input.max), step = Number(input.step) || 0.01;
+  const suffix = el.dataset.suffix ?? '';
+  const dflt = Number(input.defaultValue);
+  el.tabIndex = 0;
+  el.setAttribute('role', 'slider');
+  el.setAttribute('aria-label', el.dataset.name);
+  el.setAttribute('aria-valuemin', min);
+  el.setAttribute('aria-valuemax', max);
+  el.title = `${el.dataset.tip} Drag up or down, scroll or use the arrow keys; double-click resets to ${dflt.toFixed(2)}${suffix}.`;
+  el.innerHTML = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="ring" cx="32" cy="32" r="29"/>'
+    + '<circle class="cap" cx="32" cy="32" r="22"/><line class="ptr" x1="32" y1="32" x2="32" y2="13"/></svg>'
+    + '<span class="name"></span><span class="val"></span>';
+  el.querySelector('.name').textContent = el.dataset.name;
+  const paint = () => {
+    const v = Number(input.value);
+    el.querySelector('.ptr').setAttribute('transform', `rotate(${-135 + 270 * ((v - min) / (max - min))} 32 32)`);
+    el.querySelector('.val').textContent = `${v.toFixed(2)}${suffix}`;
+    el.setAttribute('aria-valuenow', v);
+    el.setAttribute('aria-valuetext', `${v.toFixed(2)}${suffix}`);
+  };
+  const set = (v, commit) => {
+    const next = Number(Math.min(max, Math.max(min, Math.round(v / step) * step)).toFixed(4));
+    if (next !== Number(input.value)) { input.value = next; input.dispatchEvent(new Event('input', { bubbles: true })); }
+    if (commit) input.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+  input.addEventListener('input', paint);
+  paint();
+  let drag = null;
+  el.addEventListener('pointerdown', (e) => { el.setPointerCapture(e.pointerId); drag = { y: e.clientY, v: Number(input.value) }; el.focus(); e.preventDefault(); });
+  el.addEventListener('pointermove', (e) => { if (drag) set(drag.v + ((drag.y - e.clientY) / 150) * (max - min) * (e.shiftKey ? 0.2 : 1)); });
+  const end = () => { if (drag) { drag = null; set(Number(input.value), true); } };
+  el.addEventListener('pointerup', end);
+  el.addEventListener('pointercancel', end);
+  // A wheel notch moves about 1/20 of the range (Speed's fine 0.01 step would take 50 notches).
+  const notch = Math.max(step, Math.round((max - min) / 20 / step) * step);
+  el.addEventListener('wheel', (e) => { e.preventDefault(); set(Number(input.value) - Math.sign(e.deltaY) * notch, true); }, { passive: false });
+  el.addEventListener('dblclick', () => set(dflt, true));
+  el.addEventListener('keydown', (e) => {
+    const v = Number(input.value);
+    const to = { ArrowUp: v + step, ArrowRight: v + step, ArrowDown: v - step, ArrowLeft: v - step,
+      PageUp: v + step * 10, PageDown: v - step * 10, Home: min, End: max }[e.key];
+    if (to === undefined || e.metaKey || e.ctrlKey || e.altKey) return;
+    e.preventDefault();
+    e.stopPropagation();
+    set(to, true);
+  });
+}
+for (const el of document.querySelectorAll('.knob[data-for]')) makeKnob(el);
+
 function ttsLines() {
   if (!$('tts-script').checked) return [{ text: $('tts-text').value, speaker: null, voiceId: null }];
   // Lyrics keep every line as text: a "Name:" in a lyric is not a speaker.

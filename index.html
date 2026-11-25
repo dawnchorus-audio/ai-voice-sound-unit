@@ -43,6 +43,13 @@
       <div class="card">
         <textarea id="tts-text" class="big" data-remember aria-label="Text" placeholder="Type what the voice should say, or drop a text, subtitle or LRC file here…"></textarea>
         <div class="card-meta" id="tts-count">0 characters</div>
+        <!-- Vintage draws the voice settings as knobs on the panel; each one drives the slider of the same name in ⚙ -->
+        <div class="knobs" role="group" aria-label="Voice settings">
+          <div class="knob" data-for="tts-stability" data-name="Stability" data-tip="Stability: lower is more expressive and varied, higher is steadier."></div>
+          <div class="knob" data-for="tts-similarity" data-name="Similarity" data-tip="Similarity: how close the voice stays to the original."></div>
+          <div class="knob" data-for="tts-style" data-name="Style" data-tip="Style: exaggerates the speaker's style; high values can be less stable."></div>
+          <div class="knob" data-for="tts-speed" data-name="Speed" data-suffix="×" data-tip="Speed: how fast the voice speaks, 0.7× to 1.2×."></div>
+        </div>
         <div class="bar">
           <button class="chip av" data-pop="pop-tts-voice" data-voice-chip="tts-voice" title="Voice: search, preview and pick"><span class="avatar">?</span><span class="lbl">Voice</span></button>
           <select id="tts-model" class="chip" data-remember aria-label="Model" title="Model"></select>
@@ -87,6 +94,9 @@
     <section id="tab-sfx">
       <div class="card">
         <textarea id="sfx-text" class="big" data-remember aria-label="Describe the sound" placeholder="Describe the sound, e.g. heavy wooden door slams shut in a large stone hall"></textarea>
+        <div class="knobs" role="group" aria-label="Sound settings">
+          <div class="knob" data-for="sfx-influence" data-name="Influence" data-tip="Prompt influence: higher follows the words more literally."></div>
+        </div>
         <div class="bar">
           <span class="chip" title="Length in seconds (0.5–30). Empty: the model decides."><span class="unit">Length</span><input type="number" id="sfx-duration" min="0.5" max="30" step="0.5" placeholder="auto" data-remember aria-label="Length in seconds"><span class="unit">s</span><button id="sfx-sel-len" title="Length of the timeline selection">Selection</button></span>
           <label class="chip" title="Make the sound loop seamlessly"><input type="checkbox" id="sfx-loop" data-remember> Loop</label>
