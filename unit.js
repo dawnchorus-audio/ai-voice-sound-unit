@@ -269,7 +269,7 @@
 
   unit.innerHTML = `
     <div class="u-face">
-      <div class="u-top"><span class="u-screw"></span><svg class="u-logo" width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="8" fill="#E6E0D2" stroke="#A9A190"/><rect x="9" y="12" width="46" height="30" rx="9" fill="#161C14"/><path d="M19 40 L16 52 L29 41 Z" fill="#161C14"/><rect x="15" y="24.0" width="2.2" height="6.0" rx="1" fill="#F2B544"/><rect x="19" y="21.0" width="2.2" height="12.0" rx="1" fill="#F2B544"/><rect x="23" y="18.0" width="2.2" height="18.0" rx="1" fill="#F2B544"/><rect x="27" y="21.5" width="2.2" height="11.0" rx="1" fill="#F2B544"/><rect x="31" y="17.0" width="2.2" height="20.0" rx="1" fill="#F2B544"/><rect x="35" y="20.0" width="2.2" height="14.0" rx="1" fill="#F2B544"/><rect x="39" y="22.5" width="2.2" height="9.0" rx="1" fill="#F2B544"/><rect x="43" y="19.0" width="2.2" height="16.0" rx="1" fill="#F2B544"/><rect x="47" y="23.5" width="2.2" height="7.0" rx="1" fill="#F2B544"/></svg>
+      <div class="u-top"><span class="u-screw"></span>
         <span class="u-title"><span class="u-name">AI Voice &amp; Sound Unit</span><span class="u-maker">dawnchorus</span></span>
         <span class="u-grow"></span>
         <div class="u-right-top">
