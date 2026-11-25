@@ -301,3 +301,13 @@
 :root[data-skin=vintage] .softkeys button:active { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .25); }
 :root[data-skin=vintage] .softkeys button:disabled { opacity: .45; cursor: default; }
 :root[data-skin=vintage] :is(#tab-tts > .row:has(#tts-import-text), #sfx-sel-len, #music-sel-len, #music-context) { display: none; }
+
+/* the tape of takes (design E, stage 5): this tab's results drawn as tape rows. Same rows, buttons and
+   order as Studio; each take gets a letter (A, B, C…) after its play key, like E's takes. */
+:root[data-skin=vintage] #results .group { counter-reset: take; gap: 5px; }
+:root[data-skin=vintage] #results .item { counter-increment: take; gap: 8px; padding: 5px 8px; background: #0F130D; border: 1px solid var(--v-lcd-line); border-radius: 3px; }
+:root[data-skin=vintage] #results .item > .play { order: -2; }
+:root[data-skin=vintage] #results .item::before { content: counter(take, upper-alpha); order: -1; flex: 0 0 18px; height: 18px; display: grid; place-items: center; border-radius: 2px; background: var(--v-amber); color: var(--v-lcd); font: 700 11px var(--v-mono); }
+:root[data-skin=vintage] #results .item .name { color: var(--v-amber-dim); text-transform: uppercase; }
+:root[data-skin=vintage] #results .item button.ghost, :root[data-skin=vintage] #results .group-actions button.ghost { font: 700 10.5px var(--v-label); letter-spacing: .1em; text-transform: uppercase; }
+:root[data-skin=vintage] #results .group .title b { text-transform: uppercase; letter-spacing: .06em; }

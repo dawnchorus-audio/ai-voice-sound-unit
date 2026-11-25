@@ -106,6 +106,8 @@ Under that screen, `.softkeys[data-keys="id:Label|…"]` are Vintage's soft keys
 button it names (Import text / lyrics, Length from the selection, Tempo & key), copies its tooltip and
 disabled state, and shows its feedback ("Reading…", "✓ Set") while the button does. Vintage hides
 the buttons they repeat; switches (Lines, Loop, Instrumental) stay slide switches.
+The results list is drawn as design E's **tape** in Vintage, with CSS only (`#results .item` with a
+`take` counter): the same rows, buttons and order as Studio, each take lettered A, B, C… after ▶.
 
 The **Look** button in the header (`#look-open`, popover `#pop-look`) picks the skin and Vintage's
 finish (the finish radios are disabled, not hidden, in Studio); ⇧⌘E (`look` in `SHORTCUTS`) steps
