@@ -2,7 +2,7 @@
   "name": "elevenlabs",
   "private": true,
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "AI Voice & Sound Unit, a LUNA Add On built with @uaudio/luna-builder-sdk",
   "scripts": {
