@@ -57,12 +57,37 @@ const AddOnLogic = {
     return t && t.trackType.value === 'audio' ? t : undefined;
   },
 
-  /** What the destination row says. */
-  destinationText(session, mode) {
+  /** What the destination row says. `at`: 'playhead' (default), 'selection' or 'marker'. */
+  destinationText(session, mode, at = 'playhead') {
     if (!session) return 'No session open: generated audio can be previewed but not placed.';
-    if (mode === 'new') return 'A new track at the playhead';
+    const where = AddOnLogic.AT_TEXT[at] ?? AddOnLogic.AT_TEXT.playhead;
+    if (mode === 'new') return `A new track ${where}`;
     const t = AddOnLogic.targetTrack(session);
-    return t ? `"${t.name.value ?? t.id}" at the playhead` : 'No audio track selected: a new track will be made';
+    return t ? `"${t.name.value ?? t.id}" ${where}` : 'No audio track selected: a new track will be made';
+  },
+  AT_TEXT: { playhead: 'at the playhead', selection: 'at the selection start', marker: 'at the next marker' },
+
+  /**
+   * Where a new result starts: the playhead, the start of the timeline selection, or the first
+   * marker at or after the playhead. Falls back to the playhead, with a note, when there is no
+   * selection or no marker. Markers must have been loaded (session.markers.load()).
+   * @returns {{ tick: number, note: string }}
+   */
+  startTick(session, at = 'playhead') {
+    const head = Math.max(0, Math.round(session.transport.tick || 0));
+    if (at === 'selection') {
+      const a = session.context.selectionStart.value;
+      const b = session.context.selectionStop.value;
+      if (typeof a === 'number' && typeof b === 'number' && b > a) return { tick: Math.max(0, Math.round(a)), note: '' };
+      return { tick: head, note: 'No selection on the timeline, so it goes at the playhead.' };
+    }
+    if (at === 'marker') {
+      let ticks = [];
+      try { ticks = session.markers.sorted.map((m) => m.location.value).filter((t) => typeof t === 'number' && t >= head); } catch { /* not loaded */ }
+      if (ticks.length) return { tick: Math.round(ticks[0]), note: '' };
+      return { tick: head, note: 'No marker at or after the playhead, so it goes at the playhead.' };
+    }
+    return { tick: head, note: '' };
   },
 
   // ---------- where generated audio goes ----------

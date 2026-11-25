@@ -90,12 +90,13 @@ describe('ElevenLabs client', () => {
     const f = fakeFetch((url) => (url.pathname === '/v1/voices/add' ? { json: { voice_id: 'new1', requires_verification: false } } : { audio: new ArrayBuffer(2) }));
     const c = new Client('k', { fetch: f });
     const clip = new File([new Uint8Array(10)], 'take.wav', { type: 'audio/wav' });
-    await c.voiceChanger({ voiceId: 'v9', audio: clip, modelId: 'eleven_multilingual_sts_v2', removeBackgroundNoise: true });
+    await c.voiceChanger({ voiceId: 'v9', audio: clip, modelId: 'eleven_multilingual_sts_v2', removeBackgroundNoise: true, voiceSettings: { stability: 0.4, similarity_boost: 0.8, style: 0 } });
     const res = await c.cloneVoice({ name: ' My Voice ', files: [clip, clip], description: 'warm' });
     expect(f.calls[0].url.pathname).toBe('/v1/voice-changer/v9');
     const vc = f.calls[0].init.body;
     expect(vc.get('model_id')).toBe('eleven_multilingual_sts_v2');
     expect(vc.get('remove_background_noise')).toBe('true');
+    expect(JSON.parse(vc.get('voice_settings'))).toEqual({ stability: 0.4, similarity_boost: 0.8, style: 0 });
     expect(vc.get('audio').name).toBe('take.wav');
     const ivc = f.calls[1].init.body;
     expect(ivc.get('name')).toBe('My Voice');
@@ -394,6 +395,25 @@ describe('targets, variations, scripts and history', () => {
     expect(await clipsOn(session, placed[0].track)).toEqual([4 * beat, 12 * beat]);
     const three = [...items, await uploaded(session, 'L3')];
     await expect(logic.placeScript(session, three, logic.captureTarget(session, 'new', 0), { layout: 'markers' })).rejects.toThrow(/2 markers after the playhead but 3 lines/);
+  });
+
+  it('starts a result at the playhead, the selection start or the next marker', async () => {
+    const { engine, session } = await connected();
+    const beat = Luna.TICKS_PER_BEAT;
+    expect(logic.startTick(session, 'playhead')).toEqual({ tick: 0, note: '' });
+    expect(logic.startTick(session, 'selection').note).toMatch(/No selection/);
+    engine.setValue('/sessions/abc/contexts/main', 'selection_start', 8 * beat);
+    engine.setValue('/sessions/abc/contexts/main', 'selection_stop', 16 * beat);
+    await engine.settled();
+    expect(logic.startTick(session, 'selection')).toEqual({ tick: 8 * beat, note: '' });
+    await session.markers.load();
+    expect(logic.startTick(session, 'marker').note).toMatch(/No marker/);
+    await session.addMarker(4 * beat, 'Verse');
+    await engine.settled();
+    await session.markers.load();
+    expect(logic.startTick(session, 'marker')).toEqual({ tick: 4 * beat, note: '' });
+    expect(logic.destinationText(session, 'new', 'marker')).toBe('A new track at the next marker');
+    expect(logic.destinationText(session, 'new', 'selection')).toBe('A new track at the selection start');
   });
 
   it('keeps a generation history in the session', async () => {

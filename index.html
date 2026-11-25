@@ -22,7 +22,7 @@
     <button data-tab="tts" title="Text to Speech: turn text into speech in an ElevenLabs voice: typed, imported from a file, or LUNA's lyrics.">Speech</button>
     <button data-tab="sfx" title="Sound Effects: make a sound effect from a description.">SFX</button>
     <button data-tab="music" title="Music: make music from a description, up to 10 minutes.">Music</button>
-    <button data-tab="vc" title="Voice Changer: re-voice a recording or clips from the timeline with another voice, keeping timing and delivery.">Voice Changer</button>
+    <button data-tab="vc" title="Voice Changer: re-voice a recording or clips from the timeline with another voice, keeping timing and delivery.">Changer</button>
     <button data-tab="ivc" title="Voice Clone: create a new voice in your ElevenLabs account from recordings of a speaker.">Clone</button>
     <button data-tab="lyrics" title="Lyrics &amp; LRC: find LUNA's extracted lyrics or transcribe a clip; view them as text or LRC; re-voice or copy them.">Lyrics</button>
     <button data-tab="key" class="push" aria-label="API Key" title="API Key: add, check or forget your ElevenLabs API key."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3"/><path d="m16 7 3 3"/></svg></button>
@@ -159,6 +159,7 @@
           <button class="chip av" data-pop="pop-vc-voice" data-voice-chip="vc-voice" title="New voice: search, preview and pick"><span class="avatar">?</span><span class="lbl">Voice</span></button>
           <select id="vc-model" class="chip" data-remember aria-label="Model" title="Model"></select>
           <label class="chip" title="Remove background noise first"><input type="checkbox" id="vc-denoise" data-remember> Denoise</label>
+          <button class="chip ic" data-pop="pop-vc-opts" aria-label="Voice settings" title="Voice settings: stability, similarity and style of the new voice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></button>
         </div>
         <div class="row">
           <div class="hwkeys" role="group" aria-label="Track"></div>
@@ -166,6 +167,13 @@
           <button class="primary alt generate" id="vc-go" title="Re-voice the recording shown above with the chosen voice. One clip or file, one result.">Change voice</button>
           <button class="primary generate" id="vc-every" title="Re-voice every clip in the timeline selection at once (no need to use the recording above). Each clip is its own request; each result goes where its clip is, on the track the destination chip names (Selected track: over the originals; New track: a track of their own).">Change every clip in selection</button>
         </div>
+      </div>
+      <div class="pop" id="pop-vc-opts" hidden>
+        <div class="ph">Voice settings</div>
+        <div class="ctl"><span>Stability</span><input type="range" id="vc-stability" min="0" max="1" step="0.05" value="0.5" data-remember aria-label="Stability"><b id="vc-stability-v"></b></div>
+        <div class="ctl"><span>Similarity</span><input type="range" id="vc-similarity" min="0" max="1" step="0.05" value="0.75" data-remember aria-label="Similarity"><b id="vc-similarity-v"></b></div>
+        <div class="ctl"><span>Style</span><input type="range" id="vc-style" min="0" max="1" step="0.05" value="0" data-remember aria-label="Style"><b id="vc-style-v"></b></div>
+        <div class="foot"><span>How the new voice delivers the recording; lower stability is more expressive.</span></div>
       </div>
       <div class="pop" id="pop-vc-voice" hidden>
         <label class="search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" class="voice-search" data-for="vc-voice" placeholder="Search voices" aria-label="Search voices"></label>
@@ -252,6 +260,10 @@
       <div class="ph">Track</div>
       <label class="check"><input type="radio" name="dest" value="selected" checked> Selected track</label>
       <label class="check"><input type="radio" name="dest" value="new"> New track</label>
+      <div class="ph">Position</div>
+      <label class="check" title="Where the playhead is when you click Generate"><input type="radio" name="at" value="playhead" checked> Playhead</label>
+      <label class="check" title="The start of the timeline selection when you click Generate (the playhead if nothing is selected)"><input type="radio" name="at" value="selection"> Selection start</label>
+      <label class="check" title="The first marker at or after the playhead when you click Generate (the playhead if there is none)"><input type="radio" name="at" value="marker"> Next marker</label>
       <div class="ph">When ready</div>
       <label class="check"><input type="checkbox" id="auto-place" checked> Place automatically</label>
       <div id="dest-text"></div>

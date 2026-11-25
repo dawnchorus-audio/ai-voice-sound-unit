@@ -138,37 +138,41 @@ function remember() {
     // A voice or model list that has not loaded yet keeps the value remembered before.
     fields[el.id] = el.tagName === 'SELECT' && !el.options.length ? prefs.fields?.[el.id] : fieldValue(el);
   }
-  prefs = { ...prefs, fields, tab: activeTab, dest: destMode(), auto: $('auto-place').checked, placeAs: prefs.placeAs };
+  prefs = { ...prefs, fields, tab: activeTab, dest: destMode(), at: placeAt(), auto: $('auto-place').checked, placeAs: prefs.placeAs };
   try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch { /* storage unavailable: nothing to keep */ }
 }
 function restorePrefs() {
   for (const [id, v] of Object.entries(prefs.fields ?? {})) { const el = $(id); if (el && el.tagName !== 'SELECT') setField(el, v); }
   if (prefs.dest) { const r = document.querySelector(`input[name=dest][value=${prefs.dest}]`); if (r) r.checked = true; }
+  if (prefs.at) { const r = document.querySelector(`input[name=at][value=${prefs.at}]`); if (r) r.checked = true; }
   if (typeof prefs.auto === 'boolean') $('auto-place').checked = prefs.auto;
   (hwKeyPainters || []).forEach((p) => p());
 }
 /** Selects are filled later (voices, models); put their remembered values back then. */
 function restoreSelect(sel) { const v = prefs.fields?.[sel.id]; if (v && [...sel.options].some((o) => o.value === v)) sel.value = v; }
-document.addEventListener('change', (e) => { if (e.target.matches?.('[data-remember], input[name=dest], #auto-place')) remember(); });
+document.addEventListener('change', (e) => { if (e.target.matches?.('[data-remember], input[name=dest], input[name=at], #auto-place')) remember(); });
 
 // ---------- destination ----------
 
 const destMode = () => document.querySelector('input[name=dest]:checked').value;
+/** Where a new result starts: 'playhead', 'selection' (its start) or 'marker' (the next one). */
+const placeAt = () => document.querySelector('input[name=at]:checked')?.value ?? 'playhead';
 function renderDestination() {
   const auto = $('auto-place').checked;
-  let text = L.destinationText(session, destMode());
+  let text = L.destinationText(session, destMode(), placeAt());
+  if (session && placeAt() === 'marker') session.markers.load().catch(() => {}); // startTick() reads them
   if (session && !auto) text += ' · results wait in the list';
   $('dest-text').textContent = text;
   const short = `${text.replace(/ · results wait in the list$/, '').replace(/\.$/, '')}${session ? (auto ? ' · auto' : ' · waits in the list') : ''}`;
   $('dest-short').textContent = short;
   $('dest-chip').title = `Where results land: ${text.replace(/\.$/, '')}. Click to choose the track and automatic placing.`;
 }
-for (const r of document.querySelectorAll('input[name=dest]')) r.addEventListener('change', renderDestination);
+for (const r of document.querySelectorAll('input[name=dest], input[name=at]')) r.addEventListener('change', renderDestination);
 $('auto-place').addEventListener('change', renderDestination);
 
 // ---------- sliders, counters, credits ----------
 
-for (const id of ['tts-stability', 'tts-similarity', 'tts-style', 'tts-speed', 'sfx-influence']) {
+for (const id of ['tts-stability', 'tts-similarity', 'tts-style', 'tts-speed', 'sfx-influence', 'vc-stability', 'vc-similarity', 'vc-style']) {
   const input = $(id);
   const paint = () => ($(`${id}-v`).textContent = Number(input.value).toFixed(2));
   input.addEventListener('input', paint);
@@ -729,13 +733,20 @@ async function finish(job, ctx, parts) {
   await placeGroup(g, fake);
 }
 
+/** The tick a new result starts at, from the Position choice; says so when it falls back. */
+function startAt() {
+  const { tick, note } = L.startTick(session, placeAt());
+  if (note) say(note);
+  return tick;
+}
+
 /** What every generation remembers at the moment Generate is clicked. */
 function context(kind, title, prompt, extra = {}) {
   const tab = kind === 'script' ? 'tts' : kind;
   return {
     kind, tab, title, prompt, groupId: uid(), layout: 'single',
     sessionUid: session?.uid ?? null,
-    target: session ? L.captureTarget(session, destMode(), extra.originTick) : null,
+    target: session ? L.captureTarget(session, destMode(), extra.originTick ?? startAt()) : null,
     autoPlace: $('auto-place').checked,
     settings: snapshot(tab),
     ...extra,
@@ -990,6 +1001,9 @@ function generateMusic() {
   });
 }
 
+/** The Voice Changer's voice settings (⚙), as ElevenLabs takes them. */
+const vcSettings = () => ({ stability: Number($('vc-stability').value), similarity_boost: Number($('vc-similarity').value), style: Number($('vc-style').value) });
+
 let vcFile = null;
 let vcOriginTick = null; // where vcFile came from on the timeline, when it came from a clip
 function generateVc() {
@@ -998,7 +1012,7 @@ function generateVc() {
   if (!voiceId) { say('Choose a voice.', 'error'); return; }
   const voiceName = $('vc-voice').selectedOptions[0]?.textContent ?? 'Voice';
   const file = vcFile;
-  const opts = { voiceId, modelId: $('vc-model').value, removeBackgroundNoise: $('vc-denoise').checked };
+  const opts = { voiceId, modelId: $('vc-model').value, removeBackgroundNoise: $('vc-denoise').checked, voiceSettings: vcSettings() };
   const fromClip = vcOriginTick !== null;
   const ctx = context('vc', L.clipName(voiceName, file.name.replace(/\.[^.]+$/, '')), file.name, fromClip ? { originTick: vcOriginTick, origin: true } : {});
   enqueue(ctx.title, async (signal, job) => {
@@ -1014,7 +1028,7 @@ async function generateVcEvery() {
   let sels;
   try { sels = await L.clipsInSelection(session); } catch (e) { sayError(e); return; }
   const voiceName = $('vc-voice').selectedOptions[0]?.textContent ?? 'Voice';
-  const opts = { voiceId, modelId: $('vc-model').value, removeBackgroundNoise: $('vc-denoise').checked };
+  const opts = { voiceId, modelId: $('vc-model').value, removeBackgroundNoise: $('vc-denoise').checked, voiceSettings: vcSettings() };
   const ctx = context('vc', `Voice - ${voiceName} (${sels.length} clips)`, `${sels.length} clips on "${sels[0].track.name.value}"`, {
     layout: 'clips', sourceTrackId: sels[0].track.id, sourceTrackName: sels[0].track.name.value ?? 'its track',
   });

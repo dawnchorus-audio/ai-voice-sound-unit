@@ -216,13 +216,14 @@ const ElevenLabs = (() => {
     }
 
     /** Voice Changer (speech to speech): re-voice `audio` (a Blob/File) as `voiceId`. */
-    voiceChanger({ voiceId, audio, modelId, removeBackgroundNoise = false, signal }) {
+    voiceChanger({ voiceId, audio, modelId, removeBackgroundNoise = false, voiceSettings, signal }) {
       if (!voiceId) throw new Error('Choose a voice');
       if (!audio) throw new Error('Add the audio to change');
       const form = new FormData();
       form.append('audio', audio, audio.name || 'audio.wav');
       if (modelId) form.append('model_id', modelId);
       form.append('remove_background_noise', String(!!removeBackgroundNoise));
+      if (voiceSettings) form.append('voice_settings', JSON.stringify(voiceSettings));
       return this.request('POST', `/v1/voice-changer/${encodeURIComponent(voiceId)}`, {
         query: { output_format: OUTPUT_FORMAT }, form, audio: true, signal,
       });
