@@ -142,8 +142,8 @@ function remember() {
 }
 function restorePrefs() {
   for (const [id, v] of Object.entries(prefs.fields ?? {})) { const el = $(id); if (el && el.tagName !== 'SELECT') setField(el, v); }
-  if (prefs.dest) { const r = document.querySelector(`input[name=dest][value=${prefs.dest}]`); if (r) r.checked = true; }
-  if (prefs.at) { const r = document.querySelector(`input[name=at][value=${prefs.at}]`); if (r) r.checked = true; }
+  if (['selected', 'new'].includes(prefs.dest)) document.querySelector(`input[name=dest][value=${prefs.dest}]`).checked = true;
+  if (['playhead', 'selection', 'marker'].includes(prefs.at)) document.querySelector(`input[name=at][value=${prefs.at}]`).checked = true;
   if (typeof prefs.auto === 'boolean') $('auto-place').checked = prefs.auto;
 }
 /** Selects are filled later (voices, models); put their remembered values back then. */
@@ -1625,15 +1625,17 @@ function renderHistory() {
   const box = $('history-list');
   box.innerHTML = '';
   if (!history) { box.innerHTML = '<p class="hint">Open a session in LUNA: History is kept with each session.</p>'; $('history-count').textContent = ''; return; }
-  const entries = history.list();
-  $('history-count').textContent = `${entries.length} in this session`;
+  // A session can come from someone else: show at most 500 entries, each text cut to 2,000 characters.
+  const cut = (t) => { const s = String(t ?? ''); return s.length > 2000 ? `${s.slice(0, 2000)}…` : s; };
+  const entries = history.list().slice(0, 500);
+  $('history-count').textContent = `${history.list().length} in this session`;
   if (!entries.length) { box.innerHTML = '<p class="hint">Nothing generated in this session yet.</p>'; return; }
   for (const e of entries) {
     const el = document.createElement('div');
     el.className = 'hist';
     const when = new Date(e.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    el.innerHTML = `<div class="top"><button class="play" title="Play">▶</button><span class="tag ${esc(e.kind)}">${esc(KIND_LABEL[e.kind] ?? e.kind)}</span><b>${esc(e.name)}</b></div>
-      <div class="prompt">${esc(e.prompt)}</div>
+    el.innerHTML = `<div class="top"><button class="play" title="Play">▶</button><span class="tag ${KIND_LABEL[e.kind] ? e.kind : 'other'}">${esc(KIND_LABEL[e.kind] ?? cut(e.kind).slice(0, 20))}</span><b>${esc(cut(e.name))}</b></div>
+      <div class="prompt">${esc(cut(e.prompt))}</div>
       <div class="meta">${esc(when)} · ${Number(e.seconds || 0).toFixed(1)} s${e.target ? ` · made for ${esc(L.targetText(e.target))}` : ''}${e.placed ? ` · placed ${esc(e.placed)}` : ''}</div>
       <div class="actions"></div>`;
     const play = el.querySelector('.play');
