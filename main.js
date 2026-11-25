@@ -111,18 +111,8 @@ function applySkin(skin, finish) {
   return { skin: s, finish: f };
 }
 
-/** Vintage puts the status line and the destination inside the active tab's screen, as in design E;
- * Studio (and tabs with no screen) keep them in their usual places. The elements move, so their
- * listeners, popover and contents stay as they are. `var`: this runs before later declarations. */
-var screenHome = null; // eslint-disable-line no-var
-function placeScreenParts() {
-  const status = document.getElementById('status'), dest = document.getElementById('dest-row');
-  if (!status || !dest) return;
-  screenHome ??= { footer: status.parentElement, destParent: dest.parentElement, destNext: dest.nextElementSibling };
-  const foot = document.documentElement.dataset.skin === 'vintage' ? document.querySelector(`#tab-${activeTab} .lcd-foot`) : null;
-  if (foot) foot.append(status, dest);
-  else { screenHome.footer.append(status); screenHome.destParent.insertBefore(dest, screenHome.destNext); }
-}
+/** Vintage draws its own panel (unit.js); keep it in step with the tab and the look. */
+function placeScreenParts() { window.unitRender?.(); }
 applySkin(prefs.skin, prefs.finish);
 function fieldValue(el) { return el.type === 'checkbox' ? el.checked : el.value; }
 function setField(el, v) {
