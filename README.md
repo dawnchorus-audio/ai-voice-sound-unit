@@ -110,7 +110,7 @@ Studio → Vintage Cream → Vintage Black. `setLook()` keeps the choice in `pre
 It opens as a floating window only (*Add Ons > Windows > AI Voice & Sound Unit*), one page and one
 Add On (id `com.dawnchorus.voiceunit`). The side panel in LUNA's secondary browser is left out for
 now: it is too narrow for the Add On until LUNA allows a wider panel.
-The window opens at 600 × 860. LUNA has no minimum window width, so the page itself never lays out
+The window opens at 620 × 860: on Windows the window frame takes part of the width, and 620 leaves the page its 600 px there (at 600 the panel's right edge was cut). LUNA has no minimum window width, so the page itself never lays out
 narrower than 600 px (`min-width` on `body` in `skins/studio.css`; Vintage's mode keys need about
 590): a narrower window scrolls sideways instead of wrapping rows or cutting the tabs.
 

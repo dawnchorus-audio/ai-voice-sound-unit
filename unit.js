@@ -543,7 +543,8 @@
     q('.u-go').disabled = !!go?.disabled;
     q('.u-go').title = go?.title ?? m.goLabel;
     q('.u-tape-title').textContent = `Tape · ${m.label}`;
-    q('.u-tape-hist').textContent = `${AddOnHelp.keyLabel({ mod: true, key: 'y' })} History`;
+    const histKey = AddOnHelp.SHORTCUTS.find((x) => x.action === 'history');
+    q('.u-tape-hist').textContent = histKey ? `${AddOnHelp.keyLabel(histKey)} History` : 'History';
     for (const k of unit.querySelectorAll('.u-soft, .u-knob, .u-switch')) k.paint?.();
   }
 
