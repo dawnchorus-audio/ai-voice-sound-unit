@@ -1,7 +1,7 @@
 {
     "package_name": "AI Voice & Sound Unit",
     "manufacturer": "dawnchorus",
-    "description": "Text to Speech, Sound Effects, Music, Voice Changer and Instant Voice Clone from ElevenLabs, placed straight onto the LUNA timeline.",
+    "description": "Bring ElevenLabs into LUNA: speech, sound effects, music, voice changing and voice cloning, placed straight onto your timeline where you were working. Re-voice LUNA's extracted lyrics at their original timing, and turn lyrics or speech into LRC files. Uses your own ElevenLabs account.",
     "categories": [
         "AI Tools",
         "Create"
