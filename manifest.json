@@ -12,7 +12,7 @@
     ],
     "add_ons": [
         {
-            "id": "com.vbilous.elevenlabs",
+            "id": "com.dawnchorus.voiceunit",
             "title": "AI Voice & Sound Unit",
             "version": "0.1.0",
             "sdk_version": "3.1.2",

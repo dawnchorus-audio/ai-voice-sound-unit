@@ -461,7 +461,7 @@ describe('targets, variations, scripts and history', () => {
 
   it('keeps a generation history in the session', async () => {
     const { session } = await connected();
-    const h = logic.history(session, 'com.vbilous.elevenlabs');
+    const h = logic.history(session, 'com.dawnchorus.voiceunit');
     await h.load();
     await h.add({ id: 'g1', kind: 'sfx', name: 'SFX - door', createdAt: 1, sourceUid: 's1' });
     await h.add({ id: 'g2', kind: 'tts', name: 'Alice - hi', createdAt: 2, sourceUid: 's2' });

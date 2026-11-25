@@ -327,6 +327,7 @@
     b.title = src.title;
     b.setAttribute('aria-label', src.getAttribute('aria-label') ?? src.title);
     b.onclick = () => src.click();
+    b.disabled = src.disabled; // the cup key, while there is no tip page
     q('.u-tools').append(b);
   }
 
@@ -466,7 +467,7 @@
       headPart({ text: '◀ Back', run: () => show('main') }, 'right');
       soft = [softKey('See plans ↗', () => openUrl(PRICING_URL), { title: 'Open the ElevenLabs plans page in your web browser' }),
         softKey('↻ Update', async () => { await refreshQuota(); say('Credits updated.'); }, { title: 'Read the credits left again' }),
-        softKey('Help', () => toggleHelp(), { title: 'Help and shortcuts' }), softKey('Feedback', () => openFeedback(), { title: $('feedback-open')?.title }), softKey('Support ☕', () => openSupport(), { title: $('support-open')?.title })];
+        softKey('Help', () => toggleHelp(), { title: 'Help and shortcuts' }), softKey('Feedback', () => openFeedback(), { title: $('feedback-open')?.title }), softKey('Support ☕', 'support-open')];
     } else {
       for (const el of m.body()) dock(el, body);
       const hd = m.head;

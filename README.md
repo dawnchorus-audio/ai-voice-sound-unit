@@ -35,11 +35,10 @@ Needs LUNA 3.1.1 or later.
 - **Feedback**: the speech-bubble button in the header (⇧⌘B / Ctrl+Shift+B) opens a short Tally form
   (`FEEDBACK_URL` in `main.js`) in the web browser, with hidden fields `version`, `luna`, `os`,
   `look` and `mode` filled in by the Add On. Replies arrive by email to the maker.
-- The Add On is free. The **cup** button in the header opens the maker's optional support page
-  (monobank Base, base.monobank.ua; it takes international cards) in your web browser for a tip;
-  it sends nothing and changes nothing in the Add On. `SUPPORT_URL` in `main.js` holds the page
-  address (https://base.monobank.ua/CxcJKeRQip99nf); if it is empty the button says the page is
-  coming soon.
+- The Add On is free. The **cup** button in the header is for an optional tip to the maker; there
+  is no tip page yet, so it is disabled (`disabled` on `#support-open` in `index.html`, and
+  `SUPPORT_URL` in `main.js` is empty). To turn it on, set both together; the Vintage key copies
+  the disabled state. It will only open the page in the web browser and send nothing.
 
 The user guide and the full shortcut list live in the Add On itself: **?** in its header,
 or ⌘/ (Ctrl+/), with a search box (⇧⌘F) that finds words or "phrases" across every section,
@@ -109,7 +108,7 @@ Studio → Vintage Cream → Vintage Black. `setLook()` keeps the choice in `pre
 ## Files
 
 It opens as a floating window only (*Add Ons > Windows > AI Voice & Sound Unit*), one page and one
-Add On (id `com.vbilous.elevenlabs`). The side panel in LUNA's secondary browser is left out for
+Add On (id `com.dawnchorus.voiceunit`). The side panel in LUNA's secondary browser is left out for
 now: it is too narrow for the Add On until LUNA allows a wider panel.
 The window opens at 600 × 860. LUNA has no minimum window width, so the page itself never lays out
 narrower than 600 px (`min-width` on `body` in `skins/studio.css`; Vintage's mode keys need about
@@ -117,7 +116,7 @@ narrower than 600 px (`min-width` on `body` in `skins/studio.css`; Vintage's mod
 
 | File | Purpose |
 |---|---|
-| `manifest.json` | What LUNA reads: id, name, window size, entry page. `id` is `com.vbilous.elevenlabs` for good: it scopes the keychain secret and the session storage, so never change it. |
+| `manifest.json` | What LUNA reads: id, name, window size, entry page. `id` is `com.dawnchorus.voiceunit` for good (set before the first release, 2026-11-25; it was `com.vbilous.elevenlabs` during development): it scopes the keychain secret and the session storage, so never change it. |
 | `icon.png` | The Add On's icon (512 px): a speech bubble with a voice wave on an amber screen, on the Vintage Cream faceplate (draft V2). `icon` in the manifest; LUNA does not draw it in its menus yet, UA Universe shows it on the Add On's card. Drafts and the source that draws it: `notes/icon-drafts` (outside this repo). |
 | `index.html` | The page. Loads the two skin stylesheets, the SDK bundle, then the scripts below in this order. |
 | `skins/studio.css` | Studio, the clean dark look (direction A, Compose). It is also the base for every skin. |

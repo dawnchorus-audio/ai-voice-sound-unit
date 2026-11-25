@@ -118,7 +118,7 @@ const AddOnHelp = (() => {
     {
       id: 'vintage', title: 'The panel, key by key', html: `
 <ul>
-  <li><b>Top strip</b>: the lamp says <b>Online</b> (green: key saved, connected to a LUNA session), <b>Waiting</b> or <b>No session</b> (yellow: LUNA is starting or reconnecting, or no session is open), <b>No LUNA</b> (LUNA could not be reached) or a red key with <b>No key</b>; click it (hover shows a key) to add, change or forget the API key. <b>CR</b> is the credits left on your ElevenLabs plan this period, read when the key is checked and after every generation (ElevenLabs can take a minute to count the newest one); click it for your plan, Help and support. Under them: <b>◐ Cream / Black</b> (Look), ⟳ <b>Reuse clip settings</b>, the clock (<b>History</b>), the speech bubble (<b>Feedback</b>), ☕ <b>Support</b> and <b>?</b> (Help).</li>
+  <li><b>Top strip</b>: the lamp says <b>Online</b> (green: key saved, connected to a LUNA session), <b>Waiting</b> or <b>No session</b> (yellow: LUNA is starting or reconnecting, or no session is open), <b>No LUNA</b> (LUNA could not be reached) or a red key with <b>No key</b>; click it (hover shows a key) to add, change or forget the API key. <b>CR</b> is the credits left on your ElevenLabs plan this period, read when the key is checked and after every generation (ElevenLabs can take a minute to count the newest one); click it for your plan, Help and support. Under them: <b>◐ Cream / Black</b> (Look), ⟳ <b>Reuse clip settings</b>, the clock (<b>History</b>), the speech bubble (<b>Feedback</b>), ☕ <b>Support</b> (inactive until the tip page is ready) and <b>?</b> (Help).</li>
   <li><b>Mode keys</b>: <b>Speech</b>, <b>SFX</b>, <b>Music</b>, <b>Changer</b>, <b>Clone</b>, <b>Lyrics</b> (Studio: the tabs).</li>
   <li><b>The screen</b>: on top the voice (click it to search, preview and pick; <b>My voices</b> shows only yours) and the model (click for the next one, Shift-click for the previous one); then the text, recording or samples; then the status line, the count and <b>DEST ▸</b>.</li>
   <li><b>Soft keys</b> under the screen do the mode's actions (Studio: the buttons and chips on the card). A wider window shows more of them in the row; when they don't all fit, <b>More ▸</b> opens the rest in a row below (<b>Less ▴</b> closes it).</li>
@@ -259,9 +259,9 @@ const AddOnHelp = (() => {
     },
     {
       id: 'support', title: 'Feedback and support', html: `
-<p>The Add On is free. If it saves you time and you'd like to say thanks, the <b>cup</b> button in the header (in both looks) opens the maker's support page (monobank Base) in your web browser, where you can leave a tip by card, from any country. It's entirely optional: nothing in the Add On changes either way.</p>
+<p>The Add On is free. The <b>cup</b> key (☕) in the top strip is for an optional tip to the maker (dawnchorus); the tip page is not ready yet, so the key is inactive for now. Nothing in the Add On will ever depend on it.</p>
 <p><b>Feedback</b>: the speech-bubble key in the top strip (Studio: in the header; <kbd>${isMac ? '⇧⌘B' : 'Ctrl+Shift+B'}</kbd>) opens a short form in your web browser to report a bug, ask a question or suggest an idea; you can attach a screenshot and leave an email if you'd like a reply. The form gets the Add On's version, whether it runs in LUNA, your system (Mac or Windows), the look and the mode you were in, so a report can be read without asking; nothing else is sent, and nothing at all until you submit the form.</p>
-<p>The tip goes to the maker (dawnchorus) through monobank, not ElevenLabs, and has nothing to do with your ElevenLabs credits or plan. The Add On sends nothing about you or your session; it only opens the page.</p>`,
+<p>A tip will go to the maker, not ElevenLabs, and has nothing to do with your ElevenLabs credits or plan. The key will only open the page in your web browser; it sends nothing about you or your session.</p>`,
     },
   ];
 

@@ -2,7 +2,7 @@
 // ElevenLabs requests as background jobs, keeps results and the session's history, and hands
 // WAV bytes to AddOnLogic to place on the timeline. No engine logic lives here.
 
-const STORE_ID = 'com.vbilous.elevenlabs';
+const STORE_ID = 'com.dawnchorus.voiceunit';
 const ADD_ON_ID = STORE_ID; // LUNA serves media files and keeps secrets per Add On id
 const $ = (id) => document.getElementById(id);
 // Key labels and wording in the page's markup are written for macOS; on Windows say Ctrl+Enter and
@@ -1816,7 +1816,9 @@ $('help-open').onclick = () => toggleHelp();
 
 // The maker's monobank Base page (base.monobank.ua; international cards accepted). If it is ever
 // emptied, the button says the page is coming soon instead of opening anything.
-const SUPPORT_URL = 'https://base.monobank.ua/CxcJKeRQip99nf';
+// No tip page yet: monobank Base did not work out (2026-11-25); Donatello is next. The cup key is
+// disabled in index.html until this is set; set both together.
+const SUPPORT_URL = '';
 function openSupport() {
   if (!SUPPORT_URL) { say('Support page coming soon: it is not set up yet. Thanks for the thought!'); return; }
   say('Opening the support page in your web browser. Thank you!', 'ok');
