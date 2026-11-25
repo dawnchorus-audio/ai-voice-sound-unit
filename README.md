@@ -41,7 +41,8 @@ Needs LUNA 3.1.1 or later.
 The user guide and the full shortcut list live in the Add On itself: **?** in its header,
 or ⌘/ (Ctrl+/), with a search box (⇧⌘F) that finds words or "phrases" across every section,
 shortcuts included. They come from `help.js` (`SECTIONS`, `SHORTCUTS`, `search()`), so they
-always match the code.
+always match the code. Help names the controls as they are on the Vintage panel (the default look), with the
+Studio name in brackets where it differs.
 
 ## What it does
 

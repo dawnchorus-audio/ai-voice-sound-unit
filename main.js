@@ -32,9 +32,11 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 
 let statusSeq = 0; // counts status messages, so a button can tell what its own click reported
 let lastStatusKind = '';
+let lastStatusTab = null; // the tab an error was said on
 function say(text, kind = '', action) {
   statusSeq++;
   lastStatusKind = kind;
+  try { lastStatusTab = activeTab; } catch { lastStatusTab = null; } // before activeTab is declared
   const el = $('status');
   el.className = kind;
   el.textContent = '';
@@ -93,6 +95,9 @@ const TABS = ['tts', 'sfx', 'music', 'vc', 'ivc', 'lyrics', 'key'];
 let activeTab = 'tts';
 function showTab(name) {
   if (typeof closePop === 'function') closePop();
+  // An error belongs to the tab it was said on: another tab starts with a clean status line
+  // (the API Key tab keeps it, since "Check the API key" leads there).
+  if (lastStatusKind === 'error' && lastStatusTab && lastStatusTab !== name && name !== 'key') say('');
   activeTab = name;
   document.body.dataset.tab = name; // Clone, Lyrics and API Key show no destination or results (skins/studio.css)
   for (const b of document.querySelectorAll('#tabs button')) {
@@ -211,6 +216,7 @@ $('tts-script').addEventListener('change', () => {
   $('tts-script-box').classList.toggle('script-on', $('tts-script').checked);
   $('tts-variations').disabled = $('tts-script').checked;
   renderTtsCount();
+  try { lyricsLayoutUi(); } catch { /* settings restored before the lyrics code is set up; it runs again then */ }
 });
 
 // ---------- audio decoding and preview ----------
@@ -556,7 +562,7 @@ async function finish(job, ctx, parts) {
       item.sourceUid = await L.uploadAudio(session, { wav: decoded.wav, name });
       blobUrls.set(item.sourceUid, url);
       await history?.add({
-        id, kind: ctx.kind, name, prompt: p.prompt ?? ctx.prompt, settings: ctx.settings, tab: ctx.tab,
+        id, kind: ctx.historyKind ?? ctx.kind, name, prompt: p.prompt ?? ctx.prompt, settings: ctx.settings, tab: ctx.tab,
         seconds: decoded.seconds, channels: decoded.channels, sourceUid: item.sourceUid,
         createdAt: Date.now(), target: ctx.target, groupId: ctx.groupId, layout: ctx.layout,
       }).catch(() => { /* history is a convenience; the result is still here */ });
@@ -691,7 +697,7 @@ function lyricsLayoutUi() {
   $('tts-speaker-hint').hidden = on; // lyric lines have no speakers
   $('tts-layout').querySelector('option[value=lyrics]').disabled = !importedLyrics;
   const note = $('tts-lyrics-note');
-  note.hidden = !importedLyrics;
+  note.hidden = !importedLyrics || !$('tts-script').checked; // the lyric timing applies only with Lines on
   if (importedLyrics) {
     const typed = ttsLines().length;
     const n = importedLyrics.lines.length;
@@ -800,6 +806,7 @@ function generateLyrics(voiceId, voiceName, modelId, settings) {
     return { ...l, text: p.text, voiceId: p.voiceId };
   });
   const ctx = context('script', `Lyrics · ${voiceName} · ${count(lines.length, 'line')}`, lines.map((l) => l.text).join('\n'), {
+    historyKind: 'lyrics', // a script in every other way; History names it Lyrics
     layout: 'lyrics', fitMode, trackName: `TTS - ${voiceName} (lyrics)`,
   });
   enqueue(ctx.title, async (signal, job) => {
@@ -1636,7 +1643,7 @@ function clearResults() {
 function closeOverlays() { for (const o of document.querySelectorAll('.overlay')) o.classList.remove('open'); }
 const overlayOpen = () => !!document.querySelector('.overlay.open');
 
-const KIND_LABEL = { tts: 'Speech', script: 'Script', sfx: 'SFX', music: 'Music', vc: 'Voice changer' };
+const KIND_LABEL = { tts: 'Speech', script: 'Script', lyrics: 'Lyrics', sfx: 'SFX', music: 'Music', vc: 'Voice changer' };
 function renderHistory() {
   const box = $('history-list');
   box.innerHTML = '';

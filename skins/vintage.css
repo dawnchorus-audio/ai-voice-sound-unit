@@ -218,7 +218,7 @@
 :root[data-skin=vintage] #help-content mark { background: rgba(242, 163, 58, .45); }
 :root[data-skin=vintage] #help-search { background: var(--v-lcd); color: var(--v-amber); border: 0; border-radius: 4px; box-shadow: inset 0 1px 4px #000; font-family: var(--v-mono); }
 :root[data-skin=vintage] kbd:not(button kbd) { background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); border-color: var(--v-line); color: var(--v-ink); border-radius: 3px; }
-:root[data-skin=vintage] .tag.sfx { color: #2F8F7E; } :root[data-skin=vintage] .tag.music { color: #8A4FB0; } :root[data-skin=vintage] .tag.vc { color: #3A66C4; } :root[data-skin=vintage] .tag.script { color: #B8541F; }
+:root[data-skin=vintage] .tag.sfx { color: #2F8F7E; } :root[data-skin=vintage] .tag.music { color: #8A4FB0; } :root[data-skin=vintage] .tag.vc { color: #3A66C4; } :root[data-skin=vintage] .tag.script { color: #B8541F; } :root[data-skin=vintage] .tag.lyrics { color: #9A7A14; }
 :root[data-skin=vintage] .hist .tag { filter: brightness(1.6); }
 
 /* two-position options (every checkbox): a flat slide switch, left = off, right = on. A dark slot
