@@ -81,21 +81,21 @@
 /* hardware keys: header icons, chips, small buttons, the play keys */
 /* (.seg button sets this list's weight; a heavier selector here would beat the popover and feed rules) */
 :root[data-skin=vintage] :is(.icon, .chip, button.ghost, .play, .seg button) {
-  background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn));
+  background: var(--v-btn);
   border: 1px solid var(--v-line); border-radius: 4px; color: var(--v-ink);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18);
+  box-shadow: none; /* flat, like the panel's keys: only colour and border change */
 }
 :root[data-skin=vintage] :is(.icon, .chip, button.ghost, .play):hover:not(:disabled) { border-color: var(--v-muted); color: var(--v-ink); }
 /* a key that is on: pressed in, amber legend, like the takes and place keys of design E */
 :root[data-skin=vintage] :is(.icon.on, .chip.on, .seg button.on, .play.on) {
-  background: var(--v-ink); color: var(--v-amber); border-color: var(--v-ink); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .5);
+  background: var(--v-ink); color: var(--v-amber); border-color: var(--v-ink); box-shadow: none;
 }
 :root[data-skin=vintage][data-finish=black] :is(.icon.on, .chip.on, .seg button.on, .play.on) { background: #111112; border-color: #000; }
 :root[data-skin=vintage] .chip { height: 30px; font-weight: 700; font-size: 13px; }
 :root[data-skin=vintage] .chip .unit { color: inherit; opacity: .7; }
 :root[data-skin=vintage] .chip input[type=number] { font: 500 12px var(--v-mono); text-transform: none; }
 :root[data-skin=vintage] .chip button { color: inherit; border-left-color: var(--v-line); font: inherit; letter-spacing: inherit; }
-:root[data-skin=vintage] select.chip { background-image: var(--v-arrow), linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); background-repeat: no-repeat, no-repeat; background-position: right 9px center, 0 0; }
+:root[data-skin=vintage] select.chip { background-color: var(--v-btn); background-image: var(--v-arrow); background-repeat: no-repeat; background-position: right 9px center; }
 :root[data-skin=vintage] .avatar { border-radius: 3px; background: var(--v-lcd); color: var(--v-amber); font-family: var(--v-mono); box-shadow: inset 0 1px 3px #000; }
 :root[data-skin=vintage] button.ghost { font-weight: 700; font-size: 12.5px; }
 :root[data-skin=vintage] button.ghost.danger { color: var(--err); }
@@ -106,13 +106,13 @@
 /* the big red key: Generate, Compose, Create voice, Paste key… */
 :root[data-skin=vintage] button.primary:not(.alt) {
   height: 36px; padding: 0 16px; border-radius: 4px; font-size: 15px; font-weight: 700; letter-spacing: .14em;
-  background: linear-gradient(180deg, var(--v-red-hi), var(--v-red) 55%, var(--v-red-lo)); color: #FBEFE6;
-  border: 1px solid #5E2715; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 2px 0 #7E2A18, 0 4px 6px rgba(0, 0, 0, .3);
+  background: var(--v-red); color: #FBEFE6;
+  border: 1px solid #7E2A18; box-shadow: none;
 }
 :root[data-skin=vintage] button.primary.alt {
   height: 36px; border-radius: 4px; font-size: 14px; font-weight: 700; color: var(--v-ink);
-  background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); border: 1px solid var(--v-line);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18);
+  background: var(--v-btn); border: 1px solid var(--v-line);
+  box-shadow: none;
 }
 :root[data-skin=vintage] button.primary kbd { font: 500 10px var(--v-mono); letter-spacing: 0; }
 
@@ -121,11 +121,11 @@
 :root[data-skin=vintage] nav button { flex-shrink: 0;
   flex-direction: column; gap: 4px; padding: 6px 10px 5px; min-width: 58px; justify-content: center;
   color: var(--v-ink); font-weight: 700; font-size: 13px; border: 1px solid var(--v-line); border-radius: 4px;
-  background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18);
+  background: var(--v-btn);
+  box-shadow: none;
 }
 :root[data-skin=vintage] nav button::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--v-led-off); box-shadow: inset 0 1px 1px rgba(0, 0, 0, .4); }
-:root[data-skin=vintage] nav button.active { color: var(--v-ink); border-color: var(--v-muted); border-bottom-color: var(--v-muted); transform: translateY(1px); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .25); }
+:root[data-skin=vintage] nav button.active { color: var(--v-ink); border-color: var(--v-muted); border-bottom-color: var(--v-muted); box-shadow: none; }
 :root[data-skin=vintage] nav button.active::before { background: var(--v-led); box-shadow: 0 0 6px var(--v-led), 0 0 2px var(--v-amber-hi); }
 :root[data-skin=vintage] nav button:hover { color: var(--v-ink); border-color: var(--v-muted); }
 :root[data-skin=vintage] #tabs button.has-new::after { display: none; }
@@ -217,7 +217,7 @@
 :root[data-skin=vintage] #help-content h3 { color: var(--v-muted); font-family: var(--v-label); font-size: 12px; letter-spacing: .14em; }
 :root[data-skin=vintage] #help-content mark { background: rgba(242, 163, 58, .45); }
 :root[data-skin=vintage] #help-search { background: var(--v-lcd); color: var(--v-amber); border: 0; border-radius: 4px; box-shadow: inset 0 1px 4px #000; font-family: var(--v-mono); }
-:root[data-skin=vintage] kbd:not(button kbd) { background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); border-color: var(--v-line); color: var(--v-ink); border-radius: 3px; }
+:root[data-skin=vintage] kbd:not(button kbd) { background: var(--v-btn); border-color: var(--v-line); color: var(--v-ink); border-radius: 3px; }
 :root[data-skin=vintage] .tag.sfx { color: #2F8F7E; } :root[data-skin=vintage] .tag.music { color: #8A4FB0; } :root[data-skin=vintage] .tag.vc { color: #3A66C4; } :root[data-skin=vintage] .tag.script { color: #B8541F; } :root[data-skin=vintage] .tag.lyrics { color: #9A7A14; }
 :root[data-skin=vintage] .hist .tag { filter: brightness(1.6); }
 
