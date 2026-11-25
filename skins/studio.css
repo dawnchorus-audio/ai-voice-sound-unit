@@ -164,6 +164,7 @@ input.key:focus { border-color: var(--accent); }
 .seg button.on { background: #3A3A40; color: var(--text); }
 .seg button:disabled { opacity: .45; cursor: default; }
 header button.icon:disabled { opacity: .4; cursor: default; }
+#help .build { color: var(--dim); font-size: 11px; white-space: nowrap; }
 
 /* the feed: running jobs and this tab's results */
 .feed-head { display: flex; align-items: center; gap: 8px; margin-top: 4px; }

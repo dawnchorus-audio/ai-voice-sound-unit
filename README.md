@@ -32,6 +32,9 @@ Needs LUNA 3.1.1 or later.
 - A session file can come from someone else, so the History it carries is treated as
   untrusted: it is shown as text only, its settings fill only the remembered fields of their
   own tab, and an entry can only point at an audio file inside that session's audio folder.
+- **Version and build**: Help's top bar (and the title's tooltip) shows `v<manifest version> · build <stamp>`, the
+  `?v=` stamp of the scripts in `index.html`. Bump the stamp with every change, so a tester sees which build is installed;
+  Feedback sends both.
 - **Feedback**: the speech-bubble button in the header (⇧⌘B / Ctrl+Shift+B) opens a short Tally form
   (`FEEDBACK_URL` in `main.js`) in the web browser, with hidden fields `version`, `luna`, `os`,
   `look` and `mode` filled in by the Add On. Replies arrive by email to the maker.

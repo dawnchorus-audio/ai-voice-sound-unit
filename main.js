@@ -1836,12 +1836,24 @@ function openSupport() {
 }
 $('support-open').onclick = openSupport;
 
+// Version (manifest) and build (the ?v= stamp every script is loaded with, changed with every
+// update): shown in Help's top bar and the title's tooltip, and sent with Feedback.
+const BUILD = new URL(document.querySelector('script[src*="main.js"]')?.src ?? location.href).searchParams.get('v') ?? '';
+let addOnVersion = '';
+async function loadVersion() {
+  try { addOnVersion = (await (await fetch('manifest.json', { cache: 'no-store' })).json()).add_ons?.[0]?.version ?? ''; } catch { /* left empty */ }
+  const text = `v${addOnVersion || '?'}${BUILD ? ` · build ${BUILD}` : ''}`;
+  $('build-info').textContent = text;
+  for (const el of document.querySelectorAll('header h1, #unit .u-title')) el.title = `AI Voice & Sound Unit ${text}`;
+}
+loadVersion();
+
 // Feedback: a Tally form in the web browser. Its hidden fields get what helps to read a report
 // (Add On version, inside LUNA or a browser, system, look, mode); the user types the rest.
 const FEEDBACK_URL = 'https://tally.so/r/PRzV2d';
 async function openFeedback() {
-  let version = '';
-  try { version = (await (await fetch('manifest.json', { cache: 'no-store' })).json()).add_ons?.[0]?.version ?? ''; } catch { /* left empty */ }
+  if (!addOnVersion) await loadVersion();
+  const version = `${addOnVersion}${BUILD ? ` (${BUILD})` : ''}`;
   let inLuna = false;
   try { inLuna = !!(luna && (await luna.gui.available())); } catch { /* a browser */ }
   const params = new URLSearchParams({

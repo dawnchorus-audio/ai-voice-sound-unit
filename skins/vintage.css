@@ -438,6 +438,7 @@
 #unit .u-tool svg { width: 13px; height: 13px; }
 #unit .u-tool:hover, #unit .u-finish:hover { border-color: var(--v-muted); }
 #unit .u-tool:disabled { opacity: .4; cursor: default; border-color: var(--v-line); }
+:root[data-skin=vintage] #help .build { font: 11px var(--v-mono); color: var(--v-muted); }
 #unit .u-finish { margin-right: 4px; }
 /* hovering the lamp shows the key: it is how to add, change or forget the API key */
 #unit .u-online:hover i { display: none; }
