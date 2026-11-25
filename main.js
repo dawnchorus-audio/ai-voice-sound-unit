@@ -1303,9 +1303,11 @@ async function pasteKey() {
   try {
     text = await navigator.clipboard.readText();
   } catch {
+    // LUNA does not let an Add On's page read the clipboard: the field takes a normal paste
+    // instead, and a key pasted there is checked and saved at once (below).
     showTab('key');
     $('key-input').focus();
-    say(`The Add On could not read the clipboard. Paste the key into the field (${AddOnHelp.isMac ? '⌘V' : 'Ctrl+V'}) and click Save and check.`, 'error');
+    say(`LUNA does not let the Add On read the clipboard. Press ${AddOnHelp.isMac ? '⌘V' : 'Ctrl+V'} now: the key goes into the field and is checked and saved.`);
     return;
   }
   const key = L.keyFromClipboard(text);
@@ -1316,6 +1318,14 @@ async function pasteKey() {
   }
 }
 $('key-paste').onclick = pasteKey;
+// A key pasted into the field (⌘V / Ctrl+V) is checked and saved straight away, with no Save click.
+$('key-input').addEventListener('paste', (e) => {
+  const key = L.keyFromClipboard(e.clipboardData?.getData('text') ?? '');
+  if (!key) return; // not a key: leave the paste to the field
+  e.preventDefault();
+  $('key-input').value = key;
+  saveKey(key);
+});
 
 $('key-delete').onclick = async () => {
   try { await luna.secrets.delete(L.SECRET_NAME); } catch { /* nothing stored */ }
