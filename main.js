@@ -8,6 +8,9 @@ const $ = (id) => document.getElementById(id);
 // Key labels and wording in the page's markup are written for macOS; on Windows say Ctrl+Enter and
 // Windows Credential Manager instead.
 if (!AddOnHelp.isMac) {
+  // LUNA on Windows sizes the page larger than the window shows (the frame and title bar's worth):
+  // the bottom and a strip on the right were hidden. html.win keeps everything inside a safe inset.
+  document.documentElement.classList.add('win');
   for (const k of document.querySelectorAll('button.generate kbd, button.primary kbd')) if (k.textContent === '⌘↩') k.textContent = 'Ctrl+Enter';
   for (const id of ['key-paste', 'key-note']) { const el = document.getElementById(id); if (el) { el.title = el.title.replace(/keychain/g, 'Windows Credential Manager'); el.textContent = el.textContent.replace(/system keychain/g, 'Windows Credential Manager'); } }
 }

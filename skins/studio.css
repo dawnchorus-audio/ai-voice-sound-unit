@@ -10,7 +10,11 @@
 * { box-sizing: border-box; }
 /* The page never lays out narrower than 600 px (Vintage's mode keys need about 590): LUNA has no
    minimum window width, so a narrower window scrolls sideways instead of wrapping or cutting. */
-html { height: 100%; overflow-x: auto; overflow-y: hidden; background: var(--bg); } /* own background: body's (Vintage's screws) stays on the 600 px page */
+html { height: 100%; overflow-x: auto; overflow-y: hidden; background: var(--bg); --inset-b: 0px; --inset-r: 0px; } /* own background: body's (Vintage's screws) stays on the 600 px page */
+/* LUNA on Windows (2026-11-25): the page is about the title bar's height taller and a little wider
+   than the window shows, so keep content out of that strip. Measured 20-28 px down, ~10 px right. */
+html.win { --inset-b: 32px; --inset-r: 12px; }
+body { box-sizing: border-box; padding-bottom: var(--inset-b); padding-right: var(--inset-r); }
 body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.4 var(--sans); display: flex; flex-direction: column; height: 100%; overflow: hidden; min-width: 600px; }
 /* height: 100% of html, not 100vh: in LUNA on Windows 100vh can be taller than the window's
    visible area, which hid the bottom of the page whatever the window's size. */
@@ -98,7 +102,7 @@ button.link { background: none; border: 0; color: var(--accent); padding: 0; tex
 .dest-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* popovers */
-.pop { position: fixed; z-index: 30; width: 300px; max-width: calc(100vw - 16px); max-height: calc(100vh - 16px); overflow: auto; background: var(--pop); border: 1px solid var(--pop-line); border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,.55); padding: 6px; display: flex; flex-direction: column; gap: 2px; }
+.pop { position: fixed; z-index: 30; width: 300px; max-width: calc(100vw - 16px - var(--inset-r)); max-height: calc(100vh - 16px - var(--inset-b)); overflow: auto; background: var(--pop); border: 1px solid var(--pop-line); border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,.55); padding: 6px; display: flex; flex-direction: column; gap: 2px; }
 .pop .ph { font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); padding: 8px 8px 4px; }
 .pop .ctl { display: flex; align-items: center; gap: 10px; padding: 5px 8px; min-height: 30px; font-size: 12px; }
 .pop .ctl > span:first-child, .pop .ctl > .name { flex: 1; color: var(--dim); }
@@ -208,7 +212,7 @@ footer { border-top: 1px solid #262629; padding: 7px 14px; flex: 0 0 auto; }
 #status.ok { color: var(--ok); }
 
 /* History and Help, over the window */
-.overlay { position: fixed; inset: 0; background: var(--bg); display: none; flex-direction: column; z-index: 20; }
+.overlay { position: fixed; inset: 0 var(--inset-r) var(--inset-b) 0; background: var(--bg); display: none; flex-direction: column; z-index: 20; }
 .overlay.open { display: flex; }
 .overlay .bar-top { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid #262629; }
 .overlay .bar-top h2 { margin: 0; font-size: 15px; }
