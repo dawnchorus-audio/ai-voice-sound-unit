@@ -292,3 +292,12 @@
 :root[data-skin=vintage] .lcd-foot .dest-btn { height: auto; padding: 0; background: none; box-shadow: none; }
 :root[data-skin=vintage] footer:not(:has(#status)) { display: none; }
 :root[data-skin=vintage] :is(#tab-tts .bar > [data-voice-chip], #tts-model, #tab-sfx [data-pop=pop-sfx-opts], #tab-music [data-pop=pop-music-opts]) { display: none; }
+
+/* soft keys under the screen, as in design E: each presses an existing button (Import text / lyrics,
+   Length from the selection, Tempo & key), so the buttons they repeat are not shown. Switches stay
+   switches. */
+:root[data-skin=vintage] .softkeys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 6px 10px 0; }
+:root[data-skin=vintage] .softkeys button { height: 26px; padding: 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border: 1px solid var(--v-line); border-radius: 4px; color: var(--v-ink); font: 700 11px var(--v-label); letter-spacing: .1em; text-transform: uppercase; background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18); cursor: pointer; }
+:root[data-skin=vintage] .softkeys button:active { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .25); }
+:root[data-skin=vintage] .softkeys button:disabled { opacity: .45; cursor: default; }
+:root[data-skin=vintage] :is(#tab-tts > .row:has(#tts-import-text), #sfx-sel-len, #music-sel-len, #music-context) { display: none; }

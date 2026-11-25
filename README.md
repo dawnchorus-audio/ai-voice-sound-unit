@@ -102,6 +102,10 @@ voice (opens the voice list) and the model (click: next, Shift-click: previous),
 it takes `#status` and `#dest-row`, which `placeScreenParts()` moves in for the active tab and back
 to the footer and `main` in Studio or on tabs with no screen. Vintage hides the chips these repeat
 (Speech voice and model, the SFX and Music ⚙, which held only the model by then).
+Under that screen, `.softkeys[data-keys="id:Label|…"]` are Vintage's soft keys: each presses the
+button it names (Import text / lyrics, Length from the selection, Tempo & key), copies its tooltip and
+disabled state, and shows its feedback ("Reading…", "✓ Set") while the button does. Vintage hides
+the buttons they repeat; switches (Lines, Loop, Instrumental) stay slide switches.
 
 The **Look** button in the header (`#look-open`, popover `#pop-look`) picks the skin and Vintage's
 finish (the finish radios are disabled, not hidden, in Studio); ⇧⌘E (`look` in `SHORTCUTS`) steps

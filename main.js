@@ -282,6 +282,31 @@ function makeHwKeys(box) {
 // var, not const: restorePrefs() may run before this line and must not hit the temporal dead zone.
 var hwKeyPainters = [...document.querySelectorAll('.hwkeys')].map(makeHwKeys); // eslint-disable-line no-var
 
+// ---------- Vintage soft keys under the screen (hidden in Studio) ----------
+
+/** Each soft key presses an existing button (data-keys="id:Label|…"), so its action, shortcut,
+ * tooltip and feedback are that button's: while the button shows feedback ("Reading…", "✓ Set"),
+ * the key shows it too, and it is disabled when the button is. */
+for (const box of document.querySelectorAll('.softkeys[data-keys]')) {
+  for (const spec of box.dataset.keys.split('|')) {
+    const [id, label] = spec.split(':');
+    const target = $(id);
+    const rest = target.textContent.trim();
+    const key = document.createElement('button');
+    key.type = 'button';
+    key.addEventListener('click', () => target.click());
+    const paint = () => {
+      const now = target.textContent.trim();
+      key.textContent = now && now !== rest ? now : label;
+      key.title = target.title;
+      key.disabled = target.disabled;
+    };
+    new MutationObserver(paint).observe(target, { childList: true, characterData: true, subtree: true, attributes: true });
+    paint();
+    box.append(key);
+  }
+}
+
 // ---------- Vintage screen head: voice and model on top of the screen (hidden in Studio) ----------
 
 for (const head of document.querySelectorAll('.lcd-head')) {
