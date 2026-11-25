@@ -21,7 +21,7 @@
             "target": "window",
             "floating": true,
             "show_with_session": false,
-            "width": 560,
+            "width": 600,
             "height": 720
         }
     ]
