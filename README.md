@@ -5,7 +5,7 @@ into LUNA and places what it makes on the timeline. Built with the
 [LUNA Builder SDK](https://github.com/uaudio-labs/luna-builder-sdk).
 
 Made by **dawnchorus** (the `manufacturer` in `manifest.json`; written in lowercase, with "daw"
-in bold in the logo). An independent project, not made, affiliated with or endorsed by ElevenLabs
+underlined in the logo). An independent project, not made, affiliated with or endorsed by ElevenLabs
 or Universal Audio.
 ElevenLabs is a trademark of its owner.
 
