@@ -434,3 +434,11 @@
 /* soft keys fill the row: as many columns as fit at 128 px each */
 #unit .u-softkeys { grid-template-columns: repeat(var(--soft-cols, 4), minmax(0, 1fr)); }
 #unit .u-go { overflow: hidden; text-overflow: ellipsis; }
+/* the status line on the screen is always two lines high, so a long message never pushes the panel
+   down: longer text ends in an ellipsis (the whole message is the tooltip), and an action such as
+   See plans stays visible beside it */
+#unit .u-status { height: calc(2 * 1.4em); }
+#unit .u-status #status { display: flex; align-items: flex-start; gap: 8px; height: 100%; min-height: 0; flex-wrap: nowrap; }
+#unit .u-status #status .msg { flex: 1; min-width: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; line-height: 1.4; }
+#unit .u-status #status::before { flex: none; line-height: 1.4; }
+#unit .u-status #status .link { flex: none; font: 600 11px var(--v-mono); text-transform: uppercase; color: var(--v-amber-hi); background: none; border: 0; padding: 0; text-decoration: underline dotted; cursor: pointer; }

@@ -31,7 +31,12 @@ function say(text, kind = '', action) {
   lastStatusKind = kind;
   const el = $('status');
   el.className = kind;
-  el.textContent = text;
+  el.textContent = '';
+  const msg = document.createElement('span');
+  msg.className = 'msg';
+  msg.textContent = text;
+  el.append(msg);
+  el.title = text; // the whole message, for a status line that shows only part of it (Vintage)
   if (action) {
     const b = document.createElement('button');
     b.className = 'link';
@@ -1529,7 +1534,7 @@ $('ly-transcribe').onclick = async () => {
 function holdWidth(b) {
   if (b._held || !b.offsetWidth) return;
   b._held = true;
-  b.style.width = `${b.offsetWidth}px`;
+  b.style.width = `${b.getBoundingClientRect().width}px`; // exact: a rounded width shifts it by a fraction of a pixel
   b.classList.add('held');
 }
 function releaseWidth(b) { if (!b._held) return; b._held = false; b.style.width = ''; b.classList.remove('held'); }

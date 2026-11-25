@@ -533,7 +533,7 @@
     const now = go?.textContent.replace(/⌘↩|Ctrl\+↩/g, '').trim();
     const goKey = q('.u-go');
     const feedback = now && rest && !now.startsWith(rest);
-    if (!feedback) { goKey.style.width = ''; goKey.textContent = m.goLabel; goKey.dataset.rest = goKey.offsetWidth; }
+    if (!feedback) { goKey.style.width = ''; goKey.textContent = m.goLabel; goKey.dataset.rest = goKey.getBoundingClientRect().width; } // exact, not rounded: a rounded width moved it by a fraction of a pixel
     else { if (goKey.dataset.rest > 0) goKey.style.width = `${goKey.dataset.rest}px`; goKey.textContent = now; }
     q('.u-go').disabled = !!go?.disabled;
     q('.u-go').title = go?.title ?? m.goLabel;
