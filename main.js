@@ -1845,14 +1845,8 @@ const BUILD = new URL(document.querySelector('script[src*="main.js"]')?.src ?? l
 let addOnVersion = '';
 async function loadVersion() {
   try { addOnVersion = (await (await fetch('manifest.json', { cache: 'no-store' })).json()).add_ons?.[0]?.version ?? ''; } catch { /* left empty */ }
-  showBuildInfo();
+  $('build-info').textContent = `v${addOnVersion || '?'}${BUILD ? ` · build ${BUILD}` : ''}`;
 }
-// The page's own size next to the build: when the window shows less than this, LUNA gave the page
-// more room than it shows (Windows, 2026-11-25: the bottom was hidden at any window height).
-function showBuildInfo() {
-  $('build-info').textContent = `v${addOnVersion || '?'}${BUILD ? ` · build ${BUILD}` : ''} · page ${innerWidth}×${innerHeight}`;
-}
-window.addEventListener('resize', showBuildInfo);
 loadVersion();
 
 // Feedback: a Tally form in the web browser. Its hidden fields get what helps to read a report
