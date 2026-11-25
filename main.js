@@ -40,6 +40,8 @@ function say(text, kind = '', action) {
   const el = $('status');
   el.className = kind;
   el.textContent = '';
+  el.title = '';
+  if (!text && !action) return; // an empty status line, without Vintage's ▸
   const msg = document.createElement('span');
   msg.className = 'msg';
   msg.textContent = text;
@@ -499,6 +501,7 @@ async function placeOne(g, item, where) {
 async function placeGroup(g, bar) {
   const at = bar.querySelector('.at')?.value ?? 'target';
   const target = targetFor(g, at);
+  const usesPosition = g.layout === 'variations' || g.layout === 'script'; // lyrics and changed clips go where their originals are
   let made = 0;
   try {
     if (g.layout === 'variations') {
@@ -534,7 +537,7 @@ async function placeGroup(g, bar) {
       made = L.madeTracks(placed);
       g.placedText = `✓ on "${placed[0].track.name.value}"`;
     }
-    say(`Placed "${g.title}" ${g.placedText.slice(2)}.${g.note ? ` ${g.note}.` : ''}${target.note ? ` ${target.note}` : ''} ${L.undoText(made)}`, 'ok');
+    say(`Placed "${g.title}" ${g.placedText.slice(2)}.${g.note ? ` ${g.note}.` : ''}${target.note && usesPosition ? ` ${target.note}` : ''} ${L.undoText(made)}`, 'ok');
     renderResults();
     for (const item of g.items) history?.update(item.id, { placed: g.placedText.slice(2) }).catch(() => {});
   } catch (e) { sayError(e, 'Could not place them: '); }

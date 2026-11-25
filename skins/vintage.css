@@ -309,6 +309,7 @@
 #unit .u-status { font-size: 11px; letter-spacing: .06em; min-height: 1.4em; }
 #unit .u-status #status { font: 11px var(--v-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--v-amber); min-height: 1.4em; }
 #unit .u-status #status::before { content: '▸ '; }
+:root[data-skin=vintage] #status:empty::before, #unit .u-status #status:empty::before { content: none; }
 #unit .u-status #status.error { color: #FF8A6E; } #unit .u-status #status.ok { color: var(--v-green); }
 #unit .u-foot { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; color: #C99A3E; letter-spacing: .08em; white-space: nowrap; text-transform: uppercase; }
 #unit .u-foot-left { overflow: hidden; text-overflow: ellipsis; }
