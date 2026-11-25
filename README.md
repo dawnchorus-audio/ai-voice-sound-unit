@@ -90,7 +90,8 @@ Common problems:
 ## Support
 
 The Add On is free. If it saves you time, you can leave a tip at
-[donatello.to/dawnchorus](https://donatello.to/dawnchorus).
+[donatello.to/dawnchorus](https://donatello.to/dawnchorus), or press the cup key (☕) at the top of
+the Add On. For now the page takes cards from Ukraine and the EU, or crypto.
 
 ## Updating
 

@@ -1825,13 +1825,13 @@ function toggleHelp(section) {
 }
 $('help-open').onclick = () => toggleHelp();
 
-// ---------- Support: an optional tip on the maker's monobank Base page ----------
+// ---------- Support: an optional tip on the maker's Donatello page ----------
 
-// The maker's monobank Base page (base.monobank.ua; international cards accepted). If it is ever
-// emptied, the button says the page is coming soon instead of opening anything.
-// No tip page yet: monobank Base did not work out (2026-11-25); Donatello is next. The cup key is
-// disabled in index.html until this is set; set both together.
-const SUPPORT_URL = '';
+// The maker's Donatello page (donatello.to; cards from Ukraine and the EU, or crypto, until the page
+// reaches Donatello's Basic status, which adds cards from every country). If it is ever emptied, the
+// button says the page is coming soon instead of opening anything; then also set `disabled` on
+// #support-open in index.html.
+const SUPPORT_URL = 'https://donatello.to/dawnchorus';
 function openSupport() {
   if (!SUPPORT_URL) { say('Support page coming soon: it is not set up yet. Thanks for the thought!'); return; }
   say('Opening the support page in your web browser. Thank you!', 'ok');

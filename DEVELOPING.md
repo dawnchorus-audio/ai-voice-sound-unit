@@ -11,10 +11,11 @@ inside the Add On, Help.
 - **Feedback**: the speech-bubble button in the header (⇧⌘B / Ctrl+Shift+B) opens a short Tally form
   (`FEEDBACK_URL` in `main.js`) in the web browser, with hidden fields `version`, `luna`, `os`,
   `look` and `mode` filled in by the Add On. Replies arrive by email to the maker.
-- The Add On is free. The **cup** button in the header is for an optional tip to the maker; there
-  is no tip page yet, so it is disabled (`disabled` on `#support-open` in `index.html`, and
-  `SUPPORT_URL` in `main.js` is empty). To turn it on, set both together; the Vintage key copies
-  the disabled state. It will only open the page in the web browser and send nothing.
+- The Add On is free. The **cup** button in the header opens the maker's tip page on Donatello
+  (`SUPPORT_URL` in `main.js`, https://donatello.to/dawnchorus) in the web browser and sends
+  nothing. Until the page reaches Donatello's Basic status it takes cards from Ukraine and the EU,
+  or crypto. To take it out again, empty `SUPPORT_URL` and set `disabled` on `#support-open` in
+  `index.html` together; the Vintage key copies the disabled state.
 
 The user guide and the full shortcut list live in the Add On itself: **?** in its header,
 or ⌘/ (Ctrl+/), with a search box (⇧⌘F) that finds words or "phrases" across every section,
