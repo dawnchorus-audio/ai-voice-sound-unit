@@ -56,7 +56,7 @@ const AddOnHelp = (() => {
   /** LUNA's own keys that keep working in this window (outside text fields). */
   const LUNA_KEYS = [
     { keys: 'Space', label: 'Play / stop' },
-    { keys: isMac ? '⌘Z  ·  ⇧⌘Z' : 'Ctrl+Z  ·  Ctrl+Shift+Z', label: 'Undo / redo in LUNA (placing audio is one undo step)' },
+    { keys: isMac ? '⌘Z  ·  ⇧⌘Z' : 'Ctrl+Z  ·  Ctrl+Shift+Z', label: 'Undo / redo in LUNA (placing audio is one undo step; new tracks are their own steps)' },
     { keys: 'R', label: 'Record, as in LUNA' },
   ];
 
@@ -110,7 +110,7 @@ const AddOnHelp = (() => {
 </ol>
 <p><b>How a Studio tab is laid out</b> (Vintage: see <b>The Vintage panel</b>): the card at the top holds what you write or bring (text, a description, a recording, samples, lyrics). The chips on its bottom bar are the choices: voice, model, ×variations, toggles such as Loop or Lines, and ⚙ for the finer settings. Chips with a list or settings open a small panel; click outside it or press <kbd>Esc</kbd> to close it. The main button sits at the right of the card (<kbd>${isMac ? '⌘↩' : 'Ctrl+Enter'}</kbd>). On Speech, SFX, Music and Voice Changer, under the card are the destination chip and <b>This tab</b>: jobs still running and this tab's results, newest first. Clone, Lyrics and API Key make nothing to place, so they show neither. The status line at the very bottom says what just happened.</p>
 <p><b>Search</b>: type in the box at the top of Help (or press <kbd>${isMac ? '⇧⌘F' : 'Ctrl+Shift+F'}</kbd> anywhere) to find every section that mentions your words, shortcuts included. Put words in quotes to find a phrase, such as <i>"place all"</i>. <kbd>↩</kbd> opens the best match, <kbd>Esc</kbd> clears the search.</p>
-<p>Every placement is one undo step in LUNA: <kbd>${isMac ? '⌘Z' : 'Ctrl+Z'}</kbd> removes it.</p>
+<p>Every placement is one undo step in LUNA: <kbd>${isMac ? '⌘Z' : 'Ctrl+Z'}</kbd> removes it. When the audio goes on new tracks, the tracks are made first, as steps of their own, so undo once more to remove them too.</p>
 <p>Not sure what a button does? Hover over it: every button has a short description, with its shortcut when it has one.</p>
 <p>Every button shows that it worked: buttons that do something tell you how it went on the button itself, without changing size, for example <i>Refreshing…</i> then <b>✓ 23 voices</b>, or <b>✓ Started</b> for a generation. A red <b>Failed</b> means the status line at the bottom of the window says why.</p>`,
     },
@@ -158,7 +158,7 @@ const AddOnHelp = (() => {
       <li><b>Fit each line to its length</b>: LUNA also stretches or squeezes it toward the original length, by at most 1.25× longer or 0.8× shorter so the voice stays natural. A line far off is first generated once more at a fitting speed (turn this off to save credits). A line that would need more keeps as close as the limit allows, and the Add On tells you.</li>
       <li><b>Each word at its original time</b>: the new line is cut into words, each starting where the original word did; a word longer than the room before the next is squeezed, at most to 0.8×. Lines whose words you changed are placed whole.</li>
     </ul></li>
-  <li>Generate. The result goes on a new track under the original, one undo step. You can place the same result again with another timing from the results list without generating again.</li>
+  <li>Generate. The result goes on a new track under the original: the track is one undo step, the lines on it another. You can place the same result again with another timing from the results list without generating again.</li>
 </ol>
 <p>Lyrics in LUNA belong to the audio file, not to the timeline: when you move a clip, its lyrics move with it, and the Add On always places lines by the clip that plays them.</p>
 <h3>LRC files</h3>

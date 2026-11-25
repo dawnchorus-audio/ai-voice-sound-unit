@@ -173,8 +173,26 @@ const AddOnLogic = {
     });
   },
 
+  /**
+   * A new audio track, listed and loaded. Call it before a transaction, never inside one:
+   * inside a batch the track has no playlist yet, so a clip put on it makes the SDK ask LUNA
+   * get_clip_info mid-transaction. On 2026-11-25 LUNA never answered that, the abort hung as
+   * well, and LUNA could not quit. Made first, the track has its playlist and nothing is asked.
+   */
   newTrackFor(session, name, channels) {
+    if (session.batching) throw new Error('newTrackFor() inside a transaction');
     return session.newTrack({ name, stemFormat: channels > 1 ? 'stereo' : 'mono', makeNameUnique: true }).then((r) => r[0]);
+  },
+
+  /** Run `run`; if it fails, take away the (still empty) tracks made for it, then rethrow. */
+  async onNewTracks(session, made, run) {
+    try {
+      return await run();
+    } catch (err) {
+      const ids = made.filter(Boolean).map((t) => t.id);
+      if (ids.length) await session.deleteTracks(ids).catch(() => undefined);
+      throw err;
+    }
   },
 
   /**
@@ -188,11 +206,12 @@ const AddOnLogic = {
     await session.musical.ready();
     let track = AddOnLogic.trackFor(session, target);
     const startTick = Math.max(0, Math.round(target.tick));
+    const made = [];
+    if (!track) made.push((track = await AddOnLogic.newTrackFor(session, item.name, item.channels)));
     let clip;
-    await session.transaction(`ElevenLabs: ${item.name}`, async () => {
-      if (!track) track = await AddOnLogic.newTrackFor(session, item.name, item.channels);
+    await AddOnLogic.onNewTracks(session, made, () => session.transaction(`ElevenLabs: ${item.name}`, async () => {
       clip = await AddOnLogic.insertGenerated(session, { trackUid: track.id, item, startTick });
-    });
+    }));
     return { track, clip, startTick, stopTick: AddOnLogic.spanTicks(session, startTick, item.seconds) };
   },
 
@@ -208,13 +227,14 @@ const AddOnLogic = {
     const startTick = Math.max(0, Math.round(target.tick));
     const placed = [];
     if (as === 'tracks') {
-      await session.transaction(`ElevenLabs: ${items.length} variations`, async () => {
-        for (const item of items) {
-          const track = await AddOnLogic.newTrackFor(session, item.name, item.channels);
-          await AddOnLogic.insertGenerated(session, { trackUid: track.id, item, startTick });
-          placed.push({ track });
+      const made = [];
+      for (const item of items) made.push(await AddOnLogic.newTrackFor(session, item.name, item.channels));
+      await AddOnLogic.onNewTracks(session, made, () => session.transaction(`ElevenLabs: ${items.length} variations`, async () => {
+        for (let i = 0; i < items.length; i++) {
+          await AddOnLogic.insertGenerated(session, { trackUid: made[i].id, item: items[i], startTick });
+          placed.push({ track: made[i] });
         }
-      });
+      }));
       return placed;
     }
     // Playlists. A batch transaction holds new nodes back until its commit, so the empty
@@ -276,27 +296,31 @@ const AddOnLogic = {
         t = Math.round(tl.tickAtSeconds(tl.seconds(t) + item.seconds + Math.max(0, gapSeconds)));
       }
     }
-    const placed = [];
-    await session.transaction(`ElevenLabs: script (${items.length} line${items.length === 1 ? '' : 's'})`, async () => {
-      const speakerTracks = new Map();
-      let main = AddOnLogic.trackFor(session, target);
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        let track;
-        if (item.speaker) {
-          track = speakerTracks.get(item.speaker);
-          if (!track) {
-            track = await AddOnLogic.newTrackFor(session, `TTS - ${item.speaker}`, 1);
-            speakerTracks.set(item.speaker, track);
-          }
-        } else {
-          if (!main) main = await AddOnLogic.newTrackFor(session, trackName, Math.max(1, ...items.map((x) => x.channels || 1)));
-          track = main;
+    // Tracks first, in the order the lines need them, then every clip in one undo step.
+    const made = [];
+    const speakerTracks = new Map();
+    let main = AddOnLogic.trackFor(session, target);
+    const trackOf = [];
+    for (const item of items) {
+      if (item.speaker) {
+        if (!speakerTracks.has(item.speaker)) {
+          const t = await AddOnLogic.newTrackFor(session, `TTS - ${item.speaker}`, 1);
+          made.push(t);
+          speakerTracks.set(item.speaker, t);
         }
-        await AddOnLogic.insertGenerated(session, { trackUid: track.id, item, startTick: starts[i] });
-        placed.push({ track, startTick: starts[i] });
+        trackOf.push(speakerTracks.get(item.speaker));
+      } else {
+        if (!main) made.push((main = await AddOnLogic.newTrackFor(session, trackName, Math.max(1, ...items.map((x) => x.channels || 1)))));
+        trackOf.push(main);
       }
-    });
+    }
+    const placed = [];
+    await AddOnLogic.onNewTracks(session, made, () => session.transaction(`ElevenLabs: script (${items.length} line${items.length === 1 ? '' : 's'})`, async () => {
+      for (let i = 0; i < items.length; i++) {
+        await AddOnLogic.insertGenerated(session, { trackUid: trackOf[i].id, item: items[i], startTick: starts[i] });
+        placed.push({ track: trackOf[i], startTick: starts[i] });
+      }
+    }));
     return placed;
   },
 

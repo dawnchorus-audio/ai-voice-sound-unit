@@ -170,8 +170,9 @@ const AddOnLyrics = {
     // No alg_type on the clips: they use the track's own algorithm, like any clip LUNA makes.
     // Sources carry silence after the speech (see main.js decodeToWav), so a stretched clip
     // never reads past the end of its file.
-    await session.transaction(`ElevenLabs: lyrics (${items.length} line${items.length === 1 ? '' : 's'})`, async () => {
-      [track] = await session.newTrack({ name: trackName, stemFormat: items.some((i) => i.channels > 1) ? 'stereo' : 'mono', makeNameUnique: true });
+    // The track is made before the transaction (see AddOnLogic.newTrackFor), then every clip goes in as one undo step.
+    track = await AddOnLogic.newTrackFor(session, trackName, items.some((i) => i.channels > 1) ? 2 : 1);
+    await AddOnLogic.onNewTracks(session, [track], () => session.transaction(`ElevenLabs: lyrics (${items.length} line${items.length === 1 ? '' : 's'})`, async () => {
       for (const item of items) {
         const full = Math.round(item.seconds * 1e9);
         const words = mode === 'words' ? AddOnLyrics.matchWords(item.line.words, item.genWords) : null;
@@ -204,7 +205,7 @@ const AddOnLyrics = {
         await session.insertClip({ trackUid: track.id, sourceUid: item.sourceUid, startTick: item.line.startTick, stopTick: Math.max(item.line.startTick + 1, after(item.line.startTick, seconds)), sourceStartNs: 0, sourceStopNs: full, name: item.name, lengthFollows: 'time' });
         clips++;
       }
-    });
+    }));
     return { track, clips, fallbacks, limited };
   },
 

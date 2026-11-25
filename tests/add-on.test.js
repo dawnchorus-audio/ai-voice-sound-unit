@@ -289,6 +289,17 @@ describe('targets, variations, scripts and history', () => {
     const sourceUid = await logic.uploadAudio(session, { wav: logic.encodeWav(chans, 44100), name });
     return { sourceUid, seconds, channels, name };
   }
+  // Commands sent while a transaction is open. Clip info must never be asked there: on
+  // 2026-11-25 LUNA did not answer get_clip_info mid-transaction and could not quit after.
+  const askedInside = (session) => {
+    const asked = [];
+    const post = session.post.bind(session);
+    session.post = (cmd, payload) => {
+      if (session.batching) asked.push(cmd);
+      return post(cmd, payload);
+    };
+    return asked;
+  };
   const clipsOn = async (session, track) => {
     const pl = session.playlistFor(track);
     await pl.clips.load();
@@ -317,11 +328,32 @@ describe('targets, variations, scripts and history', () => {
     const { engine, session } = await connected();
     const before = session.tracks.items.length;
     const items = [await uploaded(session, 'SFX - hit #1', 0.5), await uploaded(session, 'SFX - hit #2', 0.7)];
+    const asked = askedInside(session);
     const placed = await logic.placeVariations(session, items, logic.captureTarget(session, 'new', 0), 'tracks');
     await engine.settled();
     expect(session.tracks.items.length).toBe(before + 2);
     expect(placed.map((p) => p.track.name.value)).toEqual(['SFX - hit #1', 'SFX - hit #2']);
     expect(engine.transactions).toEqual(['begin', 'commit']);
+    expect(asked).not.toContain('new_track');
+    expect(asked).not.toContain('get_clip_info');
+  });
+
+  it('takes away the empty new tracks when placing on them fails', async () => {
+    const { session } = await connected();
+    const before = session.tracks.items.length;
+    const items = [await uploaded(session, 'SFX - hit #1', 0.5), await uploaded(session, 'SFX - hit #2', 0.7)];
+    const insert = session.insertClip.bind(session);
+    let n = 0;
+    session.insertClip = (o) => (++n === 2 ? Promise.reject(new Error('LUNA did not answer')) : insert(o));
+    await expect(logic.placeVariations(session, items, logic.captureTarget(session, 'new', 0), 'tracks')).rejects.toThrow(/did not answer/);
+    expect(session.tracks.items.length).toBe(before);
+  });
+
+  it('never makes a track inside a transaction', async () => {
+    const { session } = await connected();
+    await session.transaction('x', async () => {
+      expect(() => logic.newTrackFor(session, 'T', 1)).toThrow(/inside a transaction/);
+    });
   });
 
   it('places variations as playlists of one track and keeps the first one playing', async () => {
@@ -357,7 +389,9 @@ describe('targets, variations, scripts and history', () => {
     ]);
     const items = [];
     for (const [i, l] of lines.entries()) items.push({ ...(await uploaded(session, `Line ${i + 1}`, 1)), speaker: l.speaker });
+    const asked = askedInside(session);
     const placed = await logic.placeScript(session, items, logic.captureTarget(session, 'new', 0), { layout: 'sequential', gapSeconds: 0.5 });
+    expect(asked.filter((c) => c === 'new_track' || c === 'get_clip_info')).toEqual([]);
     await engine.settled();
     const beat = Luna.TICKS_PER_BEAT; // 1 s of audio + 0.5 s gap = 3 beats at 120 BPM
     expect(placed.map((p) => p.startTick)).toEqual([0, 3 * beat, 6 * beat, 9 * beat]);
