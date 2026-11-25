@@ -87,6 +87,11 @@ Common problems:
   clipboard itself; press ⌘V / Ctrl+V in the key field, which the Add On selects for you.
 - **Music or Clone is refused**: these need a paid ElevenLabs plan.
 
+## Support
+
+The Add On is free. If it saves you time, you can leave a tip at
+[donatello.to/dawnchorus](https://donatello.to/dawnchorus).
+
 ## Updating
 
 New versions are published as releases of this repository. LUNA checks for them each time it
