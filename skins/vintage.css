@@ -364,7 +364,7 @@
 #unit .u-go:disabled { opacity: .55; cursor: default; }
 
 /* the tape */
-#unit .u-tape { background: #2A2722; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-height: 140px; overflow: hidden; } /* fills what is left of the window; its takes scroll inside */
+#unit .u-tape { background: #2A2722; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-height: 100px; overflow: hidden; } /* fills what is left of the window; its takes scroll inside */
 #unit .u-tape-head { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #CFC7B5; }
 #unit .u-tape-head button { background: transparent; border: 1px solid #5A554B; border-radius: 4px; padding: 2px 6px; color: #CFC7B5; font: 500 11px var(--v-mono); cursor: pointer; text-transform: uppercase; }
 #unit .u-tape-head button:disabled { opacity: .4; cursor: default; }
@@ -413,7 +413,7 @@
 @media (prefers-reduced-motion: reduce) { #unit .u-switch .thumb { transition: none; } }
 /* the panel's rows keep their natural height (the face grows and the panel scrolls); only the tape stretches */
 #unit .u-face > * { flex-shrink: 0; }
-#unit .u-face > .u-tape { flex: 1 0 140px; }
+#unit .u-face > .u-tape { flex: 1 0 100px; }
 #unit :is(.u-bezel, .u-sel, .u-lcd, .u-body) > * { flex-shrink: 0; } /* eased parts: children keep their height */
 /* soft keys keep one width (four fill the row at the 600 px window); a wider window shows more of
    them, and MORE ▸ opens the rest in a row below */
