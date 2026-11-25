@@ -1837,14 +1837,13 @@ function openSupport() {
 $('support-open').onclick = openSupport;
 
 // Version (manifest) and build (the ?v= stamp every script is loaded with, changed with every
-// update): shown in Help's top bar and the title's tooltip, and sent with Feedback.
+// update): shown in Help's top bar and sent with Feedback.
 const BUILD = new URL(document.querySelector('script[src*="main.js"]')?.src ?? location.href).searchParams.get('v') ?? '';
 let addOnVersion = '';
 async function loadVersion() {
   try { addOnVersion = (await (await fetch('manifest.json', { cache: 'no-store' })).json()).add_ons?.[0]?.version ?? ''; } catch { /* left empty */ }
   const text = `v${addOnVersion || '?'}${BUILD ? ` · build ${BUILD}` : ''}`;
   $('build-info').textContent = text;
-  for (const el of document.querySelectorAll('header h1, #unit .u-title')) el.title = `AI Voice & Sound Unit ${text}`;
 }
 loadVersion();
 

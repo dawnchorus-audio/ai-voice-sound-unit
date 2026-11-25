@@ -260,7 +260,7 @@ const AddOnHelp = (() => {
     {
       id: 'support', title: 'Feedback and support', html: `
 <p>The Add On is free. The <b>cup</b> key (☕) in the top strip is for an optional tip to the maker (dawnchorus); the tip page is not ready yet, so the key is inactive for now. Nothing in the Add On will ever depend on it.</p>
-<p><b>Version</b>: the top of Help shows the Add On's version and build (for example <i>v0.1.0 · build 20261125w</i>); the build changes with every update, so it tells you a new one is installed. Hovering over the Add On's name shows it too.</p>
+<p><b>Version</b>: the top of Help shows the Add On's version and build (for example <i>v0.1.0 · build 20261125w</i>); the build changes with every update, so it tells you a new one is installed.</p>
 <p><b>Feedback</b>: the speech-bubble key in the top strip (Studio: in the header; <kbd>${isMac ? '⇧⌘B' : 'Ctrl+Shift+B'}</kbd>) opens a short form in your web browser to report a bug, ask a question or suggest an idea; you can attach a screenshot and leave an email if you'd like a reply. The form gets the Add On's version, whether it runs in LUNA, your system (Mac or Windows), the look and the mode you were in, so a report can be read without asking; nothing else is sent, and nothing at all until you submit the form.</p>
 <p>A tip will go to the maker, not ElevenLabs, and has nothing to do with your ElevenLabs credits or plan. The key will only open the page in your web browser; it sends nothing about you or your session.</p>`,
     },
