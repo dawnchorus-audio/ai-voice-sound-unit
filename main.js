@@ -5,6 +5,8 @@
 const STORE_ID = 'com.vbilous.elevenlabs';
 const ADD_ON_ID = STORE_ID; // LUNA serves media files and keeps secrets per Add On id
 const $ = (id) => document.getElementById(id);
+/** "1 line", "2 lines". */
+const count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const L = AddOnLogic;
 
 let luna;
@@ -377,7 +379,7 @@ function groupEl(g) {
   el.className = 'group';
   const head = document.createElement('div');
   head.className = 'title';
-  const kindLabel = { variations: `${g.items.length} variations`, script: `script · ${g.items.length} lines`, clips: `${g.items.length} clips`, lyrics: `${g.items.length} lyric lines` }[g.layout] ?? '';
+  const kindLabel = { variations: `${g.items.length} variations`, script: `script · ${count(g.items.length, 'line')}`, clips: count(g.items.length, 'clip'), lyrics: count(g.items.length, 'lyric line') }[g.layout] ?? '';
   head.innerHTML = `<b></b><span class="hint"></span><span class="placed"></span>`;
   head.querySelector('b').textContent = g.title;
   head.querySelector('.hint').textContent = kindLabel;
@@ -485,7 +487,7 @@ async function placeGroup(g, bar) {
       g.placedText = as === 'tracks' ? `✓ on ${placed.length} new tracks` : `✓ as ${placed.length} playlists of "${placed[0].track.name.value}"`;
     } else if (g.layout === 'script') {
       const placed = await L.placeScript(session, g.items, target, g.scriptOpts);
-      g.placedText = `✓ ${placed.length} lines from ${L.barText(session, placed[0].startTick)}`;
+      g.placedText = `✓ ${count(placed.length, 'line')} from ${L.barText(session, placed[0].startTick)}`;
       g.placedLines = placed.map((p, i) => {
         const item = g.items[i];
         const tl = session.musical.timeline;
@@ -496,7 +498,7 @@ async function placeGroup(g, bar) {
       const mode = bar.querySelector('.fit')?.value ?? g.fitMode ?? 'fit';
       const res = await AddOnLyrics.place(session, g.items, { mode, trackName: g.trackName });
       g.fitMode = mode;
-      g.placedText = `✓ on "${res.track.name.value}" (${res.clips} clips)`;
+      g.placedText = `✓ on "${res.track.name.value}" (${count(res.clips, 'clip')})`;
       const notes = [];
       if (res.limited) notes.push(`${res.limited} line${res.limited === 1 ? ' needed' : 's needed'} more stretch than a voice takes, so ${res.limited === 1 ? 'it keeps' : 'they keep'} closer to the natural length`);
       if (res.fallbacks) notes.push(`${res.fallbacks} line${res.fallbacks === 1 ? ' was' : 's were'} placed whole because the words differ from the lyrics`);
@@ -631,7 +633,7 @@ function generateTts() {
   if ($('tts-script').checked) {
     const lines = ttsLines();
     if (!lines.length) { say('Write at least one line.', 'error'); return; }
-    const ctx = context('script', `Script · ${lines.length} lines`, $('tts-text').value, {
+    const ctx = context('script', `Script · ${count(lines.length, 'line')}`, $('tts-text').value, {
       layout: 'script', scriptOpts: { layout: $('tts-layout').value, gapSeconds: Number($('tts-gap').value) || 0 },
     });
     enqueue(ctx.title, async (signal, job) => {
@@ -701,7 +703,7 @@ async function importLyrics(found) {
     lyricsLayoutUi();
     $('tts-layout').value = 'lyrics';
     lyricsLayoutUi();
-    say(`Imported ${found.lines.length} lines. Pick a voice and timing, then Generate.`, 'ok');
+    say(`Imported ${count(found.lines.length, 'line')}. Pick a voice and timing, then Generate.`, 'ok');
   } catch (e) { sayError(e); }
 }
 $('tts-import-lyrics').onclick = () => importLyrics();
@@ -776,7 +778,7 @@ function generateLyrics(voiceId, voiceName, modelId, settings) {
     const p = L.parseScript(typed[i].text, voices)[0] ?? { text: typed[i].text, voiceId: null };
     return { ...l, text: p.text, voiceId: p.voiceId };
   });
-  const ctx = context('script', `Lyrics · ${voiceName} · ${lines.length} lines`, lines.map((l) => l.text).join('\n'), {
+  const ctx = context('script', `Lyrics · ${voiceName} · ${count(lines.length, 'line')}`, lines.map((l) => l.text).join('\n'), {
     layout: 'lyrics', fitMode, trackName: `TTS - ${voiceName} (lyrics)`,
   });
   enqueue(ctx.title, async (signal, job) => {
@@ -860,7 +862,7 @@ async function generateVcEvery() {
   try { sels = await L.clipsInSelection(session); } catch (e) { sayError(e); return; }
   const voiceName = $('vc-voice').selectedOptions[0]?.textContent ?? 'Voice';
   const opts = { voiceId, modelId: $('vc-model').value, removeBackgroundNoise: $('vc-denoise').checked, voiceSettings: vcSettings() };
-  const ctx = context('vc', `Voice - ${voiceName} (${sels.length} clips)`, `${sels.length} clips on "${sels[0].track.name.value}"`, {
+  const ctx = context('vc', `Voice - ${voiceName} (${count(sels.length, 'clip')})`, `${count(sels.length, 'clip')} on "${sels[0].track.name.value}"`, {
     layout: 'clips', sourceTrackId: sels[0].track.id, sourceTrackName: sels[0].track.name.value ?? 'its track',
   });
   enqueue(ctx.title, async (signal, job) => {
@@ -1419,7 +1421,7 @@ function openDoc(next, view = 'text') {
   docView = view;
   showTab('lyrics');
   renderDoc();
-  say(`${doc.lines.length} lines from ${doc.from}.`, 'ok');
+  say(`${count(doc.lines.length, 'line')} from ${doc.from}.`, 'ok');
 }
 /** Kept name: the results list's LRC buttons open the document in the LRC view. */
 const openLrc = (next) => openDoc(next, 'lrc');
@@ -1579,7 +1581,7 @@ $('lrc-copy').onclick = async () => {
     if (!doc || !doc.writable || !doc.sourceUid || !session) return;
     if (!checkDocEdits()) { say('Keep one line per lyric line, then add them.', 'error'); return; }
     if (!armed) { // writing into the session: a second click confirms
-      $('lrc-to-luna').textContent = `Click again to add ${doc.lines.length} lines`;
+      $('lrc-to-luna').textContent = `Click again to add ${count(doc.lines.length, 'line')}`;
       armed = setTimeout(() => { armed = null; $('lrc-to-luna').textContent = 'Add to LUNA lyrics'; }, 3000);
       return;
     }
@@ -1592,7 +1594,7 @@ $('lrc-copy').onclick = async () => {
       doc.inLuna = true;
       renderDoc();
       flashButton($('lrc-to-luna'), '✓ Added');
-      say(`Added ${n} lines to LUNA's lyrics. They belong to the audio file, so they move with its clips.`, 'ok');
+      say(`Added ${count(n, 'line')} to LUNA's lyrics. They belong to the audio file, so they move with its clips.`, 'ok');
     } catch (e) { sayError(e, 'Could not add the lyrics: '); }
   };
 }

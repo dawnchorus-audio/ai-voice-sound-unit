@@ -117,6 +117,7 @@ narrower than 600 px (`min-width` on `body` in `skins/studio.css`; Vintage's mod
 | `icon.png` | The Add On's icon (512 px): a voice wave printed on the Vintage Cream faceplate. `icon` in the manifest; LUNA does not draw it in its menus yet, UA Universe shows it on the Add On's card. Drafts and the source that draws it: `notes/icon-drafts` (outside this repo). |
 | `index.html` | The page. Loads the two skin stylesheets, the SDK bundle, then the scripts below in this order. |
 | `skins/studio.css` | Studio, the clean dark look (direction A, Compose). It is also the base for every skin. |
+| `index.html` `?v=` | Every script and stylesheet is loaded with `?v=<stamp>`; change the stamp with every change, so a web view that cached an older file never mixes it with new ones (seen while testing: an old `logic.js` with a new `main.js`). |
 | `unit.js` | The Vintage panel (design E): builds `#unit` and drives the page's controls; see Skins. |
 | `skins/vintage.css` | Vintage, the hardware faceplate look (design E), as rules scoped to `:root[data-skin=vintage]` over Studio; Cream finish, Black with `data-finish=black`. |
 | `elevenlabs-api.js` | ElevenLabs REST client (`fetch`, no DOM): TTS (with timestamps), SFX, Music, Voice Changer, Voice Clone, Speech to Text, voices, models, quota; retries on concurrency limits; classified errors. |

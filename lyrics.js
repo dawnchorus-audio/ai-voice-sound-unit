@@ -170,7 +170,7 @@ const AddOnLyrics = {
     // No alg_type on the clips: they use the track's own algorithm, like any clip LUNA makes.
     // Sources carry silence after the speech (see main.js decodeToWav), so a stretched clip
     // never reads past the end of its file.
-    await session.transaction(`ElevenLabs: lyrics (${items.length} lines)`, async () => {
+    await session.transaction(`ElevenLabs: lyrics (${items.length} line${items.length === 1 ? '' : 's'})`, async () => {
       [track] = await session.newTrack({ name: trackName, stemFormat: items.some((i) => i.channels > 1) ? 'stereo' : 'mono', makeNameUnique: true });
       for (const item of items) {
         const full = Math.round(item.seconds * 1e9);

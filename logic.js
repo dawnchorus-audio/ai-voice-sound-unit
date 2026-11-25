@@ -266,7 +266,7 @@ const AddOnLogic = {
     } else if (layout === 'markers') {
       await session.markers.load();
       const ticks = session.markers.sorted.map((m) => m.location.value).filter((t) => t >= target.tick);
-      if (ticks.length < items.length) throw new Error(`There are ${ticks.length} markers after the playhead but ${items.length} lines. Add markers or place the lines one after another.`);
+      if (ticks.length < items.length) throw new Error(`There are ${ticks.length} marker${ticks.length === 1 ? '' : 's'} after the playhead but ${items.length} line${items.length === 1 ? '' : 's'}. Add markers or place the lines one after another.`);
       starts = ticks.slice(0, items.length);
     } else {
       starts = [];
@@ -277,7 +277,7 @@ const AddOnLogic = {
       }
     }
     const placed = [];
-    await session.transaction(`ElevenLabs: script (${items.length} lines)`, async () => {
+    await session.transaction(`ElevenLabs: script (${items.length} line${items.length === 1 ? '' : 's'})`, async () => {
       const speakerTracks = new Map();
       let main = AddOnLogic.trackFor(session, target);
       for (let i = 0; i < items.length; i++) {
