@@ -300,6 +300,14 @@
     </div>`;
   const q = (s) => unit.querySelector(s);
   smoothHeights([q('.u-bezel'), q('.u-knobs'), q('.u-sel')]);
+  // a wider or narrower window fits more or fewer soft keys in the row
+  if (window.ResizeObserver) {
+    let lastFit = 0;
+    new ResizeObserver(() => {
+      const fit = Math.max(1, Math.floor((q('.u-softkeys').clientWidth + SOFT_GAP) / (SOFT_W + SOFT_GAP)));
+      if (fit !== lastFit) { lastFit = fit; layoutSoft(); }
+    }).observe(q('.u-bezel'));
+  }
 
   // header
   q('.u-finish').onclick = (e) => (openPopId === 'pop-look' ? closePop() : openPop('pop-look', e.currentTarget));
@@ -358,8 +366,25 @@
   const screenNow = () => (screen !== 'main' ? screen : activeTab === 'key' ? 'key' : 'main');
   const leaveKey = () => { screen = 'main'; if (activeTab === 'key') showTab(prefs.lastMode ?? 'tts'); else { built = null; render(); } };
   let built = null; // what is drawn now: `${tab}|${screen}`
-  let softPage = 0;
-  function show(s) { screen = s; if (s === 'key' && activeTab !== 'key') { /* keep the mode */ } built = null; softPage = 0; render(); }
+  let softKeys = [];   // this screen's soft keys
+  let softOpen = false; // MORE ▸ has opened the second row
+  const SOFT_W = 128, SOFT_GAP = 6; // a soft key's width: four fill the row at the 600 px window
+  function layoutSoft() {
+    const box = q('.u-softkeys');
+    const fit = Math.max(1, Math.floor((box.clientWidth + SOFT_GAP) / (SOFT_W + SOFT_GAP)));
+    const row = [];
+    if (softKeys.length <= fit) row.push(...softKeys);
+    else {
+      row.push(...softKeys.slice(0, fit - 1));
+      const more = softKey(softOpen ? 'Less ▴' : 'More ▸', () => { softOpen = !softOpen; layoutSoft(); }, { title: softOpen ? 'Hide the second row of keys' : 'Show the rest of the keys for this mode in a row below' });
+      more.classList.add('more');
+      row.push(more);
+      if (softOpen) row.push(...softKeys.slice(fit - 1));
+    }
+    box.replaceChildren(...row);
+    box.dataset.fit = fit;
+  }
+  function show(s) { screen = s; built = null; softOpen = false; render(); }
 
   function headPart(spec, side) {
     const box = q(side === 'left' ? '.u-left' : '.u-right');
@@ -387,6 +412,7 @@
     body.className = `u-body u-${scr} u-mode-${tab}`;
     const keys = q('.u-softkeys');
     keys.innerHTML = '';
+    softOpen = false;
     let soft = [];
 
     if (scr === 'voices') {
@@ -429,13 +455,10 @@
       soft = m.keys();
     }
 
-    // soft keys: four at a time; when there are more, the fourth is MORE ▸ / ◀ BACK
-    const pages = soft.length <= 4 ? [soft] : [soft.slice(0, 3), soft.slice(3, 6)];
-    softPage = Math.min(softPage, pages.length - 1);
-    const page = [...pages[softPage]];
-    if (pages.length > 1) page.push(softKey(softPage ? '◀ Back' : 'More ▸', () => { softPage = softPage ? 0 : 1; built = null; render(); }, { title: softPage ? 'The first keys' : 'More keys for this mode' }));
-    while (page.length < 4) { const blank = h('button', 'u-soft blank'); blank.disabled = true; blank.tabIndex = -1; page.push(blank); }
-    keys.append(...page);
+    // soft keys: a fixed width each, as many in the row as fit; when there are more, the last place in
+    // the row is MORE ▸, which opens the rest in a row below (and closes it again)
+    softKeys = soft;
+    layoutSoft();
 
     // knobs and switches
     const kn = q('.u-knobs');

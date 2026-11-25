@@ -121,7 +121,7 @@ const AddOnHelp = (() => {
   <li><b>Top strip</b>: <b>◐ Cream / Black</b> opens Look (Studio, Vintage, finish); the lamp says <b>Online</b>, <b>Waiting</b>, <b>No LUNA</b> or <b>No key</b> (click it for the API key); <b>CR</b> shows the credits left (click it for your plan, Help and support).</li>
   <li><b>Mode keys</b>: Speech, SFX, Music, Changer, Clone, Lyrics.</li>
   <li><b>The screen</b>: on top the voice (click to search, preview and pick; <b>My voices</b> shows only yours) and the model (click for the next one, Shift-click for the previous one); then the text, recording or samples; then the status line, the count and <b>DEST ▸</b> (click it to choose the track, the position and Place automatically).</li>
-  <li><b>Soft keys</b> under the screen do what the Studio buttons do (Import text, Len = sel, Tempo &amp; key, Read sel, + Sample, Find, Transcribe…); <b>More ▸</b> shows the rest.</li>
+  <li><b>Soft keys</b> under the screen do what the Studio buttons do (Import text, Len = sel, Tempo &amp; key, Read sel, + Sample, Find, Transcribe…); a wider window shows more of them in the row; when they don't all fit, <b>More ▸</b> opens the rest in a row below.</li>
   <li><b>Knobs</b>: drag up or down (Shift for finer steps), scroll, or click one and use the arrow keys; a double-click puts the default back. Options with two positions are slide switches: left is off, right is on.</li>
   <li><b>Takes</b> 1–4 (variations), <b>Takes as</b> Playlists or Tracks (how several takes are placed together), <b>Place at</b> Playhead, Selection (its start) or Markers (the next one), and the red key.</li>
   <li><b>The tape</b> lists this mode's takes, lettered A, B, C…, with ▶ and Place; <b>History</b> opens every result.</li>

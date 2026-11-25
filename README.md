@@ -81,7 +81,7 @@ Vintage Cream is the default) and **Studio** (the layout above). `applySkin()` i
 **Vintage is its own panel**, built by `unit.js` (`#unit`), laid out as design E: a top strip (name,
 maker, finish → Look, the Online / No key lamp → API key screen, credits → plan screen), six
 one-word mode keys, a screen in a bezel (voice and model on top, the text or drop zone, the status
-line, a count and DEST) with four soft keys (More ▸ for the rest), knobs and slide switches, TAKES,
+line, a count and DEST) with soft keys (one fixed width; as many as fit in the row, four at 600 px, and More ▸ opens the rest in a row below), knobs and slide switches, TAKES,
 TAKES AS (playlists or tracks), PLACE AT and the red key, and the tape of results with History.
 Studio's header, tabs and footer are hidden and `main` keeps only its popovers.
 

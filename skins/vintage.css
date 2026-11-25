@@ -404,3 +404,7 @@
 #unit .u-face > * { flex-shrink: 0; }
 #unit .u-face > .u-tape { flex: 1 0 140px; }
 #unit :is(.u-bezel, .u-sel, .u-lcd, .u-body) > * { flex-shrink: 0; } /* eased parts: children keep their height */
+/* soft keys keep one width (four fill the row at the 600 px window); a wider window shows more of
+   them, and MORE ▸ opens the rest in a row below */
+#unit .u-softkeys { grid-template-columns: repeat(auto-fill, 128px); justify-content: start; }
+#unit .u-soft.more { color: var(--v-amber); }
