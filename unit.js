@@ -318,7 +318,7 @@
 
   // header tools: Studio's header buttons, as small keys (each presses the Studio button, so its
   // shortcut, tooltip and action stay the same)
-  for (const id of ['load-from-clip', 'history-open', 'support-open', 'help-open']) {
+  for (const id of ['load-from-clip', 'history-open', 'feedback-open', 'support-open', 'help-open']) {
     const src = $(id);
     if (!src) continue;
     const b = h('button', 'u-tool');
@@ -466,7 +466,7 @@
       headPart({ text: '◀ Back', run: () => show('main') }, 'right');
       soft = [softKey('See plans ↗', () => openUrl(PRICING_URL), { title: 'Open the ElevenLabs plans page in your web browser' }),
         softKey('↻ Update', async () => { await refreshQuota(); say('Credits updated.'); }, { title: 'Read the credits left again' }),
-        softKey('Help', () => toggleHelp(), { title: 'Help and shortcuts' }), softKey('Support ☕', () => openSupport(), { title: $('support-open')?.title })];
+        softKey('Help', () => toggleHelp(), { title: 'Help and shortcuts' }), softKey('Feedback', () => openFeedback(), { title: $('feedback-open')?.title }), softKey('Support ☕', () => openSupport(), { title: $('support-open')?.title })];
     } else {
       for (const el of m.body()) dock(el, body);
       const hd = m.head;

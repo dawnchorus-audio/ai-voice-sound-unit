@@ -47,6 +47,7 @@ const AddOnHelp = (() => {
     { group: 'Window', action: 'voice-search', mod: true, key: 'f', field: true, label: 'Open the voice list and search voices (Speech, Changer)' },
     { group: 'Window', action: 'paste-key', mod: true, shift: true, key: 'v', field: true, label: 'Paste the API key from the clipboard' },
     { group: 'Window', action: 'look', mod: true, shift: true, key: 'e', field: true, label: 'Next look: Studio, Vintage Cream, Vintage Black' },
+    { group: 'Window', action: 'feedback', mod: true, shift: true, key: 'b', field: true, label: 'Send feedback or report a bug (opens the form in your web browser)' },
     { group: 'Window', action: 'help', mod: true, key: '/', field: true, label: 'Open or close Help' },
     { group: 'Window', action: 'search-help', mod: true, shift: true, key: 'f', field: true, label: 'Search Help' },
     { group: 'Window', action: 'help', key: '?', label: 'Open Help' },
@@ -117,7 +118,7 @@ const AddOnHelp = (() => {
     {
       id: 'vintage', title: 'The panel, key by key', html: `
 <ul>
-  <li><b>Top strip</b>: the lamp says <b>Online</b> (green: key saved, connected to a LUNA session), <b>Waiting</b> or <b>No session</b> (yellow: LUNA is starting or reconnecting, or no session is open), <b>No LUNA</b> (LUNA could not be reached) or a red key with <b>No key</b>; click it (hover shows a key) to add, change or forget the API key. <b>CR</b> is the credits left on your ElevenLabs plan this period, read when the key is checked and after every generation (ElevenLabs can take a minute to count the newest one); click it for your plan, Help and support. Under them: <b>◐ Cream / Black</b> (Look), ⟳ <b>Reuse clip settings</b>, the clock (<b>History</b>), ☕ <b>Support</b> and <b>?</b> (Help).</li>
+  <li><b>Top strip</b>: the lamp says <b>Online</b> (green: key saved, connected to a LUNA session), <b>Waiting</b> or <b>No session</b> (yellow: LUNA is starting or reconnecting, or no session is open), <b>No LUNA</b> (LUNA could not be reached) or a red key with <b>No key</b>; click it (hover shows a key) to add, change or forget the API key. <b>CR</b> is the credits left on your ElevenLabs plan this period, read when the key is checked and after every generation (ElevenLabs can take a minute to count the newest one); click it for your plan, Help and support. Under them: <b>◐ Cream / Black</b> (Look), ⟳ <b>Reuse clip settings</b>, the clock (<b>History</b>), the speech bubble (<b>Feedback</b>), ☕ <b>Support</b> and <b>?</b> (Help).</li>
   <li><b>Mode keys</b>: <b>Speech</b>, <b>SFX</b>, <b>Music</b>, <b>Changer</b>, <b>Clone</b>, <b>Lyrics</b> (Studio: the tabs).</li>
   <li><b>The screen</b>: on top the voice (click it to search, preview and pick; <b>My voices</b> shows only yours) and the model (click for the next one, Shift-click for the previous one); then the text, recording or samples; then the status line, the count and <b>DEST ▸</b>.</li>
   <li><b>Soft keys</b> under the screen do the mode's actions (Studio: the buttons and chips on the card). A wider window shows more of them in the row; when they don't all fit, <b>More ▸</b> opens the rest in a row below (<b>Less ▴</b> closes it).</li>
@@ -241,6 +242,7 @@ const AddOnHelp = (() => {
   <dt>"Quota exceeded" / out of credits</dt><dd>Your plan's credits are used up for this period. The header shows what is left (in Vintage, <b>CR</b>).</dd>
   <dt>Paste key does nothing</dt><dd>LUNA may not let the page read the clipboard. Paste into the field with ${isMac ? '⌘V' : 'Ctrl+V'} and press <b>Save</b> (Studio: <b>Save and check</b>).</dd>
   <dt>"LUNA could not hand over the clip's audio"</dt><dd>The Add On reads clip audio from the session's audio folder. If that fails, bounce or export the clip and use <b>From file</b> (or drop the file on the screen).</dd>
+  <dt>Something else is wrong</dt><dd>Press <b>Feedback</b> (the speech-bubble key) and describe it; a screenshot helps.</dd>
   <dt>The result is on the wrong track</dt><dd>Check <b>DEST ▸</b> on the screen and <b>Place at</b> before you press the red key: they name the track and position. Takes that wait on the tape can be placed anywhere later.</dd>
 </dl>`,
     },
@@ -250,13 +252,15 @@ const AddOnHelp = (() => {
   <li>Your API key stays in your system's secure key store and is sent only to api.elevenlabs.io.</li>
   <li>Only what you generate from is sent to ElevenLabs: the text or prompt, and for Voice Changer, Voice Clone and Transcribe the selected audio. LUNA's lyrics are read in the Add On and only sent as the text you generate from. Nothing else from your session leaves your computer.</li>
   <li>Every request uses your ElevenLabs credits. Variations, script and lyric lines, multi-clip changes and transcriptions each count as separate requests, and in lyrics mode a line generated again at a fitting speed counts twice.</li>
+  <li>The <b>Feedback</b> form (Tally) receives only what you type and attach, plus the Add On's version, whether it runs in LUNA, Mac or Windows, the look and the mode.</li>
   <li>Writing to your session happens only when you place audio or click <b>Add to LUNA lyrics</b>; both are undoable in LUNA.</li>
   <li>A session someone sent you brings its History along. The Add On shows it as plain text, loads its settings only into the matching tab's fields, and plays only audio files inside that session. Nothing in it can run code or reach your API key.</li>
 </ul>`,
     },
     {
-      id: 'support', title: 'Support the Add On', html: `
+      id: 'support', title: 'Feedback and support', html: `
 <p>The Add On is free. If it saves you time and you'd like to say thanks, the <b>cup</b> button in the header (in both looks) opens the maker's support page (monobank Base) in your web browser, where you can leave a tip by card, from any country. It's entirely optional: nothing in the Add On changes either way.</p>
+<p><b>Feedback</b>: the speech-bubble key in the top strip (Studio: in the header; <kbd>${isMac ? '⇧⌘B' : 'Ctrl+Shift+B'}</kbd>) opens a short form in your web browser to report a bug, ask a question or suggest an idea; you can attach a screenshot and leave an email if you'd like a reply. The form gets the Add On's version, whether it runs in LUNA, your system (Mac or Windows), the look and the mode you were in, so a report can be read without asking; nothing else is sent, and nothing at all until you submit the form.</p>
 <p>The tip goes to the maker (dawnchorus) through monobank, not ElevenLabs, and has nothing to do with your ElevenLabs credits or plan. The Add On sends nothing about you or your session; it only opens the page.</p>`,
     },
   ];

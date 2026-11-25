@@ -32,6 +32,9 @@ Needs LUNA 3.1.1 or later.
 - A session file can come from someone else, so the History it carries is treated as
   untrusted: it is shown as text only, its settings fill only the remembered fields of their
   own tab, and an entry can only point at an audio file inside that session's audio folder.
+- **Feedback**: the speech-bubble button in the header (⇧⌘B / Ctrl+Shift+B) opens a short Tally form
+  (`FEEDBACK_URL` in `main.js`) in the web browser, with hidden fields `version`, `luna`, `os`,
+  `look` and `mode` filled in by the Add On. Replies arrive by email to the maker.
 - The Add On is free. The **cup** button in the header opens the maker's optional support page
   (monobank Base, base.monobank.ua; it takes international cards) in your web browser for a tip;
   it sends nothing and changes nothing in the Add On. `SUPPORT_URL` in `main.js` holds the page

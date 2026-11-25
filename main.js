@@ -1824,6 +1824,26 @@ function openSupport() {
 }
 $('support-open').onclick = openSupport;
 
+// Feedback: a Tally form in the web browser. Its hidden fields get what helps to read a report
+// (Add On version, inside LUNA or a browser, system, look, mode); the user types the rest.
+const FEEDBACK_URL = 'https://tally.so/r/PRzV2d';
+async function openFeedback() {
+  let version = '';
+  try { version = (await (await fetch('manifest.json', { cache: 'no-store' })).json()).add_ons?.[0]?.version ?? ''; } catch { /* left empty */ }
+  let inLuna = false;
+  try { inLuna = !!(luna && (await luna.gui.available())); } catch { /* a browser */ }
+  const params = new URLSearchParams({
+    version,
+    luna: inLuna ? 'yes' : 'no',
+    os: AddOnHelp.isMac ? 'mac' : 'windows',
+    look: prefs.skin === 'vintage' ? `vintage-${prefs.finish ?? 'cream'}` : 'studio',
+    mode: activeTab,
+  });
+  say('Opening the feedback form in your web browser. Thank you!', 'ok');
+  openUrl(`${FEEDBACK_URL}?${params}`);
+}
+$('feedback-open').onclick = openFeedback;
+
 // ---------- Look: Studio or Vintage, and Vintage's finish ----------
 
 const LOOKS = [['studio', 'cream'], ['vintage', 'cream'], ['vintage', 'black']];
@@ -1958,6 +1978,7 @@ const ACTIONS = {
   },
   'paste-key': pasteKey,
   help: () => toggleHelp(),
+  feedback: () => openFeedback(),
   look: nextLook,
   'search-help': () => {
     if (!$('help').classList.contains('open')) toggleHelp();
