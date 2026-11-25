@@ -390,3 +390,11 @@
 #unit .u-tape-body .item { counter-increment: take; }
 #unit .u-tape-body .item > .play { order: -2; }
 #unit .u-tape-body .item::before { content: counter(take, upper-alpha); order: -1; width: 12px; font: 12px var(--v-mono); color: var(--v-amber); }
+
+/* segmented keys (Takes, Takes as, Place at): each key draws its own border and overlaps its neighbour
+   by 1px, so a selected (dark) key covers the light lines around it instead of sitting inside them */
+#unit .u-seg { border: 0; overflow: visible; }
+#unit .u-seg button { position: relative; border: 1px solid var(--v-line); margin-left: -1px; border-radius: 0; }
+#unit .u-seg button:first-child { margin-left: 0; border-radius: 5px 0 0 5px; }
+#unit .u-seg button:last-child { border-radius: 0 5px 5px 0; border-right: 1px solid var(--v-line); }
+#unit .u-seg button.on { border-color: var(--v-seg-on); z-index: 1; }
