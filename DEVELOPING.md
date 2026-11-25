@@ -86,14 +86,14 @@ Studio → Vintage Cream → Vintage Black. `setLook()` keeps the choice in `pre
 It opens as a floating window only (*Add Ons > Windows > AI Voice & Sound Unit*), one page and one
 Add On (id `com.dawnchorus.voiceunit`). The side panel in LUNA's secondary browser is left out for
 now: it is too narrow for the Add On until LUNA allows a wider panel.
-The window opens at 620 × 860: on Windows the window frame takes part of the width, and 620 leaves the page its 600 px there (at 600 the panel's right edge was cut). LUNA has no minimum window width (asked), so the page never lays out narrower than 600 px:
+The window opens at 620 × 860: on Windows the window frame takes part of the width, and 620 leaves the page its 600 px there (at 600 the panel's right edge was cut). The manifest sets `min_width` 600 and `min_height` 780 (page size; LUNA 3.1.2 stops the user's resize there, an older LUNA ignores them): 780 fits the Vintage panel on Speech, SFX, Music and Changer (about 755 px plus `#unit`'s padding); Clone and Lyrics are taller and scroll inside `#unit`. LUNA reads the manifest only at start. The page still never lays out narrower than 600 px:
 Studio has `min-width` on `body` (`skins/studio.css`); Vintage moves it to the panel
 (`#unit .u-face`, 580 px) so a narrower window scrolls inside `#unit`, not the page. The Vintage
 panel fits the window's height; its takes scroll inside the tape. The page takes its height from
 `html` (100%), not `100vh`.
 On Windows LUNA sizes the page about a title bar taller and a little wider than the window shows,
 so `html.win` (set in `main.js`) insets the page 32 px at the bottom and 12 px on the right
-(`--inset-b`, `--inset-r`), confirmed on Windows 2026-11-25.
+(`--inset-b`, `--inset-r`), confirmed on Windows 2026-11-25; filed as HBH-36810.
 
 | File | Purpose |
 |---|---|

@@ -26,7 +26,9 @@
             "floating": true,
             "show_with_session": false,
             "width": 620,
-            "height": 860
+            "height": 860,
+            "min_width": 600,
+            "min_height": 780
         }
     ]
 }
