@@ -56,7 +56,7 @@ const AddOnHelp = (() => {
   /** LUNA's own keys that keep working in this window (outside text fields). */
   const LUNA_KEYS = [
     { keys: 'Space', label: 'Play / stop' },
-    { keys: isMac ? '⌘Z  ·  ⇧⌘Z' : 'Ctrl+Z  ·  Ctrl+Y', label: 'Undo / redo in LUNA (placing audio is one undo step)' },
+    { keys: isMac ? '⌘Z  ·  ⇧⌘Z' : 'Ctrl+Z  ·  Ctrl+Shift+Z', label: 'Undo / redo in LUNA (placing audio is one undo step)' },
     { keys: 'R', label: 'Record, as in LUNA' },
   ];
 

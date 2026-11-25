@@ -270,14 +270,14 @@
   unit.innerHTML = `
     <div class="u-face">
       <div class="u-top"><span class="u-screw"></span>
-        <span class="u-title"><span class="u-name">AI Voice &amp; Sound Unit</span><span class="u-maker">dawnchorus</span></span>
+        <span class="u-title"><span class="u-name">AI Voice &amp; Sound Unit</span><span class="u-maker"><u>daw</u>nchorus</span></span>
         <span class="u-grow"></span>
         <div class="u-right-top">
           <div class="u-status-row">
             <button type="button" class="u-online"><i></i><svg class="u-key" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3"/><path d="m16 7 3 3"/></svg><span></span></button>
             <button type="button" class="u-credits" title="Credits left on your ElevenLabs plan: click for the plan, Help and support"></button>
           </div>
-          <div class="u-tools"><button type="button" class="u-finish" title="Look: Studio or Vintage, and Vintage's finish (⇧⌘E steps through them)"></button></div>
+          <div class="u-tools"><button type="button" class="u-finish" title="Look: Studio or Vintage, and Vintage's finish"></button></div>
         </div>
         <span class="u-screw"></span></div>
       <div class="u-modes" role="tablist"></div>
@@ -457,7 +457,7 @@
         softKey('↻ Refresh', () => pop.querySelector('[id^=voices-refresh]')?.click(), { title: 'Load your voices again from ElevenLabs' })];
     } else if (scr === 'key') {
       for (const el of [$('key-input'), $('key-note')]) dock(el, body);
-      headPart('API key ▸ kept in your keychain', 'left');
+      headPart(`API key ▸ kept in your ${AddOnHelp.isMac ? 'keychain' : 'credential store'}`, 'left');
       headPart({ text: '◀ Back', run: leaveKey }, 'right');
       soft = [softKey('Paste key', 'key-paste'), softKey('Save', 'key-save'), softKey('Forget key', 'key-delete'), softKey('Get a key ↗', 'key-open')];
     } else if (scr === 'plan') {
@@ -530,7 +530,7 @@
     for (const [b, radio] of placeKeys) { b.classList.toggle('on', radio.checked); b.setAttribute('aria-pressed', radio.checked); }
     const go = $(m.go);
     const rest = { tts: 'Generate', sfx: 'Generate', music: 'Compose', vc: 'Change voice', ivc: 'Create voice', lyrics: 'Re-voice in Text to Speech' }[tab];
-    const now = go?.textContent.replace(/⌘↩|Ctrl\+↩/g, '').trim();
+    const now = go?.textContent.replace(/⌘↩|Ctrl\+(↩|Enter)/g, '').trim();
     const goKey = q('.u-go');
     const feedback = now && rest && !now.startsWith(rest);
     if (!feedback) { goKey.style.width = ''; goKey.textContent = m.goLabel; goKey.dataset.rest = goKey.getBoundingClientRect().width; } // exact, not rounded: a rounded width moved it by a fraction of a pixel

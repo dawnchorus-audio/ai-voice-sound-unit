@@ -5,6 +5,12 @@
 const STORE_ID = 'com.vbilous.elevenlabs';
 const ADD_ON_ID = STORE_ID; // LUNA serves media files and keeps secrets per Add On id
 const $ = (id) => document.getElementById(id);
+// Key labels and wording in the page's markup are written for macOS; on Windows say Ctrl+Enter and
+// Windows Credential Manager instead.
+if (!AddOnHelp.isMac) {
+  for (const k of document.querySelectorAll('button.generate kbd, button.primary kbd')) if (k.textContent === '⌘↩') k.textContent = 'Ctrl+Enter';
+  for (const id of ['key-paste', 'key-note']) { const el = document.getElementById(id); if (el) { el.title = el.title.replace(/keychain/g, 'Windows Credential Manager'); el.textContent = el.textContent.replace(/system keychain/g, 'Windows Credential Manager'); } }
+}
 /** "1 line", "2 lines". */
 const count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const L = AddOnLogic;
@@ -1254,7 +1260,7 @@ async function saveKey(key) {
     await useKey(key);
     await luna.secrets.set(L.SECRET_NAME, key);
     $('key-input').value = '';
-    const where = luna.secrets.storage === 'keychain' ? 'saved in your keychain' : 'kept only until this page reloads';
+    const where = luna.secrets.storage === 'keychain' ? `saved in your ${AddOnHelp.isMac ? 'keychain' : 'Windows Credential Manager'}` : 'kept only until this page reloads';
     say(`Key works and is ${where}.`, 'ok');
     showTab('tts');
     return true;
@@ -1279,7 +1285,7 @@ async function pasteKey() {
   } catch {
     showTab('key');
     $('key-input').focus();
-    say('The Add On could not read the clipboard. Paste the key into the field (⌘V) and click Save and check.', 'error');
+    say(`The Add On could not read the clipboard. Paste the key into the field (${AddOnHelp.isMac ? '⌘V' : 'Ctrl+V'}) and click Save and check.`, 'error');
     return;
   }
   const key = L.keyFromClipboard(text);
@@ -1575,7 +1581,7 @@ async function copyField() {
 }
 
 $('lrc-copy').onclick = async () => {
-  if (!(await copyField())) { flashButton($('lrc-copy'), 'Copy failed', 'error'); say('Could not copy. Select the text and press ⌘C.', 'error'); return; }
+  if (!(await copyField())) { flashButton($('lrc-copy'), 'Copy failed', 'error'); say(`Could not copy. Select the text and press ${AddOnHelp.isMac ? '⌘C' : 'Ctrl+C'}.`, 'error'); return; }
   flashButton($('lrc-copy'), '✓ Copied');
   say(docView === 'lrc' ? 'LRC copied: paste it into any editor, subtitle tool or message.' : 'Lyrics copied: paste them anywhere.', 'ok');
 };

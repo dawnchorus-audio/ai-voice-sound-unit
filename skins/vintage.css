@@ -21,7 +21,7 @@
   --v-lcd: #161C14; --v-lcd-2: #1F2619; --v-lcd-line: #3A3A26; --v-amber: #F2B544; --v-amber-hi: #FFD27A;
   --v-amber-dim: #B08A3C; --v-led: #F2A33A; --v-red: #C8452D; --v-red-hi: #E0533A; --v-red-lo: #8E3524;
   --v-green: #8FD39F;
-  --v-label: "Barlow Condensed", "Avenir Next Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Arial Narrow", sans-serif;
+  --v-label: "Barlow Condensed", "Avenir Next Condensed", "Bahnschrift Condensed", "Bahnschrift", "Roboto Condensed", "Arial Narrow", sans-serif;
   --v-mono: "IBM Plex Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 
   /* Studio's variables, for the faceplate */
@@ -442,3 +442,8 @@
 #unit .u-status #status .msg { flex: 1; min-width: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; line-height: 1.4; }
 #unit .u-status #status::before { flex: none; line-height: 1.4; }
 #unit .u-status #status .link { flex: none; font: 600 11px var(--v-mono); text-transform: uppercase; color: var(--v-amber-hi); background: none; border: 0; padding: 0; text-decoration: underline dotted; cursor: pointer; }
+#unit .u-maker u { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; font-weight: inherit; color: inherit; }
+/* Windows has no condensed system face but Bahnschrift: ask for its condensed width; and the name
+   never pushes the header wider than the panel */
+:root[data-skin=vintage] { font-stretch: condensed; }
+#unit .u-title .u-name { overflow: hidden; text-overflow: ellipsis; }

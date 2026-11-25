@@ -218,7 +218,7 @@ footer { border-top: 1px solid #262629; padding: 7px 14px; flex: 0 0 auto; }
 #help-content dd { margin: 2px 0 0 0; color: #bbb; }
 table.keys { border-collapse: collapse; width: 100%; }
 table.keys td { padding: 3px 6px 3px 0; vertical-align: top; }
-table.keys td:first-child { width: 96px; white-space: nowrap; }
+table.keys td:first-child { width: 96px; min-width: 130px; white-space: nowrap; }
 kbd { font: 11px var(--mono); background: var(--chip); border: 1px solid var(--line2); border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px; color: var(--text); }
 @media (max-width: 460px) { #help .body { grid-template-columns: 1fr; } #help-nav { display: flex; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid #262629; padding: 4px; } #help-nav button { width: auto; } #help-content { padding: 10px 14px; } }
 .hist { background: var(--feed); border: 1px solid #2A2A2D; border-radius: 12px; padding: 9px 11px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 5px; }
@@ -251,3 +251,5 @@ button.busy { opacity: .7; cursor: progress; }
 
 /* a button showing feedback keeps its width; a longer message is cut with an ellipsis */
 button.held { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* the maker's name: "daw" underlined, same weight and colour as the rest */
+header h1 .by u { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; font-weight: inherit; color: inherit; }
