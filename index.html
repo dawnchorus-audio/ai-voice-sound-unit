@@ -44,26 +44,14 @@
     <!-- Text to Speech -->
     <section id="tab-tts">
       <div class="card">
-        <!-- Vintage: the screen's head and foot (status and destination move in), as in design E -->
-        <div class="lcd-head"><button type="button" class="lcd-key" data-pop="pop-tts-voice" data-head-voice="tts-voice" title="Voice: search, preview and pick">Voice ▸ <span></span></button><span class="grow"></span><button type="button" class="lcd-key" data-head-model="tts-model" title="Model: click for the next one, Shift-click for the previous one">Model ▸ <span></span></button></div>
         <textarea id="tts-text" class="big" data-remember aria-label="Text" placeholder="Type what the voice should say, or drop a text, subtitle or LRC file here…"></textarea>
-        <div class="lcd-foot"></div>
-        <div class="softkeys" data-keys="tts-import-text:Import text|tts-import-lyrics:Import lyrics" role="group" aria-label="Screen keys"></div>
         <div class="card-meta" id="tts-count">0 characters</div>
-        <!-- Vintage draws the voice settings as knobs on the panel; each one drives the slider of the same name in ⚙ -->
-        <div class="knobs" role="group" aria-label="Voice settings">
-          <div class="knob" data-for="tts-stability" data-name="Stability" data-tip="Stability: lower is more expressive and varied, higher is steadier."></div>
-          <div class="knob" data-for="tts-similarity" data-name="Similarity" data-tip="Similarity: how close the voice stays to the original."></div>
-          <div class="knob" data-for="tts-style" data-name="Style" data-tip="Style: exaggerates the speaker's style; high values can be less stable."></div>
-          <div class="knob" data-for="tts-speed" data-name="Speed" data-suffix="×" data-tip="Speed: how fast the voice speaks, 0.7× to 1.2×."></div>
-        </div>
         <div class="bar">
           <button class="chip av" data-pop="pop-tts-voice" data-voice-chip="tts-voice" title="Voice: search, preview and pick"><span class="avatar">?</span><span class="lbl">Voice</span></button>
           <select id="tts-model" class="chip" data-remember aria-label="Model" title="Model"></select>
           <select id="tts-variations" class="chip variations" data-remember aria-label="Variations" title="How many variations to generate at once"><option value="1">×1</option><option value="2">×2</option><option value="3">×3</option><option value="4">×4</option></select>
           <label class="chip" title="One clip per line (script): each line of the text becomes its own clip, laid out as chosen under the card. A line that starts with a voice's name and a colon uses that voice."><input type="checkbox" id="tts-script" data-remember> Lines</label>
           <button class="chip ic" data-pop="pop-tts-opts" aria-label="Voice settings" title="Voice settings: stability, similarity, style and speed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></button>
-          <div class="hwkeys" data-takes="tts-variations" role="group" aria-label="Takes and track"></div>
           <span class="grow"></span>
           <button class="primary generate" id="tts-go" title="Generate the speech with the chosen voice and settings. It runs in the background; the result goes where the destination chip says.">Generate <kbd>⌘↩</kbd></button>
         </div>
@@ -101,20 +89,12 @@
     <!-- Sound Effects -->
     <section id="tab-sfx">
       <div class="card">
-        <!-- Vintage: the screen's head and foot (status and destination move in), as in design E -->
-        <div class="lcd-head"><span class="lcd-lbl">Sound effect ▸ prompt</span><span class="grow"></span><button type="button" class="lcd-key" data-head-model="sfx-model" title="Model: click for the next one, Shift-click for the previous one">Model ▸ <span></span></button></div>
         <textarea id="sfx-text" class="big" data-remember aria-label="Describe the sound" placeholder="Describe the sound, e.g. heavy wooden door slams shut in a large stone hall"></textarea>
-        <div class="lcd-foot"></div>
-        <div class="softkeys" data-keys="sfx-sel-len:Len = sel" role="group" aria-label="Screen keys"></div>
-        <div class="knobs" role="group" aria-label="Sound settings">
-          <div class="knob" data-for="sfx-influence" data-name="Influence" data-tip="Prompt influence: higher follows the words more literally."></div>
-        </div>
         <div class="bar">
           <span class="chip" title="Length in seconds (0.5–30). Empty: the model decides."><span class="unit">Length</span><input type="number" id="sfx-duration" min="0.5" max="30" step="0.5" placeholder="auto" data-remember aria-label="Length in seconds"><span class="unit">s</span><button id="sfx-sel-len" title="Length of the timeline selection">Selection</button></span>
           <label class="chip" title="Make the sound loop seamlessly"><input type="checkbox" id="sfx-loop" data-remember> Loop</label>
           <select id="sfx-variations" class="chip variations" data-remember aria-label="Variations" title="How many variations to generate at once"><option value="1">×1</option><option value="2">×2</option><option value="3">×3</option><option value="4">×4</option></select>
           <button class="chip ic" data-pop="pop-sfx-opts" aria-label="Sound settings" title="Prompt influence and model"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></button>
-          <div class="hwkeys" data-takes="sfx-variations" role="group" aria-label="Takes and track"></div>
           <span class="grow"></span>
           <button class="primary generate" id="sfx-go" title="Generate the sound effect. It runs in the background; the result goes where the destination chip says.">Generate <kbd>⌘↩</kbd></button>
         </div>
@@ -130,18 +110,13 @@
     <!-- Music -->
     <section id="tab-music">
       <div class="card">
-        <!-- Vintage: the screen's head and foot (status and destination move in), as in design E -->
-        <div class="lcd-head"><span class="lcd-lbl">Music ▸ prompt</span><span class="grow"></span><button type="button" class="lcd-key" data-head-model="music-model" title="Model: click for the next one, Shift-click for the previous one">Model ▸ <span></span></button></div>
         <textarea id="music-text" class="big" data-remember aria-label="Describe the music" placeholder="Describe the music, e.g. warm lo-fi hip hop beat, dusty drums, mellow Rhodes chords"></textarea>
-        <div class="lcd-foot"></div>
-        <div class="softkeys" data-keys="music-sel-len:Len = sel|music-context:Tempo & key" role="group" aria-label="Screen keys"></div>
         <div class="bar">
           <span class="chip" title="Length in seconds (3–600)"><span class="unit">Length</span><input type="number" id="music-length" min="3" max="600" step="1" value="30" data-remember aria-label="Length in seconds"><span class="unit">s</span><button id="music-sel-len" title="Length of the timeline selection">Selection</button></span>
           <label class="chip" title="Instrumental: no vocals"><input type="checkbox" id="music-instrumental" data-remember> Instrumental</label>
           <select id="music-variations" class="chip variations" data-remember aria-label="Variations" title="How many variations to generate at once"><option value="1">×1</option><option value="2">×2</option><option value="3">×3</option><option value="4">×4</option></select>
           <button class="chip" id="music-context" title="Add the session's tempo and key at the playhead to the prompt">+ Tempo &amp; key</button>
           <button class="chip ic" data-pop="pop-music-opts" aria-label="Music settings" title="Music model"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></button>
-          <div class="hwkeys" data-takes="music-variations" role="group" aria-label="Takes and track"></div>
           <span class="grow"></span>
           <button class="primary generate" id="music-go" title="Generate the music. It can take a minute and runs in the background; the result goes where the destination chip says.">Compose <kbd>⌘↩</kbd></button>
         </div>
@@ -165,7 +140,6 @@
           <button class="chip ic" data-pop="pop-vc-opts" aria-label="Voice settings" title="Voice settings: stability, similarity and style of the new voice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></button>
         </div>
         <div class="row">
-          <div class="hwkeys" role="group" aria-label="Track"></div>
           <span class="grow"></span>
           <button class="primary alt generate" id="vc-go" title="Re-voice the recording shown above with the chosen voice. One clip or file, one result.">Change voice</button>
           <button class="primary generate" id="vc-every" title="Re-voice every clip in the timeline selection at once (no need to use the recording above). Each clip is its own request; each result goes where its clip is, on the track the destination chip names (Selected track: over the originals; New track: a track of their own).">Change every clip in selection</button>

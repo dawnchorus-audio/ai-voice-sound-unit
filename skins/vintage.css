@@ -85,7 +85,6 @@
   border: 1px solid var(--v-line); border-radius: 4px; color: var(--v-ink);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18);
 }
-:root[data-skin=vintage] :is(.icon, .chip, button.ghost, .play, .seg button):active { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .25); }
 :root[data-skin=vintage] :is(.icon, .chip, button.ghost, .play):hover:not(:disabled) { border-color: var(--v-muted); color: var(--v-ink); }
 /* a key that is on: pressed in, amber legend, like the takes and place keys of design E */
 :root[data-skin=vintage] :is(.icon.on, .chip.on, .seg button.on, .play.on) {
@@ -110,7 +109,6 @@
   background: linear-gradient(180deg, var(--v-red-hi), var(--v-red) 55%, var(--v-red-lo)); color: #FBEFE6;
   border: 1px solid #5E2715; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 2px 0 #7E2A18, 0 4px 6px rgba(0, 0, 0, .3);
 }
-:root[data-skin=vintage] button.primary:not(.alt):active { transform: translateY(2px); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .35); }
 :root[data-skin=vintage] button.primary.alt {
   height: 36px; border-radius: 4px; font-size: 14px; font-weight: 700; color: var(--v-ink);
   background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); border: 1px solid var(--v-line);
@@ -247,71 +245,6 @@
 :root[data-skin=vintage] .chip:has(> input[type=checkbox])::after { content: 'OFF'; display: inline-block; width: 3.4ch; text-align: left; font: 600 10px var(--v-mono); letter-spacing: .06em; color: var(--v-muted); opacity: .75; }
 :root[data-skin=vintage] .chip:has(> input[type=checkbox]:checked)::after { content: 'ON'; color: var(--v-red); opacity: 1; }
 
-/* knobs: the voice and sound sliders drawn on the panel as rotary knobs, as in design E. Each knob
-   drives the slider of the same name, so ⚙ on Speech (which holds only those sliders) is not shown,
-   and the SFX ⚙ keeps only the model. */
-:root[data-skin=vintage] .knobs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 12px 14px 2px; text-align: center; }
-:root[data-skin=vintage] .knob { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: ns-resize; user-select: none; -webkit-user-select: none; touch-action: none; outline: none; color: var(--v-ink); }
-:root[data-skin=vintage] .knob svg { width: 50px; height: 50px; border-radius: 50%; }
-:root[data-skin=vintage] .knob .ring { fill: none; stroke: #9C947F; stroke-width: 2; stroke-dasharray: 2 4; }
-:root[data-skin=vintage] .knob .cap { fill: #1E1E1E; stroke: #3B3B3B; stroke-width: 2; }
-:root[data-skin=vintage] .knob .ptr { stroke: #E6E0D2; stroke-width: 3; stroke-linecap: round; }
-:root[data-skin=vintage][data-finish=black] .knob .ring { stroke: #77777C; }
-:root[data-skin=vintage][data-finish=black] .knob .cap { fill: #CFCAC0; }
-:root[data-skin=vintage][data-finish=black] .knob .ptr { stroke: #1E1E1E; }
-:root[data-skin=vintage] .knob .name { font: 700 12px var(--v-label); letter-spacing: .12em; text-transform: uppercase; }
-:root[data-skin=vintage] .knob .val { font: 11px var(--v-mono); color: var(--v-muted); }
-:root[data-skin=vintage] .knob:focus-visible svg { outline: 2px solid var(--v-red); outline-offset: 2px; }
-:root[data-skin=vintage] #tab-tts [data-pop=pop-tts-opts] { display: none; }
-:root[data-skin=vintage] #pop-sfx-opts :is(.ctl:has(#sfx-influence), .foot) { display: none; }
-
-/* TAKES and TRACK keys by the red key, as in design E: TAKES drive the ×variations list (whose chip
-   Vintage hides), TRACK and AUTO drive the destination's track and "Place automatically". */
-:root[data-skin=vintage] .bar > select.variations { display: none; }
-:root[data-skin=vintage] .hwkeys { display: flex; flex-direction: column; gap: 4px; flex: 0 0 auto; }
-:root[data-skin=vintage] .hwrow { display: flex; align-items: center; gap: 6px; }
-:root[data-skin=vintage] .hwlbl { width: 40px; font: 700 10.5px var(--v-label); letter-spacing: .12em; text-transform: uppercase; color: var(--v-muted); cursor: default; }
-:root[data-skin=vintage] .hwkeys .seg button { height: 22px; min-width: 26px; padding: 0 7px; font: 700 11px var(--v-label); letter-spacing: .08em; }
-
-/* the screen: a head with the voice and model, the text, and a foot that takes the status line and the
-   destination (moved in by placeScreenParts), as in design E. The chips they repeat (voice, model,
-   the SFX and Music settings that now hold only the model) are not shown. */
-:root[data-skin=vintage] .lcd-head, :root[data-skin=vintage] .lcd-foot { display: flex; margin: 0 10px; background: var(--v-lcd); color: var(--v-amber); font: 500 11px var(--v-mono); letter-spacing: .06em; text-transform: uppercase; }
-:root[data-skin=vintage] .lcd-head { margin-top: 10px; align-items: center; gap: 8px; padding: 7px 12px 5px; border-radius: 5px 5px 0 0; border-bottom: 1px dashed var(--v-lcd-line); }
-:root[data-skin=vintage] .lcd-head .lcd-lbl { color: var(--v-amber-dim); }
-:root[data-skin=vintage] .lcd-key { background: none; border: 0; padding: 0; color: var(--v-amber-dim); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-:root[data-skin=vintage] .lcd-key span { color: var(--v-amber); }
-:root[data-skin=vintage] .lcd-key:hover span { color: var(--v-amber-hi); text-decoration: underline; }
-/* :is(…, #lrc-text) matches the weight of the LCD field rule above, which sets the margin */
-:root[data-skin=vintage] .card:has(.lcd-head) :is(textarea.big, #lrc-text) { margin-top: 0; border-radius: 0; }
-:root[data-skin=vintage] .lcd-foot { --text: var(--v-amber); --dim: var(--v-amber); --mute: var(--v-amber-dim); --ok: var(--v-green); --err: #FF8A6E; flex-direction: column; gap: 4px; padding: 6px 12px 8px; border-radius: 0 0 5px 5px; border-top: 1px dashed var(--v-lcd-line); text-transform: none; }
-:root[data-skin=vintage] .lcd-foot:empty { display: none; }
-:root[data-skin=vintage] .card:has(.lcd-foot:empty) :is(textarea.big, #lrc-text) { border-radius: 0 0 5px 5px; }
-:root[data-skin=vintage] .lcd-foot #status { font: 11.5px var(--v-mono); min-height: 1.4em; }
-:root[data-skin=vintage] .lcd-foot #dest-row { margin: 0; }
-:root[data-skin=vintage] .lcd-foot .dest-btn { height: auto; padding: 0; background: none; box-shadow: none; }
-:root[data-skin=vintage] footer:not(:has(#status)) { display: none; }
-:root[data-skin=vintage] :is(#tab-tts .bar > [data-voice-chip], #tts-model, #tab-sfx [data-pop=pop-sfx-opts], #tab-music [data-pop=pop-music-opts]) { display: none; }
-
-/* soft keys under the screen, as in design E: each presses an existing button (Import text / lyrics,
-   Length from the selection, Tempo & key), so the buttons they repeat are not shown. Switches stay
-   switches. */
-:root[data-skin=vintage] .softkeys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 6px 10px 0; }
-:root[data-skin=vintage] .softkeys button { height: 26px; padding: 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border: 1px solid var(--v-line); border-radius: 4px; color: var(--v-ink); font: 700 11px var(--v-label); letter-spacing: .1em; text-transform: uppercase; background: linear-gradient(180deg, var(--v-btn-on), var(--v-btn)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 0 var(--v-shadow), 0 3px 3px rgba(0, 0, 0, .18); cursor: pointer; }
-:root[data-skin=vintage] .softkeys button:active { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .25); }
-:root[data-skin=vintage] .softkeys button:disabled { opacity: .45; cursor: default; }
-:root[data-skin=vintage] :is(#tab-tts > .row:has(#tts-import-text), #sfx-sel-len, #music-sel-len, #music-context) { display: none; }
-
-/* the tape of takes (design E, stage 5): this tab's results drawn as tape rows. Same rows, buttons and
-   order as Studio; each take gets a letter (A, B, C…) after its play key, like E's takes. */
-:root[data-skin=vintage] #results .group { counter-reset: take; gap: 5px; }
-:root[data-skin=vintage] #results .item { counter-increment: take; gap: 8px; padding: 5px 8px; background: #0F130D; border: 1px solid var(--v-lcd-line); border-radius: 3px; }
-:root[data-skin=vintage] #results .item > .play { order: -2; }
-:root[data-skin=vintage] #results .item::before { content: counter(take, upper-alpha); order: -1; flex: 0 0 18px; height: 18px; display: grid; place-items: center; border-radius: 2px; background: var(--v-amber); color: var(--v-lcd); font: 700 11px var(--v-mono); }
-:root[data-skin=vintage] #results .item .name { color: var(--v-amber-dim); text-transform: uppercase; }
-:root[data-skin=vintage] #results .item button.ghost, :root[data-skin=vintage] #results .group-actions button.ghost { font: 700 10.5px var(--v-label); letter-spacing: .1em; text-transform: uppercase; }
-:root[data-skin=vintage] #results .group .title b { text-transform: uppercase; letter-spacing: .06em; }
-
 /* ========== the Vintage panel (unit.js), laid out as design E ==========
    In Vintage the Studio layout is not drawn: its header, tabs and footer are hidden and main keeps only
    its popovers. The panel moves the page's own parts (text fields, drop zones, status, results) in. */
@@ -419,7 +352,6 @@
 #unit .u-seg button:disabled { cursor: default; }
 #unit .u-takes .u-seg button { font-size: 14px; }
 #unit .u-go { flex: none; height: 62px; padding: 0 18px; border-radius: 8px; border: 2px solid #7E2A18; background: var(--v-red); box-shadow: 0 0 14px rgba(200, 69, 45, .35), inset 0 -3px 0 #9B3320; color: #FFFFFF; font: 700 19px var(--v-label); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; white-space: nowrap; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
-#unit .u-go:active { transform: translateY(2px); box-shadow: inset 0 2px 6px rgba(0, 0, 0, .35); }
 #unit .u-go:disabled { opacity: .55; cursor: default; }
 
 /* the tape */
@@ -448,3 +380,13 @@
 #unit .u-foot-left { flex: 0 1 auto; min-width: 0; }
 #unit .u-dest { flex: 1 1 0; min-width: 0; display: flex; justify-content: flex-end; }
 #unit .u-dest .dest-btn { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+
+/* no press effect in Vintage, as on design E: a key changes only its colour and border */
+:root[data-skin=vintage] button.pressed { animation: none; }
+:root[data-skin=vintage] button:active { transform: none; }
+
+/* each take on the tape gets a letter after its play key (A, B, C…), as on design E */
+#unit .u-tape-body .group { counter-reset: take; }
+#unit .u-tape-body .item { counter-increment: take; }
+#unit .u-tape-body .item > .play { order: -2; }
+#unit .u-tape-body .item::before { content: counter(take, upper-alpha); order: -1; width: 12px; font: 12px var(--v-mono); color: var(--v-amber); }

@@ -23,8 +23,6 @@ svg { flex: 0 0 auto; }
 /* header and tabs */
 header { display: flex; align-items: center; gap: 8px; padding: 10px 14px 8px; }
 header h1 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; display: flex; flex-direction: column; line-height: 1.1; }
-/* knobs are Vintage's way of showing the sliders; Studio keeps them in ⚙ */
-.knobs, .hwkeys, .lcd-head, .lcd-foot, .softkeys { display: none; }
 header h1 .by { margin-top: 1px; font-size: 10px; font-weight: 400; letter-spacing: 0; color: var(--dim); }
 #quota { font-size: 11px; color: var(--dim); background: #1F1F22; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; max-width: 40%; font-variant-numeric: tabular-nums; }
 #quota:empty { display: none; }
