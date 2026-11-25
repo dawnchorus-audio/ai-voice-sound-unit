@@ -527,7 +527,11 @@
     takeKeys.forEach((b, i) => { const on = !!sel && sel.value === String(i + 1); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); b.disabled = !sel || sel.disabled; });
     q('.u-as').classList.toggle('off', !sel || sel.disabled);
     for (const [b, v] of asKeys) { const on = (prefs.placeAs ?? 'playlists') === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); b.disabled = !sel || sel.disabled; }
-    for (const [b, radio] of placeKeys) { b.classList.toggle('on', radio.checked); b.setAttribute('aria-pressed', radio.checked); }
+    // Clone and Lyrics place nothing themselves (Lyrics re-voices through Speech), so their destination and position show dimmed, as Takes does.
+    const places = tab !== 'ivc' && tab !== 'lyrics';
+    q('.u-place').classList.toggle('off', !places);
+    q('.u-dest').classList.toggle('off', !places);
+    for (const [b, radio] of placeKeys) { b.classList.toggle('on', radio.checked); b.setAttribute('aria-pressed', radio.checked); b.disabled = !places; }
     const go = $(m.go);
     const rest = { tts: 'Generate', sfx: 'Generate', music: 'Compose', vc: 'Change voice', ivc: 'Create voice', lyrics: 'Re-voice in Text to Speech' }[tab];
     const now = go?.textContent.replace(/⌘↩|Ctrl\+(↩|Enter)/g, '').trim();

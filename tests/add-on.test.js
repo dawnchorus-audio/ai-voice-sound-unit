@@ -349,6 +349,15 @@ describe('targets, variations, scripts and history', () => {
     expect(session.tracks.items.length).toBe(before);
   });
 
+  it('says how many more undos the new tracks take', async () => {
+    expect(logic.undoText(0)).toBe('Undo removes it.');
+    expect(logic.undoText(1)).toMatch(/new track takes one more Undo/);
+    expect(logic.undoText(2)).toMatch(/each of the 2 new tracks/);
+    const { session } = await connected();
+    const items = [await uploaded(session, 'SFX - hit #1', 0.5), await uploaded(session, 'SFX - hit #2', 0.7)];
+    expect(logic.madeTracks(await logic.placeVariations(session, items, logic.captureTarget(session, 'new', 0), 'tracks'))).toBe(2);
+  });
+
   it('never makes a track inside a transaction', async () => {
     const { session } = await connected();
     await session.transaction('x', async () => {

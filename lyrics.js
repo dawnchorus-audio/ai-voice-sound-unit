@@ -206,7 +206,7 @@ const AddOnLyrics = {
         clips++;
       }
     }));
-    return { track, clips, fallbacks, limited };
+    return { track, clips, fallbacks, limited, made: 1 };
   },
 
   /** Pair original lyric words with generated words, or null when the words differ. */

@@ -395,6 +395,7 @@ function groupEl(g) {
   head.querySelector('b').textContent = g.title;
   head.querySelector('.hint').textContent = kindLabel;
   head.querySelector('.placed').textContent = g.placedText ?? '';
+  head.querySelector('.placed').title = g.placedText ?? '';
   el.appendChild(head);
 
   for (const item of g.items) {
@@ -405,6 +406,7 @@ function groupEl(g) {
     row.querySelector('.play').onclick = () => togglePlay(item.id, item.url);
     row.querySelector('.name').textContent = `${g.layout === 'single' ? '' : `${item.label} · `}${item.seconds.toFixed(1)} s`;
     row.querySelector('.placed').textContent = item.placedText ?? '';
+    row.querySelector('.placed').title = item.placedText ?? '';
     if (g.layout === 'single' || g.layout === 'variations') {
       const canTarget = g.target && session && g.sessionUid === session.uid;
       const atOrigin = btn(`Place at ${g.target?.where || 'original spot'}`, () => placeOne(g, item, 'target'), undefined, { busy: 'Placing…', ok: '✓ Placed' });
@@ -479,10 +481,10 @@ function targetFor(g, where) {
 async function placeOne(g, item, where) {
   try {
     const target = targetFor(g, where);
-    const { track, startTick } = await L.placeSource(session, item, target);
+    const { track, startTick, made } = await L.placeSource(session, item, target);
     item.placedTick = startTick;
     item.placedText = `✓ on "${track.name.value ?? track.id}" at ${L.barText(session, startTick)}`;
-    say(`Placed "${item.name}" ${item.placedText.slice(2)}. Undo removes it.`, 'ok');
+    say(`Placed "${item.name}" ${item.placedText.slice(2)}.${target.note ? ` ${target.note}` : ''} ${L.undoText(made)}`, 'ok');
     renderResults();
     history?.update(item.id, { placed: item.placedText.slice(2) }).catch(() => {});
   } catch (e) { sayError(e, 'Could not place it: '); }
@@ -491,13 +493,17 @@ async function placeOne(g, item, where) {
 async function placeGroup(g, bar) {
   const at = bar.querySelector('.at')?.value ?? 'target';
   const target = targetFor(g, at);
+  let made = 0;
   try {
     if (g.layout === 'variations') {
       const as = bar.querySelector('.as').value;
       const placed = await L.placeVariations(session, g.items, target, as);
+      made = L.madeTracks(placed);
+      placed.forEach((p, i) => { g.items[i].placedTick = p.startTick; }); // LRC and Re-voice need where each take is
       g.placedText = as === 'tracks' ? `✓ on ${placed.length} new tracks` : `✓ as ${placed.length} playlists of "${placed[0].track.name.value}"`;
     } else if (g.layout === 'script') {
       const placed = await L.placeScript(session, g.items, target, g.scriptOpts);
+      made = L.madeTracks(placed);
       g.placedText = `✓ ${count(placed.length, 'line')} from ${L.barText(session, placed[0].startTick)}`;
       g.placedLines = placed.map((p, i) => {
         const item = g.items[i];
@@ -508,6 +514,7 @@ async function placeGroup(g, bar) {
     } else if (g.layout === 'lyrics') {
       const mode = bar.querySelector('.fit')?.value ?? g.fitMode ?? 'fit';
       const res = await AddOnLyrics.place(session, g.items, { mode, trackName: g.trackName });
+      made = res.made;
       g.fitMode = mode;
       g.placedText = `✓ on "${res.track.name.value}" (${count(res.clips, 'clip')})`;
       const notes = [];
@@ -518,10 +525,12 @@ async function placeGroup(g, bar) {
       const on = bar.querySelector('.on')?.value ?? 'target';
       const trackId = on === 'source' ? g.sourceTrackId : on === 'new' ? null : g.target?.trackId ?? null;
       const placed = await L.placeScript(session, g.items, { trackId, tick: 0 }, { layout: 'explicit', trackName: g.title });
+      made = L.madeTracks(placed);
       g.placedText = `✓ on "${placed[0].track.name.value}"`;
     }
-    say(`Placed "${g.title}" ${g.placedText.slice(2)}.${g.note ? ` ${g.note}.` : ''} Undo removes it.`, 'ok');
+    say(`Placed "${g.title}" ${g.placedText.slice(2)}.${g.note ? ` ${g.note}.` : ''}${target.note ? ` ${target.note}` : ''} ${L.undoText(made)}`, 'ok');
     renderResults();
+    for (const item of g.items) history?.update(item.id, { placed: g.placedText.slice(2) }).catch(() => {});
   } catch (e) { sayError(e, 'Could not place them: '); }
 }
 
@@ -581,6 +590,7 @@ async function finish(job, ctx, parts) {
 function startAt() {
   const { tick, note } = L.startTick(session, placeAt());
   if (note) say(note);
+  startAt.note = note; // said again when the result is placed: by then this line is long gone
   return tick;
 }
 
@@ -590,7 +600,7 @@ function context(kind, title, prompt, extra = {}) {
   return {
     kind, tab, title, prompt, groupId: uid(), layout: 'single',
     sessionUid: session?.uid ?? null,
-    target: session ? L.captureTarget(session, destMode(), extra.originTick ?? startAt()) : null,
+    target: session ? Object.assign(L.captureTarget(session, destMode(), extra.originTick ?? startAt()), extra.originTick == null && startAt.note ? { note: startAt.note } : {}) : null,
     autoPlace: $('auto-place').checked,
     settings: snapshot(tab),
     ...extra,
@@ -964,12 +974,12 @@ function readRange(url, start, end) {
     if (start !== undefined) xhr.setRequestHeader('Range', `bytes=${start}-${end}`);
     xhr.onload = () => {
       if (!xhr.response || (xhr.status !== 200 && xhr.status !== 206 && xhr.status !== 0)) {
-        reject(new Error(`could not read the clip's audio (HTTP ${xhr.status})`));
+        reject(new Error(`Could not read the clip's audio file (HTTP ${xhr.status}). Check that it is still in the session's audio folder.`));
         return;
       }
       resolve({ bytes: new Uint8Array(xhr.response), full: xhr.status !== 206 });
     };
-    xhr.onerror = () => reject(new Error("could not read the clip's audio"));
+    xhr.onerror = () => reject(new Error("Could not read the clip's audio file. Clip audio can be read only in LUNA, not in a web browser; in LUNA, check the file is still in the session's audio folder."));
     xhr.send();
   });
 }

@@ -285,6 +285,8 @@
   color-scheme: dark; background: var(--v-lcd); border-radius: 6px; box-shadow: inset 0 2px 8px #000; padding: 10px 12px; font-family: var(--v-mono); color: var(--v-amber); display: flex; flex-direction: column; gap: 7px; }
 #unit .u-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .08em; white-space: nowrap; text-transform: uppercase; }
 #unit .u-head > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* The model (right) keeps its name and ⇄ up to 45 %; a long voice name gives way first. */
+#unit .u-head > span:last-child:not(:first-child) { flex-shrink: 0; max-width: 45%; }
 #unit .u-link { background: transparent; border: 0; padding: 0; color: var(--v-amber); font: 500 11px var(--v-mono); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #unit .u-dim { color: #C99A3E; }
 #unit .u-body { min-height: 90px; display: flex; flex-direction: column; gap: 6px; }
@@ -344,6 +346,7 @@
 #unit .u-sel { display: flex; flex-direction: column; gap: 6px; }
 #unit .u-sel > div { display: flex; align-items: center; gap: 8px; }
 #unit .u-sel > div.off { opacity: .45; }
+#unit .u-dest.off { opacity: .45; pointer-events: none; }
 #unit .u-lbl { width: 62px; font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--v-muted); }
 #unit .u-seg { display: flex; border: 1px solid var(--v-line); border-radius: 5px; overflow: hidden; }
 #unit .u-seg button { height: 28px; min-width: 30px; padding: 0 8px; border: 0; border-right: 1px solid var(--v-line); background: var(--v-btn); color: var(--v-ink); font: 700 13px var(--v-label); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
@@ -371,6 +374,8 @@
 #unit .u-tape-body .item .wave { color: #D9B26A; }
 #unit .u-tape-body :is(.item, .group-actions) button.ghost { height: 28px; padding: 0 10px; border-radius: 4px; border: 1px solid #5A554B; background: #33302A; color: #E6E0D2; font: 700 12px var(--v-label); letter-spacing: .1em; text-transform: uppercase; box-shadow: none; }
 #unit .u-tape-body .placed { color: var(--v-green); font: 11px var(--v-mono); text-transform: uppercase; }
+/* Rows stay one line (studio.css); the tape's narrower wave gives way first. */
+#unit .u-tape-body .item .wave { min-width: 40px; }
 #unit .u-tape-body .group-actions { color: #A8A090; font: 11px var(--v-mono); }
 #unit .u-tape-body .group-actions select { background: #1A1916; color: #E6E0D2; border: 1px solid #5A554B; }
 #unit .u-tape-body .empty { background: transparent; border: 0; box-shadow: none; color: #A8A090; font: 11px var(--v-mono); text-transform: uppercase; padding: 6px 2px; text-align: left; }

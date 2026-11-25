@@ -179,6 +179,17 @@ const AddOnLogic = {
    * get_clip_info mid-transaction. On 2026-11-25 LUNA never answered that, the abort hung as
    * well, and LUNA could not quit. Made first, the track has its playlist and nothing is asked.
    */
+  /** How many new tracks a placement made (each is an undo step of its own). */
+  madeTracks(placed) {
+    return new Set(placed.filter((p) => p.newTrack).map((p) => p.track.id)).size;
+  },
+
+  /** The status line's undo hint after a placement that made `made` new tracks. */
+  undoText(made) {
+    if (!made) return 'Undo removes it.';
+    return made === 1 ? 'Undo removes it; the new track takes one more Undo.' : `Undo removes it; each of the ${made} new tracks takes one more Undo.`;
+  },
+
   newTrackFor(session, name, channels) {
     if (session.batching) throw new Error('newTrackFor() inside a transaction');
     return session.newTrack({ name, stemFormat: channels > 1 ? 'stereo' : 'mono', makeNameUnique: true }).then((r) => r[0]);
@@ -212,7 +223,7 @@ const AddOnLogic = {
     await AddOnLogic.onNewTracks(session, made, () => session.transaction(`ElevenLabs: ${item.name}`, async () => {
       clip = await AddOnLogic.insertGenerated(session, { trackUid: track.id, item, startTick });
     }));
-    return { track, clip, startTick, stopTick: AddOnLogic.spanTicks(session, startTick, item.seconds) };
+    return { track, clip, startTick, stopTick: AddOnLogic.spanTicks(session, startTick, item.seconds), made: made.length };
   },
 
   /**
@@ -232,7 +243,7 @@ const AddOnLogic = {
       await AddOnLogic.onNewTracks(session, made, () => session.transaction(`ElevenLabs: ${items.length} variations`, async () => {
         for (let i = 0; i < items.length; i++) {
           await AddOnLogic.insertGenerated(session, { trackUid: made[i].id, item: items[i], startTick });
-          placed.push({ track: made[i] });
+          placed.push({ track: made[i], newTrack: true, startTick });
         }
       }));
       return placed;
@@ -241,6 +252,7 @@ const AddOnLogic = {
     // playlists are made first (each is its own undo step in LUNA), then every variation goes
     // in by playlist uid in one undo step.
     let track = AddOnLogic.trackFor(session, target);
+    const newTrack = !track;
     if (!track) track = await AddOnLogic.newTrackFor(session, items[0].name.replace(/ #\d+$/, ''), Math.max(...items.map((i) => i.channels)));
     await session.playlists.load();
     const lanes = () => session.playlists.items.filter((p) => p.trackUid.value === track.id);
@@ -264,7 +276,7 @@ const AddOnLogic = {
     await session.transaction(`ElevenLabs: ${items.length} variations`, async () => {
       for (let i = 0; i < items.length; i++) {
         await AddOnLogic.insertGenerated(session, { playlistUid: targets[i].id, item: items[i], startTick });
-        placed.push({ track, playlist: targets[i] });
+        placed.push({ track, playlist: targets[i], newTrack, startTick });
       }
     });
     return placed;
@@ -318,7 +330,7 @@ const AddOnLogic = {
     await AddOnLogic.onNewTracks(session, made, () => session.transaction(`ElevenLabs: script (${items.length} line${items.length === 1 ? '' : 's'})`, async () => {
       for (let i = 0; i < items.length; i++) {
         await AddOnLogic.insertGenerated(session, { trackUid: trackOf[i].id, item: items[i], startTick: starts[i] });
-        placed.push({ track: trackOf[i], startTick: starts[i] });
+        placed.push({ track: trackOf[i], startTick: starts[i], newTrack: made.includes(trackOf[i]) });
       }
     }));
     return placed;
