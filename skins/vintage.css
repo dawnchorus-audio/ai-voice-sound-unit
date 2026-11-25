@@ -264,3 +264,11 @@
 :root[data-skin=vintage] .knob:focus-visible svg { outline: 2px solid var(--v-red); outline-offset: 2px; }
 :root[data-skin=vintage] #tab-tts [data-pop=pop-tts-opts] { display: none; }
 :root[data-skin=vintage] #pop-sfx-opts :is(.ctl:has(#sfx-influence), .foot) { display: none; }
+
+/* TAKES and TRACK keys by the red key, as in design E: TAKES drive the ×variations list (whose chip
+   Vintage hides), TRACK and AUTO drive the destination's track and "Place automatically". */
+:root[data-skin=vintage] .bar > select.variations { display: none; }
+:root[data-skin=vintage] .hwkeys { display: flex; flex-direction: column; gap: 4px; flex: 0 0 auto; }
+:root[data-skin=vintage] .hwrow { display: flex; align-items: center; gap: 6px; }
+:root[data-skin=vintage] .hwlbl { width: 40px; font: 700 10.5px var(--v-label); letter-spacing: .12em; text-transform: uppercase; color: var(--v-muted); cursor: default; }
+:root[data-skin=vintage] .hwkeys .seg button { height: 22px; min-width: 26px; padding: 0 7px; font: 700 11px var(--v-label); letter-spacing: .08em; }

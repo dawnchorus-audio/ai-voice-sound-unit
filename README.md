@@ -93,6 +93,10 @@ design E (`.knobs` / `.knob[data-for]` in `index.html`, `makeKnob()` in `main.js
 the range input named in `data-for`, so remembered settings, History and Reuse clip settings stay
 the input's own. Studio hides `.knobs`; Vintage hides the Speech ⚙ (it held only those sliders) and
 the Influence row of the SFX ⚙.
+Next to the red key, Vintage shows **TAKES** and **TRACK** keys (`.hwkeys`, built by `makeHwKeys()`):
+TAKES 1–4 set the tab's ×variations list (whose chip Vintage hides), TRACK Sel / New and Auto set
+the destination's `input[name=dest]` and `#auto-place`. The keys only read and set those controls,
+repainting after any `input` / `change`, so shortcuts, History and the destination chip stay in step.
 
 The **Look** button in the header (`#look-open`, popover `#pop-look`) picks the skin and Vintage's
 finish (the finish radios are disabled, not hidden, in Studio); ⇧⌘E (`look` in `SHORTCUTS`) steps

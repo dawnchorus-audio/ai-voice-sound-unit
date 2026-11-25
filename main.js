@@ -130,6 +130,7 @@ function restorePrefs() {
   for (const [id, v] of Object.entries(prefs.fields ?? {})) { const el = $(id); if (el && el.tagName !== 'SELECT') setField(el, v); }
   if (prefs.dest) { const r = document.querySelector(`input[name=dest][value=${prefs.dest}]`); if (r) r.checked = true; }
   if (typeof prefs.auto === 'boolean') $('auto-place').checked = prefs.auto;
+  (hwKeyPainters || []).forEach((p) => p());
 }
 /** Selects are filled later (voices, models); put their remembered values back then. */
 function restoreSelect(sel) { const v = prefs.fields?.[sel.id]; if (v && [...sel.options].some((o) => o.value === v)) sel.value = v; }
@@ -214,6 +215,57 @@ function makeKnob(el) {
   });
 }
 for (const el of document.querySelectorAll('.knob[data-for]')) makeKnob(el);
+
+// ---------- Vintage hardware keys: TAKES and TRACK by the red key (hidden in Studio) ----------
+
+/** TAKES 1–4 drive the tab's ×variations list; TRACK SEL / NEW and AUTO drive the destination's
+ * track and "Place automatically". The controls stay the source of truth: the keys only read and
+ * set them, so remembered settings, shortcuts and the destination chip stay in step. */
+function makeHwKeys(box) {
+  const row = (label, title) => {
+    const r = document.createElement('div');
+    r.className = 'hwrow';
+    r.innerHTML = '<span class="hwlbl"></span><div class="seg"></div>';
+    r.querySelector('.hwlbl').textContent = label;
+    r.querySelector('.hwlbl').title = title;
+    box.append(r);
+    return r.querySelector('.seg');
+  };
+  const key = (seg, text, title, run) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = text;
+    b.title = title;
+    b.addEventListener('click', run);
+    seg.append(b);
+    return b;
+  };
+  const paints = [];
+  const sel = box.dataset.takes ? $(box.dataset.takes) : null;
+  if (sel) {
+    const seg = row('Takes', 'How many takes (variations) to generate at once.');
+    for (const o of sel.options) {
+      const b = key(seg, o.value, `${o.value} take${o.value === '1' ? '' : 's'} at once (variations). ${AddOnHelp.keyLabel({ mod: true, shift: true, key: 'ArrowUp' })} / ${AddOnHelp.keyLabel({ mod: true, shift: true, key: 'ArrowDown' })} for more or fewer.`, () => setField(sel, o.value));
+      paints.push(() => { b.classList.toggle('on', sel.value === o.value); b.disabled = sel.disabled; b.setAttribute('aria-pressed', sel.value === o.value); });
+    }
+  }
+  const seg = row('Track', 'Where results go: the selected audio track or a new track, at the playhead.');
+  for (const [value, text, title] of [['selected', 'Sel', 'Place results on the selected audio track, at the playhead.'], ['new', 'New', 'Place results on a new track, at the playhead.']]) {
+    const radio = document.querySelector(`input[name=dest][value=${value}]`);
+    const b = key(seg, text, title, () => { radio.checked = true; radio.dispatchEvent(new Event('change', { bubbles: true })); });
+    paints.push(() => { b.classList.toggle('on', radio.checked); b.setAttribute('aria-pressed', radio.checked); });
+  }
+  const auto = $('auto-place');
+  const a = key(seg, 'Auto', 'Place each result as soon as it is ready. Off: results wait in the list until you place them.', () => { auto.checked = !auto.checked; auto.dispatchEvent(new Event('change', { bubbles: true })); });
+  paints.push(() => { a.classList.toggle('on', auto.checked); a.setAttribute('aria-pressed', auto.checked); });
+  const paint = () => paints.forEach((p) => p());
+  // Settings change from many places (lists, popovers, shortcuts, History, Lines): repaint after any.
+  for (const ev of ['input', 'change']) document.addEventListener(ev, () => queueMicrotask(paint));
+  paint();
+  return paint;
+}
+// var, not const: restorePrefs() may run before this line and must not hit the temporal dead zone.
+var hwKeyPainters = [...document.querySelectorAll('.hwkeys')].map(makeHwKeys); // eslint-disable-line no-var
 
 function ttsLines() {
   if (!$('tts-script').checked) return [{ text: $('tts-text').value, speaker: null, voiceId: null }];
