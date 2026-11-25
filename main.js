@@ -1553,7 +1553,7 @@ function flashButton(b, text, kind = 'ok', ms = 1600) {
     if (b._html === undefined) b._html = b.innerHTML;
     b.textContent = kind === 'ok' ? '✓' : '!';
   } else {
-    if (!b.dataset.label) b.dataset.label = b.textContent;
+    if (!b.dataset.label) { b.dataset.label = b.textContent; b._labelHtml = b.innerHTML; } // the markup too (a <kbd> hint)
     holdWidth(b);
     b.textContent = text;
   }
@@ -1563,7 +1563,7 @@ function flashButton(b, text, kind = 'ok', ms = 1600) {
   b._flash = setTimeout(() => {
     b.classList.remove('flash-ok', 'flash-error');
     if (icon) { b.innerHTML = b._html; delete b._html; return; }
-    b.textContent = b.dataset.label;
+    if (b._labelHtml !== undefined) { b.innerHTML = b._labelHtml; delete b._labelHtml; } else b.textContent = b.dataset.label;
     delete b.dataset.label;
     releaseWidth(b);
   }, ms);
@@ -2061,7 +2061,7 @@ function withFeedback(b, { busy, ok = '✓ Done' } = {}) {
       if (b._html !== undefined) { b.innerHTML = b._html; delete b._html; }
       b.classList.remove('flash-ok', 'flash-error');
       b.classList.add('busy');
-    } else if (busy) { clearTimeout(b._flash); if (!b.dataset.label) b.dataset.label = label; holdWidth(b); b.textContent = busy; b.classList.add('busy'); }
+    } else if (busy) { clearTimeout(b._flash); if (!b.dataset.label) { b.dataset.label = label; b._labelHtml = b.innerHTML; } holdWidth(b); b.textContent = busy; b.classList.add('busy'); }
     let result;
     let threw = false;
     try { result = await run.call(b, e); } catch (err) { threw = true; sayError(err); }
