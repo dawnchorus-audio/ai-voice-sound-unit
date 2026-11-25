@@ -10,8 +10,10 @@
 * { box-sizing: border-box; }
 /* The page never lays out narrower than 600 px (Vintage's mode keys need about 590): LUNA has no
    minimum window width, so a narrower window scrolls sideways instead of wrapping or cutting. */
-html { overflow-x: auto; overflow-y: hidden; background: var(--bg); } /* own background: body's (Vintage's screws) stays on the 600 px page */
-body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.4 var(--sans); display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 600px; }
+html { height: 100%; overflow-x: auto; overflow-y: hidden; background: var(--bg); } /* own background: body's (Vintage's screws) stays on the 600 px page */
+body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.4 var(--sans); display: flex; flex-direction: column; height: 100%; overflow: hidden; min-width: 600px; }
+/* height: 100% of html, not 100vh: in LUNA on Windows 100vh can be taller than the window's
+   visible area, which hid the bottom of the page whatever the window's size. */
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
