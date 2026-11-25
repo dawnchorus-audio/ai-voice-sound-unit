@@ -111,11 +111,70 @@
     el.append(h('span', 'name', name));
     el.title = `${(typeof src === 'string' && $(src).closest('label')?.title) || name}. Left is off, right is on.`;
     const paint = () => { const on = !!get(); el.classList.toggle('on', on); el.setAttribute('aria-checked', on); el.disabled = typeof src === 'string' && $(src).disabled; };
-    el.addEventListener('click', () => { flip(); paint(); });
+    // The thumb slides first; a moment later the setting changes, and whatever it shows or hides on the
+    // panel (Lines' options, say) grows or shrinks smoothly instead of jumping.
+    let busy = false;
+    el.addEventListener('click', () => {
+      if (busy || el.disabled) return;
+      busy = true;
+      const on = !get();
+      el.classList.toggle('on', on);
+      el.setAttribute('aria-checked', on);
+      setTimeout(() => { easeLayout(() => { flip(); paint(); }); busy = false; }, 160);
+    });
     if (typeof src === 'string') $(src).addEventListener('change', paint);
     paint();
     el.paint = paint;
     return el;
+  }
+
+  /** Run `change`, then fade in what it showed on the screen (heights are eased by smoothHeights). */
+  function easeLayout(change) {
+    const shown = new Set([...q('.u-body').children].filter((e) => e.offsetParent));
+    change();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for (const el of q('.u-body').children) {
+      if (el.offsetParent && !shown.has(el)) el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'ease-out' });
+    }
+  }
+
+  /**
+   * Whatever changes a part's height (a switch, a mode, a screen, results arriving), the part grows or
+   * shrinks over a quarter second instead of jumping: a ResizeObserver remembers each part's last
+   * height and animates from it to the new one, before the new layout is painted.
+   */
+  function smoothHeights(parts) {
+    if (!window.ResizeObserver || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // The height a part's content wants, from where its children end: while it eases, the part itself has
+    // a fixed height, but its children (which never shrink) keep their natural layout.
+    const natural = (el) => {
+      const r = el.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      let bottom = r.top + parseFloat(cs.borderTopWidth) + parseFloat(cs.paddingTop);
+      for (const c of el.children) {
+        const cr = c.getBoundingClientRect();
+        if (!cr.height && !cr.width) continue;
+        bottom = Math.max(bottom, cr.bottom + (parseFloat(getComputedStyle(c).marginBottom) || 0));
+      }
+      return bottom - r.top + parseFloat(cs.paddingBottom) + parseFloat(cs.borderBottomWidth);
+    };
+    const state = new Map(); // el -> { at: last natural height, anim, to }
+    const ro = new ResizeObserver((entries) => {
+      for (const { target: el } of entries) {
+        const st = state.get(el) ?? {};
+        const want = natural(el);
+        if (st.at === undefined) { state.set(el, { at: want }); continue; }
+        const goal = st.anim ? st.to : st.at;
+        if (Math.abs(want - goal) < 2 || unit.hidden) { if (!st.anim) st.at = want; continue; }
+        const from = el.getBoundingClientRect().height; // where it is now, mid-animation or not
+        st.anim?.cancel();
+        const anim = el.animate([{ height: `${st.anim ? from : st.at}px`, overflow: 'hidden' }, { height: `${want}px`, overflow: 'hidden' }], { duration: 260, easing: 'cubic-bezier(.2, .7, .3, 1)' });
+        const next = { at: want, anim, to: want };
+        anim.onfinish = () => { next.anim = null; next.at = natural(el); };
+        state.set(el, next);
+      }
+    });
+    for (const p of parts) ro.observe(p);
   }
 
   /** A soft key: presses an existing button (and shows its feedback), or runs a function. */
@@ -240,6 +299,7 @@
       </div>
     </div>`;
   const q = (s) => unit.querySelector(s);
+  smoothHeights([q('.u-bezel'), q('.u-knobs'), q('.u-sel')]);
 
   // header
   q('.u-finish').onclick = (e) => (openPopId === 'pop-look' ? closePop() : openPop('pop-look', e.currentTarget));

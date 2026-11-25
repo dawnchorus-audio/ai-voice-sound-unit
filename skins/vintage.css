@@ -335,7 +335,7 @@
 #unit .u-switch .legend { display: flex; justify-content: space-between; width: 52px; font: 600 9px var(--v-mono); color: var(--v-muted); }
 #unit .u-switch.on .legend i:last-child { color: var(--v-red); }
 #unit .u-switch .slot { position: relative; width: 52px; height: 24px; border-radius: 4px; background: #2A2722; margin: 3px 0 7px; }
-#unit .u-switch .thumb { position: absolute; top: 3px; left: 3px; width: 22px; height: 18px; border-radius: 3px; background: linear-gradient(90deg, transparent 6px, #2A2722 6px 7px, transparent 7px 10px, #2A2722 10px 11px, transparent 11px 14px, #2A2722 14px 15px, transparent 15px), #E6E0D2; transition: left .1s; }
+#unit .u-switch .thumb { position: absolute; top: 3px; left: 3px; width: 22px; height: 18px; border-radius: 3px; background: linear-gradient(90deg, transparent 6px, #2A2722 6px 7px, transparent 7px 10px, #2A2722 10px 11px, transparent 11px 14px, #2A2722 14px 15px, transparent 15px), #E6E0D2; transition: left .18s cubic-bezier(.3, .7, .4, 1); }
 #unit .u-switch.on .thumb { left: 27px; }
 #unit .u-switch:disabled { opacity: .45; cursor: default; }
 
@@ -398,3 +398,9 @@
 #unit .u-seg button:first-child { margin-left: 0; border-radius: 5px 0 0 5px; }
 #unit .u-seg button:last-child { border-radius: 0 5px 5px 0; border-right: 1px solid var(--v-line); }
 #unit .u-seg button.on { border-color: var(--v-seg-on); z-index: 1; }
+#unit .u-switch .legend i { transition: color .18s; }
+@media (prefers-reduced-motion: reduce) { #unit .u-switch .thumb { transition: none; } }
+/* the panel's rows keep their natural height (the face grows and the panel scrolls); only the tape stretches */
+#unit .u-face > * { flex-shrink: 0; }
+#unit .u-face > .u-tape { flex: 1 0 140px; }
+#unit :is(.u-bezel, .u-sel, .u-lcd, .u-body) > * { flex-shrink: 0; } /* eased parts: children keep their height */

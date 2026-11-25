@@ -70,7 +70,9 @@ document.addEventListener('securitypolicyviolation', (e) => {
   console.warn('LUNA blocked', what, e.originalPolicy);
   say(`LUNA blocked ${what}. Allow ElevenLabs' servers in LUNA's Settings → Add Ons → SERVERS, then reopen this window.`, 'error');
 });
-window.addEventListener('error', (e) => { if (e.message) say(`Add On error: ${e.message}`, 'error'); });
+// "ResizeObserver loop …" is the browser noting that a size changed again in the same frame (the
+// Vintage panel eases heights that way); it is harmless and not the user's business.
+window.addEventListener('error', (e) => { if (e.message && !/ResizeObserver loop/.test(e.message)) say(`Add On error: ${e.message}`, 'error'); });
 
 // ---------- tabs ----------
 
