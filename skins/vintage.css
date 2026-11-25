@@ -255,8 +255,13 @@
 :root[data-skin=vintage] body.unit-on > main { flex: 0 0 0; padding: 0; overflow: visible; min-height: 0; }
 :root[data-skin=vintage] body.unit-on > main > :not(.pop):not(section), :root[data-skin=vintage] body.unit-on > main section > :not(.pop) { display: none; }
 #unit { flex: 1; min-height: 0; overflow: auto; padding: 10px; font-family: var(--v-label); color: var(--v-ink); }
+/* The page's 600 px minimum lives on the panel, not on body: a narrower window (Windows takes the
+   frame out of the width) scrolls the panel inside #unit instead of the whole page, so no page
+   scrollbar eats the bottom edge. */
+:root[data-skin=vintage] body.unit-on { min-width: 0; }
+:root[data-skin=vintage]:has(body.unit-on) { overflow: hidden; }
 #unit button { font-family: inherit; }
-#unit .u-face { min-height: 100%; background: var(--v-face); border: 1px solid var(--v-edge); border-radius: 10px; box-shadow: inset 0 -3px 0 var(--v-shadow); padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
+#unit .u-face { min-width: 580px; height: 100%; min-height: min-content; box-sizing: border-box; background: var(--v-face); border: 1px solid var(--v-edge); border-radius: 10px; box-shadow: inset 0 -3px 0 var(--v-shadow); padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
 #unit .u-grow { flex: 1; }
 
 /* header */
@@ -359,13 +364,13 @@
 #unit .u-go:disabled { opacity: .55; cursor: default; }
 
 /* the tape */
-#unit .u-tape { background: #2A2722; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1 0 140px; min-height: 140px; }
+#unit .u-tape { background: #2A2722; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1 1 0; min-height: 140px; overflow: hidden; } /* fills what is left of the window; its takes scroll inside */
 #unit .u-tape-head { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #CFC7B5; }
 #unit .u-tape-head button { background: transparent; border: 1px solid #5A554B; border-radius: 4px; padding: 2px 6px; color: #CFC7B5; font: 500 11px var(--v-mono); cursor: pointer; text-transform: uppercase; }
 #unit .u-tape-head button:disabled { opacity: .4; cursor: default; }
 #unit .u-tape.u-no-results .u-tape-clear { display: none; }
 #unit .u-tape-body { --text: var(--v-amber); --dim: #CFC7B5; --mute: #A8A090; --line: #5A554B; --line2: #5A554B; --chip: #33302A; --well: #1A1916; --feed: #2A2722; --ok: var(--v-green); --err: #FF8A6E; color-scheme: dark;
-  display: flex; flex-direction: column; gap: 6px; overflow-y: auto; min-height: 0; color: #CFC7B5; font: 11px var(--v-mono); }
+  display: flex; flex-direction: column; gap: 6px; overflow-y: auto; min-height: 0; flex: 1 1 0; color: #CFC7B5; font: 11px var(--v-mono); }
 #unit .u-tape-body .group { background: transparent; border: 0; box-shadow: none; padding: 0; gap: 6px; }
 #unit .u-tape-body .group .title { font: 600 10px var(--v-mono); color: #A8A090; text-transform: uppercase; letter-spacing: .06em; }
 #unit .u-tape-body .group .title b { font-weight: 600; color: #CFC7B5; }
