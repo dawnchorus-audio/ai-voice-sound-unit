@@ -272,3 +272,23 @@
 :root[data-skin=vintage] .hwrow { display: flex; align-items: center; gap: 6px; }
 :root[data-skin=vintage] .hwlbl { width: 40px; font: 700 10.5px var(--v-label); letter-spacing: .12em; text-transform: uppercase; color: var(--v-muted); cursor: default; }
 :root[data-skin=vintage] .hwkeys .seg button { height: 22px; min-width: 26px; padding: 0 7px; font: 700 11px var(--v-label); letter-spacing: .08em; }
+
+/* the screen: a head with the voice and model, the text, and a foot that takes the status line and the
+   destination (moved in by placeScreenParts), as in design E. The chips they repeat (voice, model,
+   the SFX and Music settings that now hold only the model) are not shown. */
+:root[data-skin=vintage] .lcd-head, :root[data-skin=vintage] .lcd-foot { display: flex; margin: 0 10px; background: var(--v-lcd); color: var(--v-amber); font: 500 11px var(--v-mono); letter-spacing: .06em; text-transform: uppercase; }
+:root[data-skin=vintage] .lcd-head { margin-top: 10px; align-items: center; gap: 8px; padding: 7px 12px 5px; border-radius: 5px 5px 0 0; border-bottom: 1px dashed var(--v-lcd-line); }
+:root[data-skin=vintage] .lcd-head .lcd-lbl { color: var(--v-amber-dim); }
+:root[data-skin=vintage] .lcd-key { background: none; border: 0; padding: 0; color: var(--v-amber-dim); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:root[data-skin=vintage] .lcd-key span { color: var(--v-amber); }
+:root[data-skin=vintage] .lcd-key:hover span { color: var(--v-amber-hi); text-decoration: underline; }
+/* :is(…, #lrc-text) matches the weight of the LCD field rule above, which sets the margin */
+:root[data-skin=vintage] .card:has(.lcd-head) :is(textarea.big, #lrc-text) { margin-top: 0; border-radius: 0; }
+:root[data-skin=vintage] .lcd-foot { --text: var(--v-amber); --dim: var(--v-amber); --mute: var(--v-amber-dim); --ok: var(--v-green); --err: #FF8A6E; flex-direction: column; gap: 4px; padding: 6px 12px 8px; border-radius: 0 0 5px 5px; border-top: 1px dashed var(--v-lcd-line); text-transform: none; }
+:root[data-skin=vintage] .lcd-foot:empty { display: none; }
+:root[data-skin=vintage] .card:has(.lcd-foot:empty) :is(textarea.big, #lrc-text) { border-radius: 0 0 5px 5px; }
+:root[data-skin=vintage] .lcd-foot #status { font: 11.5px var(--v-mono); min-height: 1.4em; }
+:root[data-skin=vintage] .lcd-foot #dest-row { margin: 0; }
+:root[data-skin=vintage] .lcd-foot .dest-btn { height: auto; padding: 0; background: none; box-shadow: none; }
+:root[data-skin=vintage] footer:not(:has(#status)) { display: none; }
+:root[data-skin=vintage] :is(#tab-tts .bar > [data-voice-chip], #tts-model, #tab-sfx [data-pop=pop-sfx-opts], #tab-music [data-pop=pop-music-opts]) { display: none; }

@@ -97,6 +97,11 @@ Next to the red key, Vintage shows **TAKES** and **TRACK** keys (`.hwkeys`, buil
 TAKES 1–4 set the tab's ×variations list (whose chip Vintage hides), TRACK Sel / New and Auto set
 the destination's `input[name=dest]` and `#auto-place`. The keys only read and set those controls,
 repainting after any `input` / `change`, so shortcuts, History and the destination chip stay in step.
+On Speech, SFX and Music the text field is one **screen** in Vintage: `.lcd-head` above it shows the
+voice (opens the voice list) and the model (click: next, Shift-click: previous), and `.lcd-foot` below
+it takes `#status` and `#dest-row`, which `placeScreenParts()` moves in for the active tab and back
+to the footer and `main` in Studio or on tabs with no screen. Vintage hides the chips these repeat
+(Speech voice and model, the SFX and Music ⚙, which held only the model by then).
 
 The **Look** button in the header (`#look-open`, popover `#pop-look`) picks the skin and Vintage's
 finish (the finish radios are disabled, not hidden, in Studio); ⇧⌘E (`look` in `SHORTCUTS`) steps

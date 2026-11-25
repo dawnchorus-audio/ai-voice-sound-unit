@@ -41,7 +41,10 @@
     <!-- Text to Speech -->
     <section id="tab-tts">
       <div class="card">
+        <!-- Vintage: the screen's head and foot (status and destination move in), as in design E -->
+        <div class="lcd-head"><button type="button" class="lcd-key" data-pop="pop-tts-voice" data-head-voice="tts-voice" title="Voice: search, preview and pick">Voice ▸ <span></span></button><span class="grow"></span><button type="button" class="lcd-key" data-head-model="tts-model" title="Model: click for the next one, Shift-click for the previous one">Model ▸ <span></span></button></div>
         <textarea id="tts-text" class="big" data-remember aria-label="Text" placeholder="Type what the voice should say, or drop a text, subtitle or LRC file here…"></textarea>
+        <div class="lcd-foot"></div>
         <div class="card-meta" id="tts-count">0 characters</div>
         <!-- Vintage draws the voice settings as knobs on the panel; each one drives the slider of the same name in ⚙ -->
         <div class="knobs" role="group" aria-label="Voice settings">
@@ -94,7 +97,10 @@
     <!-- Sound Effects -->
     <section id="tab-sfx">
       <div class="card">
+        <!-- Vintage: the screen's head and foot (status and destination move in), as in design E -->
+        <div class="lcd-head"><span class="lcd-lbl">Sound effect ▸ prompt</span><span class="grow"></span><button type="button" class="lcd-key" data-head-model="sfx-model" title="Model: click for the next one, Shift-click for the previous one">Model ▸ <span></span></button></div>
         <textarea id="sfx-text" class="big" data-remember aria-label="Describe the sound" placeholder="Describe the sound, e.g. heavy wooden door slams shut in a large stone hall"></textarea>
+        <div class="lcd-foot"></div>
         <div class="knobs" role="group" aria-label="Sound settings">
           <div class="knob" data-for="sfx-influence" data-name="Influence" data-tip="Prompt influence: higher follows the words more literally."></div>
         </div>
@@ -119,7 +125,10 @@
     <!-- Music -->
     <section id="tab-music">
       <div class="card">
+        <!-- Vintage: the screen's head and foot (status and destination move in), as in design E -->
+        <div class="lcd-head"><span class="lcd-lbl">Music ▸ prompt</span><span class="grow"></span><button type="button" class="lcd-key" data-head-model="music-model" title="Model: click for the next one, Shift-click for the previous one">Model ▸ <span></span></button></div>
         <textarea id="music-text" class="big" data-remember aria-label="Describe the music" placeholder="Describe the music, e.g. warm lo-fi hip hop beat, dusty drums, mellow Rhodes chords"></textarea>
+        <div class="lcd-foot"></div>
         <div class="bar">
           <span class="chip" title="Length in seconds (3–600)"><span class="unit">Length</span><input type="number" id="music-length" min="3" max="600" step="1" value="30" data-remember aria-label="Length in seconds"><span class="unit">s</span><button id="music-sel-len" title="Length of the timeline selection">Selection</button></span>
           <label class="chip" title="Instrumental: no vocals"><input type="checkbox" id="music-instrumental" data-remember> Instrumental</label>

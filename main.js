@@ -87,6 +87,7 @@ function showTab(name) {
   for (const s of document.querySelectorAll('main section')) s.classList.toggle('active', s.id === `tab-${name}`);
   remember();
   if (typeof groups !== 'undefined') renderResults(); // each tab lists its own results
+  placeScreenParts();
 }
 for (const b of document.querySelectorAll('#tabs button')) b.onclick = () => showTab(b.dataset.tab);
 
@@ -106,7 +107,21 @@ function applySkin(skin, finish) {
   const f = FINISHES.includes(finish) ? finish : 'cream';
   document.documentElement.dataset.skin = s;
   document.documentElement.dataset.finish = f;
+  placeScreenParts();
   return { skin: s, finish: f };
+}
+
+/** Vintage puts the status line and the destination inside the active tab's screen, as in design E;
+ * Studio (and tabs with no screen) keep them in their usual places. The elements move, so their
+ * listeners, popover and contents stay as they are. `var`: this runs before later declarations. */
+var screenHome = null; // eslint-disable-line no-var
+function placeScreenParts() {
+  const status = document.getElementById('status'), dest = document.getElementById('dest-row');
+  if (!status || !dest) return;
+  screenHome ??= { footer: status.parentElement, destParent: dest.parentElement, destNext: dest.nextElementSibling };
+  const foot = document.documentElement.dataset.skin === 'vintage' ? document.querySelector(`#tab-${activeTab} .lcd-foot`) : null;
+  if (foot) foot.append(status, dest);
+  else { screenHome.footer.append(status); screenHome.destParent.insertBefore(dest, screenHome.destNext); }
 }
 applySkin(prefs.skin, prefs.finish);
 function fieldValue(el) { return el.type === 'checkbox' ? el.checked : el.value; }
@@ -266,6 +281,34 @@ function makeHwKeys(box) {
 }
 // var, not const: restorePrefs() may run before this line and must not hit the temporal dead zone.
 var hwKeyPainters = [...document.querySelectorAll('.hwkeys')].map(makeHwKeys); // eslint-disable-line no-var
+
+// ---------- Vintage screen head: voice and model on top of the screen (hidden in Studio) ----------
+
+for (const head of document.querySelectorAll('.lcd-head')) {
+  const voiceKey = head.querySelector('[data-head-voice]');
+  const modelKey = head.querySelector('[data-head-model]');
+  const voiceSel = voiceKey && $(voiceKey.dataset.headVoice);
+  const modelSel = $(modelKey.dataset.headModel);
+  const label = (sel) => sel.selectedOptions[0]?.textContent.trim() || '—';
+  const paint = () => {
+    if (voiceKey) voiceKey.querySelector('span').textContent = label(voiceSel);
+    modelKey.querySelector('span').textContent = label(modelSel);
+  };
+  modelKey.addEventListener('click', (e) => {
+    const n = modelSel.options.length;
+    if (!n) return;
+    setField(modelSel, modelSel.options[(modelSel.selectedIndex + (e.shiftKey ? n - 1 : 1)) % n].value);
+    say(`Model: ${label(modelSel)}`);
+  });
+  // Voices and models load later and are set without events: watch the lists as well.
+  for (const sel of [voiceSel, modelSel].filter(Boolean)) {
+    sel.addEventListener('input', paint);
+    sel.addEventListener('change', paint);
+    new MutationObserver(paint).observe(sel, { childList: true, subtree: true, attributes: true });
+  }
+  document.addEventListener('change', () => queueMicrotask(paint));
+  paint();
+}
 
 function ttsLines() {
   if (!$('tts-script').checked) return [{ text: $('tts-text').value, speaker: null, voiceId: null }];
@@ -1991,7 +2034,9 @@ const ACTIONS = {
   'voice-search': () => {
     if (!document.querySelector(`#tab-${activeTab} .voice-search`)) showTab('tts');
     const chip = document.querySelector(`#tab-${activeTab} [data-voice-chip]`);
-    openPop(chip.dataset.pop, chip);
+    // Vintage hides the chip and opens the list from the screen's head instead.
+    const anchor = [...document.querySelectorAll(`#tab-${activeTab} [data-pop="${chip.dataset.pop}"]`)].find((e) => e.offsetParent) ?? chip;
+    openPop(chip.dataset.pop, anchor);
     const s = $(chip.dataset.pop).querySelector('.voice-search');
     s.focus(); s.select();
   },

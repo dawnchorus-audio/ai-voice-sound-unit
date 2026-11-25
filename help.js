@@ -120,6 +120,7 @@ const AddOnHelp = (() => {
 <ul>
   <li><b>Voice</b>: the first chip shows the chosen voice. Click it to search by name, accent or gender and pick from the list (double-click or <kbd>↩</kbd> picks and closes); ▶ plays the voice's sample before you spend credits, and <b>↻ Refresh</b> reloads your voices from ElevenLabs. Your own cloned voices are listed first.</li>
   <li><b>Credits</b>: the small line under the text shows the estimated cost and what is left on your plan, and warns when the text is too long for the model.</li>
+  <li>In the <b>Vintage</b> look the voice and the model sit at the top of the text screen: click the voice to search, preview and pick one; click the model for the next one (Shift-click for the previous one). The status line and the destination (<b>DEST ▸</b>, click it to choose the track) sit at the bottom of the same screen on Speech, Sound Effects and Music.</li>
   <li><b>⚙ Voice settings</b>: Stability (lower is more expressive), Similarity (closeness to the original voice), Style and Speed. In the <b>Vintage</b> look they are four knobs on the panel instead: drag up or down (Shift for finer steps), scroll, or click one and use the arrow keys; a double-click puts the default back.</li>
   <li><b>Script mode</b> (the <b>Lines</b> chip, <i>one clip per line</i>): every line becomes its own clip. Its options appear under the card: <i>one after another</i> with a gap you choose, or <i>on markers</i> from the playhead on. Start a line with a voice's name and a colon, such as <code>Alice: Hello!</code>, to speak it in that voice; each speaker gets a track of their own.</li>
   <li><b>Import text…</b> (or drop a file from Finder anywhere on the tab): <b>.txt</b>, <b>.md</b> and <b>.rtf</b> (TextEdit's and Word's rich text) fill the text field as plain text: Markdown and RTF formatting is removed, paragraphs stay. Subtitles (<b>.srt</b>, <b>.vtt</b>) and <b>.lrc</b> become one line per cue and, with a session open, keep their timing, counted from the session start: they use <i>At the original lyric timing</i>, with the same timing choices as lyrics. A WebVTT voice (<code>&lt;v Alice&gt;</code>) becomes <i>Alice:</i> and speaks in that voice if you have one by that name.</li>
@@ -163,7 +164,7 @@ const AddOnHelp = (() => {
 <ul>
   <li><b>Length</b> chip: 0.5 to 30 seconds, or empty to let the model decide. <b>Selection</b> in the chip takes the length of the timeline selection.</li>
   <li><b>Loop</b> makes a sound that loops seamlessly, without a click.</li>
-  <li><b>⚙</b>: Prompt influence (how literally the prompt is followed) and the model. In the <b>Vintage</b> look Prompt influence is the <b>Influence</b> knob on the panel, and ⚙ holds the model.</li>
+  <li><b>⚙</b>: Prompt influence (how literally the prompt is followed) and the model. In the <b>Vintage</b> look Prompt influence is the <b>Influence</b> knob on the panel, and the model is at the top of the screen (click it for the next one).</li>
 </ul>`,
     },
     {
@@ -173,7 +174,7 @@ const AddOnHelp = (() => {
   <li><b>+ Tempo &amp; key</b> adds the session's tempo and key at the playhead to the prompt, so the music fits your song.</li>
   <li><b>Length</b> chip: 3 seconds to 10 minutes. <b>Selection</b> in the chip takes the length of the timeline selection, for example exactly 8 bars.</li>
   <li><b>Instrumental</b> asks for no vocals.</li>
-  <li><b>⚙</b>: the music model.</li>
+  <li><b>⚙</b>: the music model. In the <b>Vintage</b> look it is at the top of the screen instead: click it for the next one.</li>
 </ul>`,
     },
     {
