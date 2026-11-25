@@ -87,6 +87,21 @@ Common problems:
   clipboard itself; press ⌘V / Ctrl+V in the key field, which the Add On selects for you.
 - **Music or Clone is refused**: these need a paid ElevenLabs plan.
 
+## Updating
+
+New versions are published as releases of this repository. LUNA checks for them each time it
+starts: install the new version from Discover (or download the new `.lunaaddon` from the
+[latest release](../../releases/latest)) and confirm replacing the installed one.
+
+LUNA treats an update as a fresh install, so it forgets what it kept for the old one. After
+updating:
+
+1. Add your API key again (the lamp at the top right, then **Paste key**). The audio and History
+   in your sessions are not affected.
+2. Choose **Allow** again when LUNA asks about `api.elevenlabs.io` and `storage.googleapis.com`.
+3. On macOS the Add On's remembered choices (look, voices, models, settings, Place at and DEST)
+   start from their defaults again.
+
 ## Uninstall
 
 Remove **AI Voice & Sound Unit** in LUNA's **Settings > Add Ons**. Audio it placed stays in your
